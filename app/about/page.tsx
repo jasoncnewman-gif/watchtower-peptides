@@ -27,7 +27,7 @@ export default function AboutPage() {
           <div className="max-w-3xl mx-auto">
             <div
               className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full mb-8"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784", color: "#C0A088" }}
+              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784", color: "#FFFCF2" }}
             >
               <span>⚑</span>
               <span>Our Methodology</span>
@@ -36,7 +36,7 @@ export default function AboutPage() {
               How We Score<br />
               <span style={{ color: "#186784" }}>Peptide Vendors</span>
             </h1>
-            <p className="text-xl leading-relaxed" style={{ color: "#C0A088" }}>
+            <p className="text-xl leading-relaxed" style={{ color: "#FFFCF2" }}>
               Watchtower Peptides is an independent research platform. We have no affiliate relationships,
               accept no paid placements, and receive no compensation from any vendor.
               Our scoring is based entirely on publicly verifiable data.
@@ -48,7 +48,7 @@ export default function AboutPage() {
         <section className="px-6 py-16" style={{ borderTop: "1px solid #0C2E3D" }}>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-2 text-center" style={{ color: "#FFFCF2" }}>Scoring Breakdown</h2>
-            <p className="text-center mb-10" style={{ color: "#C0A088" }}>
+            <p className="text-center mb-10" style={{ color: "#FFFCF2" }}>
               Each vendor is scored out of 100 points across five categories.
             </p>
             <div className="flex flex-col gap-4">
@@ -61,14 +61,14 @@ export default function AboutPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <h3 className="font-bold text-lg mb-1" style={{ color: "#FFFCF2" }}>{cat.name}</h3>
-                      <p className="text-sm leading-relaxed" style={{ color: "#C0A088" }}>{cat.description}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>{cat.description}</p>
                     </div>
                     <div
                       className="text-center shrink-0 rounded-lg px-4 py-2"
                       style={{ backgroundColor: "#000101" }}
                     >
                       <div className="text-2xl font-bold" style={{ color: "#186784" }}>{cat.points}</div>
-                      <div className="text-xs" style={{ color: "#9A7C65" }}>pts</div>
+                      <div className="text-xs" style={{ color: "#FFFCF2" }}>pts</div>
                     </div>
                   </div>
                   {/* Progress bar */}
@@ -88,7 +88,7 @@ export default function AboutPage() {
         <section className="px-6 py-16" style={{ borderTop: "1px solid #0C2E3D" }}>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-2 text-center" style={{ color: "#FFFCF2" }}>Rating Thresholds</h2>
-            <p className="text-center mb-10" style={{ color: "#C0A088" }}>
+            <p className="text-center mb-10" style={{ color: "#FFFCF2" }}>
               Score ranges determine a vendor's overall rating badge.
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -107,7 +107,7 @@ export default function AboutPage() {
                     </span>
                     <span className="text-sm font-mono" style={{ color: s.color }}>{s.range}</span>
                   </div>
-                  <p className="text-sm" style={{ color: "#C0A088" }}>{s.description}</p>
+                  <p className="text-sm" style={{ color: "#FFFCF2" }}>{s.description}</p>
                 </div>
               ))}
             </div>
@@ -131,7 +131,7 @@ export default function AboutPage() {
                 >
                   <div className="text-3xl mb-3">{s.icon}</div>
                   <h3 className="font-semibold mb-2" style={{ color: "#FFFCF2" }}>{s.title}</h3>
-                  <p className="text-sm" style={{ color: "#C0A088" }}>{s.desc}</p>
+                  <p className="text-sm" style={{ color: "#FFFCF2" }}>{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -141,8 +141,8 @@ export default function AboutPage() {
         {/* Disclaimer */}
         <section className="px-6 py-16" style={{ borderTop: "1px solid #0C2E3D" }}>
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-xl font-bold mb-4" style={{ color: "#9A7C65" }}>Disclaimer</h2>
-            <p className="text-sm leading-relaxed" style={{ color: "#9A7C65" }}>
+            <h2 className="text-xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Disclaimer</h2>
+            <p className="text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
               Watchtower Peptides is for research and informational purposes only. None of the content on this
               platform constitutes medical advice, and nothing should be interpreted as a recommendation to use,
               purchase, or administer any substance. Peptides reviewed on this platform may be restricted or

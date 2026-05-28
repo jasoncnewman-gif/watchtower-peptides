@@ -29,7 +29,7 @@ export default function VendorsPage() {
         <section className="px-6 py-16 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Supplier Reviews</h1>
-            <p className="text-lg" style={{ color: "#C0A088" }}>
+            <p className="text-lg" style={{ color: "#FFFCF2" }}>
               Every vendor independently scored on lab testing, transparency, and reliability.
               Scores are out of 100.
             </p>
@@ -56,7 +56,7 @@ export default function VendorsPage() {
                         <h2 className="font-bold text-lg truncate" style={{ color: "#FFFCF2" }}>
                           {vendor.name}
                         </h2>
-                        <p className="text-sm mt-0.5" style={{ color: "#9A7C65" }}>
+                        <p className="text-sm mt-0.5" style={{ color: "#FFFCF2" }}>
                           {vendor.website}
                         </p>
                       </div>
@@ -72,7 +72,7 @@ export default function VendorsPage() {
                         >
                           {vendor.overall_score}
                         </div>
-                        <div className="text-xs mt-1" style={{ color: "#9A7C65" }}>/ 100</div>
+                        <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>/ 100</div>
                       </div>
                     </div>
 
@@ -94,14 +94,14 @@ export default function VendorsPage() {
                       )}
                       <span
                         className="text-xs px-2 py-1 rounded-full"
-                        style={{ backgroundColor: "#000101", color: "#9A7C65" }}
+                        style={{ backgroundColor: "#000101", color: "#FFFCF2" }}
                       >
                         📍 {vendor.location}
                       </span>
                     </div>
 
                     {/* Verdict preview */}
-                    <p className="text-sm mt-3 line-clamp-2" style={{ color: "#C0A088" }}>
+                    <p className="text-sm mt-3 line-clamp-2" style={{ color: "#FFFCF2" }}>
                       {vendor.verdict}
                     </p>
 
@@ -128,7 +128,7 @@ export default function VendorsPage() {
                         );
                       })}
                     </div>
-                    <p className="text-xs mt-1" style={{ color: "#9A7C65" }}>
+                    <p className="text-xs mt-1" style={{ color: "#FFFCF2" }}>
                       Last reviewed: {new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                     </p>
                   </Link>

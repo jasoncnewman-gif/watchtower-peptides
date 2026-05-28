@@ -50,7 +50,7 @@ export default async function VendorDetailPage({
         <div className="max-w-5xl mx-auto px-6 py-12">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "#9A7C65" }}>
+          <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "#FFFCF2" }}>
             <Link href="/vendors" className="hover:text-white transition-colors">Supplier Reviews</Link>
             <span>›</span>
             <span style={{ color: "#FFFCF2" }}>{vendor.name}</span>
@@ -92,12 +92,12 @@ export default async function VendorDetailPage({
                   {vendor.website} ↗
                 </a>
 
-                <div className="flex flex-wrap gap-6 mt-4 text-sm" style={{ color: "#C0A088" }}>
+                <div className="flex flex-wrap gap-6 mt-4 text-sm" style={{ color: "#FFFCF2" }}>
                   <span>📍 {vendor.location}</span>
                   <span>📅 Last reviewed {new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
                 </div>
 
-                <p className="mt-4 text-sm leading-relaxed" style={{ color: "#C0A088" }}>
+                <p className="mt-4 text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
                   {vendor.notes}
                 </p>
               </div>
@@ -119,7 +119,7 @@ export default async function VendorDetailPage({
                    vendor.status === "caution" ? "Use With Caution" :
                    vendor.status === "not-recommended" ? "Not Recommended" : "Under Review"}
                 </div>
-                <div className="text-xs mt-1" style={{ color: "#9A7C65" }}>Score out of 100</div>
+                <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>Score out of 100</div>
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default async function VendorDetailPage({
             style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
           >
             <h2 className="text-lg font-bold mb-3" style={{ color: "#FFFCF2" }}>Our Verdict</h2>
-            <p className="leading-relaxed" style={{ color: "#C0A088" }}>{vendor.verdict}</p>
+            <p className="leading-relaxed" style={{ color: "#FFFCF2" }}>{vendor.verdict}</p>
           </div>
 
           {/* Score Breakdown */}
@@ -162,7 +162,7 @@ export default async function VendorDetailPage({
                         style={{ width: `${pct}%`, backgroundColor: barColor }}
                       />
                     </div>
-                    <div className="text-xs mt-1" style={{ color: "#9A7C65" }}>{pct}%</div>
+                    <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>{pct}%</div>
                   </div>
                 );
               })}
@@ -179,7 +179,7 @@ export default async function VendorDetailPage({
                 <thead>
                   <tr style={{ backgroundColor: "#0C2E3D", borderBottom: "1px solid #186784" }}>
                     {["Peptide", "Price", "Status"].map((h) => (
-                      <th key={h} className="text-left px-4 py-3 font-semibold" style={{ color: "#C0A088" }}>{h}</th>
+                      <th key={h} className="text-left px-4 py-3 font-semibold" style={{ color: "#FFFCF2" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -193,7 +193,7 @@ export default async function VendorDetailPage({
                       }}
                     >
                       <td className="px-4 py-3 font-medium" style={{ color: "#FFFCF2" }}>{item.name}</td>
-                      <td className="px-4 py-3" style={{ color: "#C0A088" }}>{item.price}</td>
+                      <td className="px-4 py-3" style={{ color: "#FFFCF2" }}>{item.price}</td>
                       <td className="px-4 py-3">
                         <span
                           className="text-xs px-2 py-1 rounded-full font-medium"

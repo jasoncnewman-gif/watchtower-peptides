@@ -43,7 +43,7 @@ export default function CalculatorPage() {
         <section className="px-6 py-16 text-center">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Reconstitution Calculator</h1>
-            <p className="text-lg" style={{ color: "#C0A088" }}>
+            <p className="text-lg" style={{ color: "#FFFCF2" }}>
               Calculate how many units to draw for your target dose after reconstituting with bacteriostatic water.
             </p>
           </div>
@@ -54,14 +54,14 @@ export default function CalculatorPage() {
 
             {/* Quick-select presets */}
             <div className="mb-8">
-              <p className="text-sm font-semibold mb-3" style={{ color: "#9A7C65" }}>QUICK SELECT</p>
+              <p className="text-sm font-semibold mb-3" style={{ color: "#FFFCF2" }}>QUICK SELECT</p>
               <div className="flex flex-wrap gap-2">
                 {COMMON_PEPTIDES.map((p) => (
                   <button
                     key={p.name}
                     onClick={() => applyPreset(p)}
                     className="text-sm px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
-                    style={{ backgroundColor: "#0C2E3D", color: "#C0A088", border: "1px solid #186784" }}
+                    style={{ backgroundColor: "#0C2E3D", color: "#FFFCF2", border: "1px solid #186784" }}
                   >
                     {p.name}
                   </button>
@@ -79,7 +79,7 @@ export default function CalculatorPage() {
               <div className="flex flex-col gap-5">
                 {/* Vial size */}
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: "#C0A088" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: "#FFFCF2" }}>
                     Vial Size (mg)
                   </label>
                   <input
@@ -100,7 +100,7 @@ export default function CalculatorPage() {
 
                 {/* BAC water */}
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: "#C0A088" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: "#FFFCF2" }}>
                     Bacteriostatic Water Added (mL)
                   </label>
                   <input
@@ -121,7 +121,7 @@ export default function CalculatorPage() {
 
                 {/* Desired dose */}
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: "#C0A088" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: "#FFFCF2" }}>
                     Desired Dose (mcg)
                   </label>
                   <input
@@ -167,7 +167,7 @@ export default function CalculatorPage() {
                     >
                       {r.value}
                     </div>
-                    <div className="text-xs" style={{ color: "#9A7C65" }}>{r.label}</div>
+                    <div className="text-xs" style={{ color: "#FFFCF2" }}>{r.label}</div>
                   </div>
                 ))}
               </div>
@@ -177,7 +177,7 @@ export default function CalculatorPage() {
                   className="mt-6 p-4 rounded-lg text-sm"
                   style={{ backgroundColor: "#000101", border: "1px solid #186784" }}
                 >
-                  <p style={{ color: "#C0A088" }}>
+                  <p style={{ color: "#FFFCF2" }}>
                     <span className="font-semibold" style={{ color: "#FFFCF2" }}>Summary: </span>
                     Draw <span style={{ color: "#186784" }}>{drawVolumeUnits.toFixed(1)} units</span> on a U-100 insulin syringe to deliver{" "}
                     <span style={{ color: "#186784" }}>{doseMcgNum} mcg</span>. This reconstitution gives you{" "}
@@ -192,8 +192,8 @@ export default function CalculatorPage() {
               className="rounded-xl p-5 text-sm"
               style={{ backgroundColor: "#0C2E3D", border: "1px solid #9A7C65" }}
             >
-              <p className="font-semibold mb-2" style={{ color: "#9A7C65" }}>⚠ Research Use Only</p>
-              <p style={{ color: "#9A7C65" }}>
+              <p className="font-semibold mb-2" style={{ color: "#FFFCF2" }}>⚠ Research Use Only</p>
+              <p style={{ color: "#FFFCF2" }}>
                 This calculator is for informational and research purposes only. Always verify calculations
                 independently. Peptide reconstitution and administration should only be performed by
                 qualified researchers following applicable regulations. This is not medical advice.

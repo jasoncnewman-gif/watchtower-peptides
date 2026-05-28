@@ -38,8 +38,9 @@ export default function Nav() {
               href={l.href}
               className="transition-colors hover:opacity-100"
               style={{
-                color: pathname === l.href ? "#FFFCF2" : "#C0A088",
+                color: "#FFFCF2",
                 fontWeight: pathname === l.href ? 600 : 400,
+                opacity: pathname === l.href ? 1 : 0.65,
               }}
             >
               {l.label}
@@ -88,7 +89,7 @@ export default function Nav() {
               key={l.href}
               href={l.href}
               className="transition-colors hover:opacity-100 px-2"
-              style={{ color: pathname === l.href ? "#FFFCF2" : "#C0A088" }}
+              style={{ color: "#FFFCF2", opacity: pathname === l.href ? 1 : 0.65 }}
               onClick={() => setOpen(false)}
             >
               {l.label}

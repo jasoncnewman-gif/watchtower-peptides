@@ -19,7 +19,7 @@ export default function PeptidesPage() {
         <section className="px-6 py-16 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Peptide Library</h1>
-            <p className="text-lg" style={{ color: "#C0A088" }}>
+            <p className="text-lg" style={{ color: "#FFFCF2" }}>
               Dosage guides, reconstitution instructions, and research summaries for commonly studied peptides.
             </p>
           </div>
@@ -49,16 +49,16 @@ export default function PeptidesPage() {
                     </div>
 
                     {peptide.aliases.length > 0 && (
-                      <p className="text-xs mb-3" style={{ color: "#9A7C65" }}>
+                      <p className="text-xs mb-3" style={{ color: "#FFFCF2" }}>
                         {peptide.aliases.join(" · ")}
                       </p>
                     )}
 
-                    <p className="text-sm leading-relaxed line-clamp-3 mb-4" style={{ color: "#C0A088" }}>
+                    <p className="text-sm leading-relaxed line-clamp-3 mb-4" style={{ color: "#FFFCF2" }}>
                       {peptide.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 text-xs" style={{ color: "#9A7C65" }}>
+                    <div className="flex flex-wrap gap-2 text-xs" style={{ color: "#FFFCF2" }}>
                       <span
                         className="px-2 py-1 rounded"
                         style={{ backgroundColor: "#000101" }}

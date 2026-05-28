@@ -34,7 +34,7 @@ export default async function PeptideDetailPage({
         <div className="max-w-4xl mx-auto px-6 py-12">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "#9A7C65" }}>
+          <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "#FFFCF2" }}>
             <Link href="/peptides" className="hover:text-white transition-colors">Peptide Library</Link>
             <span>›</span>
             <span style={{ color: "#FFFCF2" }}>{peptide.name}</span>
@@ -55,11 +55,11 @@ export default async function PeptideDetailPage({
               </span>
             </div>
             {peptide.aliases.length > 0 && (
-              <p className="text-sm mb-4" style={{ color: "#9A7C65" }}>
+              <p className="text-sm mb-4" style={{ color: "#FFFCF2" }}>
                 Also known as: {peptide.aliases.join(", ")}
               </p>
             )}
-            <p className="text-base leading-relaxed" style={{ color: "#C0A088" }}>
+            <p className="text-base leading-relaxed" style={{ color: "#FFFCF2" }}>
               {peptide.description}
             </p>
           </div>
@@ -73,7 +73,7 @@ export default async function PeptideDetailPage({
               <h2 className="text-lg font-bold mb-3" style={{ color: "#FFFCF2" }}>
                 💉 Typical Dosage
               </h2>
-              <p className="text-sm leading-relaxed" style={{ color: "#C0A088" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
                 {peptide.typical_dosage}
               </p>
             </div>
@@ -84,7 +84,7 @@ export default async function PeptideDetailPage({
               <h2 className="text-lg font-bold mb-3" style={{ color: "#FFFCF2" }}>
                 🧪 Reconstitution
               </h2>
-              <p className="text-sm leading-relaxed" style={{ color: "#C0A088" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
                 {peptide.reconstitution}
               </p>
               <Link
@@ -116,7 +116,7 @@ export default async function PeptideDetailPage({
                     className="flex items-start gap-3 text-sm hover:opacity-80 transition-opacity"
                   >
                     <span style={{ color: "#186784" }} className="shrink-0 mt-0.5">↗</span>
-                    <span style={{ color: "#C0A088" }} className="hover:underline">{study.title}</span>
+                    <span style={{ color: "#FFFCF2" }} className="hover:underline">{study.title}</span>
                   </a>
                 ))}
               </div>
@@ -144,7 +144,7 @@ export default async function PeptideDetailPage({
                       <div>
                         <p className="font-medium" style={{ color: "#FFFCF2" }}>{vendor.name}</p>
                         {item && (
-                          <p className="text-sm mt-0.5" style={{ color: "#C0A088" }}>{item.price}</p>
+                          <p className="text-sm mt-0.5" style={{ color: "#FFFCF2" }}>{item.price}</p>
                         )}
                       </div>
                       {item && (

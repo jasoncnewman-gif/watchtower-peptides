@@ -5,28 +5,22 @@ import Link from "next/link";
 
 const SLIDES = [
   {
-    headline: "The Independent\nPeptide Vendor\nReview Platform",
+    headline: "Independent scoring. Transparent methodology. Zero conflicts.",
     sub: "Watchtower Peptides tracks, scores, and monitors peptide vendors so researchers can make informed decisions. No affiliate bias. No paid placements.",
     cta: { label: "Browse Vendors →", href: "/vendors" },
     ctaSecondary: { label: "How We Score", href: "/about" },
-    gradient: "linear-gradient(135deg, #000101 0%, #0C2E3D 50%, #0a2035 100%)",
-    accent: "#186784",
   },
   {
-    headline: "Lab-Verified\nCOA Testing\nFor Every Vendor",
-    sub: "We verify third-party Certificates of Analysis and independent lab results — HPLC, NMR, LC-MS — so you know exactly what purity you're getting.",
-    cta: { label: "See Lab Results →", href: "/vendors" },
+    headline: "No affiliates. No kickbacks. No compromises.",
+    sub: "Every score is based entirely on publicly verifiable data — third-party COAs, independent lab results, and verified community reviews.",
+    cta: { label: "See Vendor Scores →", href: "/vendors" },
     ctaSecondary: { label: "Peptide Library", href: "/peptides" },
-    gradient: "linear-gradient(135deg, #000101 0%, #0a1f2e 40%, #0C2E3D 100%)",
-    accent: "#22c55e",
   },
   {
-    headline: "Real-Time\nAlerts When\nVendors Fail",
+    headline: "We monitor vendors so you don't have to.",
     sub: "Get alerted when a vendor fails a test, changes ownership, receives fraud reports, or makes misleading health claims in their advertising.",
-    cta: { label: "View Vendor Scores →", href: "/vendors" },
+    cta: { label: "View Vendor Directory →", href: "/vendors" },
     ctaSecondary: { label: "Reconstitution Calculator", href: "/calculator" },
-    gradient: "linear-gradient(135deg, #000101 0%, #1a0c0c 40%, #2D0C0C 100%)",
-    accent: "#ef4444",
   },
 ];
 
@@ -59,59 +53,46 @@ export default function HeroSlider() {
   return (
     <section
       className="relative flex items-center justify-center min-h-screen px-6 pt-20"
-      style={{ background: slide.gradient, transition: "background 0.6s ease" }}
+      style={{ background: "linear-gradient(160deg, #000101 0%, #0C2E3D 55%, #000101 100%)" }}
     >
-      {/* Decorative grid overlay */}
+      {/* Subtle dot grid overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, ${slide.accent}18 1px, transparent 0)`,
+          backgroundImage: "radial-gradient(circle at 1px 1px, #18678422 1px, transparent 0)",
           backgroundSize: "48px 48px",
-          opacity: 0.4,
         }}
       />
 
       <div
-        className="relative max-w-4xl mx-auto text-center"
+        className="relative max-w-4xl mx-auto text-center px-4"
         style={{
           opacity: fading ? 0 : 1,
-          transform: fading ? "translateY(8px)" : "translateY(0)",
+          transform: fading ? "translateY(10px)" : "translateY(0)",
           transition: "opacity 0.4s ease, transform 0.4s ease",
         }}
       >
         {/* Badge */}
         <div
           className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full mb-8"
-          style={{ backgroundColor: "#0C2E3D", border: `1px solid ${slide.accent}`, color: "#C0A088" }}
+          style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784", color: "#FFFCF2" }}
         >
           <span>⚑</span>
           <span>Independent. Unbiased. Verified.</span>
         </div>
 
-        {/* Headline */}
+        {/* Headline — no forced line breaks */}
         <h1
-          className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 whitespace-pre-line"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6"
           style={{ color: "#FFFCF2" }}
         >
-          {slide.headline.split("\n").map((line, i, arr) =>
-            i === 1 ? (
-              <span key={i} style={{ color: slide.accent }}>
-                {line}
-                {i < arr.length - 1 ? "\n" : ""}
-              </span>
-            ) : (
-              <span key={i}>
-                {line}
-                {i < arr.length - 1 ? "\n" : ""}
-              </span>
-            )
-          )}
+          {slide.headline}
         </h1>
 
         {/* Subtext */}
         <p
           className="text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-          style={{ color: "#C0A088" }}
+          style={{ color: "#FFFCF2" }}
         >
           {slide.sub}
         </p>
@@ -121,14 +102,14 @@ export default function HeroSlider() {
           <Link
             href={slide.cta.href}
             className="font-semibold px-8 py-4 rounded-lg transition-opacity hover:opacity-90 text-lg"
-            style={{ backgroundColor: slide.accent, color: "#FFFCF2" }}
+            style={{ backgroundColor: "#186784", color: "#FFFCF2" }}
           >
             {slide.cta.label}
           </Link>
           <Link
             href={slide.ctaSecondary.href}
             className="font-semibold px-8 py-4 rounded-lg transition-opacity hover:opacity-90 text-lg"
-            style={{ backgroundColor: "#0C2E3D", color: "#FFFCF2", border: `1px solid ${slide.accent}` }}
+            style={{ backgroundColor: "#0C2E3D", color: "#FFFCF2", border: "1px solid #186784" }}
           >
             {slide.ctaSecondary.label}
           </Link>
@@ -146,7 +127,7 @@ export default function HeroSlider() {
             style={{
               width: i === current ? "28px" : "10px",
               height: "10px",
-              backgroundColor: i === current ? slide.accent : "#9A7C65",
+              backgroundColor: i === current ? "#186784" : "#9A7C65",
             }}
           />
         ))}

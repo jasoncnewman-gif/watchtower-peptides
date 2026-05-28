@@ -11,13 +11,13 @@ export default function Footer() {
           <span style={{ color: "#186784" }}>⚑</span>
           <span className="font-semibold" style={{ color: "#FFFCF2" }}>Watchtower Peptides</span>
         </div>
-        <div className="flex gap-6" style={{ color: "#9A7C65" }}>
+        <div className="flex gap-6" style={{ color: "#FFFCF2", opacity: 0.7 }}>
           <Link href="/vendors" className="hover:text-white transition-colors">Vendors</Link>
           <Link href="/peptides" className="hover:text-white transition-colors">Peptides</Link>
           <Link href="/calculator" className="hover:text-white transition-colors">Calculator</Link>
           <Link href="/about" className="hover:text-white transition-colors">About</Link>
         </div>
-        <p style={{ color: "#9A7C65" }}>
+        <p style={{ color: "#FFFCF2" }}>
           © 2026 Watchtower Peptides — Independent research only. Not medical advice.
         </p>
       </div>

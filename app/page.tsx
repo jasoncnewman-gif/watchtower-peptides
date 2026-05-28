@@ -44,7 +44,7 @@ export default function Home() {
           {stats.map((stat) => (
             <div key={stat.label}>
               <div className="text-3xl font-bold mb-1" style={{ color: "#186784" }}>{stat.value}</div>
-              <div className="text-sm" style={{ color: "#C0A088" }}>{stat.label}</div>
+              <div className="text-sm" style={{ color: "#FFFCF2" }}>{stat.label}</div>
             </div>
           ))}
         </div>
@@ -56,7 +56,7 @@ export default function Home() {
           <div className="flex items-end justify-between mb-10">
             <div>
               <h2 className="text-3xl font-bold mb-2" style={{ color: "#FFFCF2" }}>Top Recommended Vendors</h2>
-              <p style={{ color: "#C0A088" }}>Vendors with verified lab testing and strong community trust.</p>
+              <p style={{ color: "#FFFCF2" }}>Vendors with verified lab testing and strong community trust.</p>
             </div>
             <Link
               href="/vendors"
@@ -80,7 +80,7 @@ export default function Home() {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="font-bold text-lg" style={{ color: "#FFFCF2" }}>{vendor.name}</h3>
-                      <p className="text-sm mt-0.5" style={{ color: "#9A7C65" }}>{vendor.website}</p>
+                      <p className="text-sm mt-0.5" style={{ color: "#FFFCF2" }}>{vendor.website}</p>
                     </div>
                     <div className="text-center ml-4 shrink-0">
                       <div
@@ -93,7 +93,7 @@ export default function Home() {
                       >
                         {vendor.overall_score}
                       </div>
-                      <div className="text-xs mt-1" style={{ color: "#9A7C65" }}>/ 100</div>
+                      <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>/ 100</div>
                     </div>
                   </div>
                   <span
@@ -102,7 +102,7 @@ export default function Home() {
                   >
                     {vendor.status.replace(/-/g, " ")}
                   </span>
-                  <p className="text-sm mt-3 line-clamp-2" style={{ color: "#C0A088" }}>
+                  <p className="text-sm mt-3 line-clamp-2" style={{ color: "#FFFCF2" }}>
                     {vendor.verdict}
                   </p>
                 </Link>
@@ -124,7 +124,7 @@ export default function Home() {
           <div className="flex items-end justify-between mb-10">
             <div>
               <h2 className="text-3xl font-bold mb-2" style={{ color: "#FFFCF2" }}>Peptide Library</h2>
-              <p style={{ color: "#C0A088" }}>Dosage, reconstitution, and research summaries for common peptides.</p>
+              <p style={{ color: "#FFFCF2" }}>Dosage, reconstitution, and research summaries for common peptides.</p>
             </div>
             <Link
               href="/peptides"
@@ -156,11 +156,11 @@ export default function Home() {
                     </span>
                   </div>
                   {peptide.aliases.length > 0 && (
-                    <p className="text-xs mb-2" style={{ color: "#9A7C65" }}>
+                    <p className="text-xs mb-2" style={{ color: "#FFFCF2" }}>
                       {peptide.aliases.slice(0, 2).join(", ")}
                     </p>
                   )}
-                  <p className="text-sm leading-relaxed line-clamp-3" style={{ color: "#C0A088" }}>
+                  <p className="text-sm leading-relaxed line-clamp-3" style={{ color: "#FFFCF2" }}>
                     {peptide.description}
                   </p>
                 </Link>
@@ -180,7 +180,7 @@ export default function Home() {
       <section className="px-6 py-24 text-center" style={{ borderTop: "1px solid #0C2E3D" }}>
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Don't Buy Blind</h2>
-          <p className="text-lg mb-8" style={{ color: "#C0A088" }}>
+          <p className="text-lg mb-8" style={{ color: "#FFFCF2" }}>
             Check any vendor's score, lab history, and active alerts before you order.
           </p>
           <Link
