@@ -23,9 +23,9 @@ export default function CalculatorPage() {
   const doseMcgNum = parseFloat(doseMcg) || 0;
 
   const vialMcg = vialMgNum * 1000;
-  const concentration = bacWaterMlNum > 0 ? vialMcg / bacWaterMlNum : 0; // mcg/mL
+  const concentration = bacWaterMlNum > 0 ? vialMcg / bacWaterMlNum : 0;
   const drawVolumeMl = concentration > 0 ? doseMcgNum / concentration : 0;
-  const drawVolumeUnits = drawVolumeMl * 100; // U-100 syringe units
+  const drawVolumeUnits = drawVolumeMl * 100;
   const dosesPerVial = doseMcgNum > 0 ? Math.floor(vialMcg / doseMcgNum) : 0;
 
   function applyPreset(preset: typeof COMMON_PEPTIDES[0]) {
@@ -35,33 +35,37 @@ export default function CalculatorPage() {
   }
 
   return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: "#000101", color: "#FFFCF2" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
       <Nav />
 
       <div className="pt-20">
-        {/* Header */}
-        <section className="px-6 py-16 text-center">
+        <section className="px-6 py-20 text-center" style={{ backgroundColor: "#FFFFFF" }}>
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Reconstitution Calculator</h1>
-            <p className="text-lg" style={{ color: "#FFFCF2" }}>
+            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#186784" }}>
+              Dosage Tools
+            </p>
+            <h1 className="text-5xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Reconstitution Calculator</h1>
+            <p className="text-xl" style={{ color: "#6E6E73" }}>
               Calculate how many units to draw for your target dose after reconstituting with bacteriostatic water.
             </p>
           </div>
         </section>
 
-        <section className="px-6 pb-24">
-          <div className="max-w-2xl mx-auto">
+        <section className="px-6 pb-24" style={{ backgroundColor: "#F5F5F7" }}>
+          <div className="max-w-xl mx-auto pt-4">
 
             {/* Quick-select presets */}
             <div className="mb-8">
-              <p className="text-sm font-semibold mb-3" style={{ color: "#FFFCF2" }}>QUICK SELECT</p>
+              <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "#6E6E73" }}>
+                Quick Select
+              </p>
               <div className="flex flex-wrap gap-2">
                 {COMMON_PEPTIDES.map((p) => (
                   <button
                     key={p.name}
                     onClick={() => applyPreset(p)}
-                    className="text-sm px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
-                    style={{ backgroundColor: "#0C2E3D", color: "#FFFCF2", border: "1px solid #186784" }}
+                    className="text-sm px-4 py-2 rounded-full transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F", border: "1px solid #E5E5E7" }}
                   >
                     {p.name}
                   </button>
@@ -70,136 +74,82 @@ export default function CalculatorPage() {
             </div>
 
             {/* Inputs */}
-            <div
-              className="rounded-xl p-6 mb-6"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-            >
-              <h2 className="text-lg font-bold mb-6" style={{ color: "#FFFCF2" }}>Inputs</h2>
+            <div className="rounded-2xl p-6 mb-5" style={{ backgroundColor: "#FFFFFF" }}>
+              <h2 className="font-semibold mb-6" style={{ color: "#1D1D1F" }}>Inputs</h2>
 
               <div className="flex flex-col gap-5">
-                {/* Vial size */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: "#FFFCF2" }}>
-                    Vial Size (mg)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.5"
-                    value={vialMg}
-                    onChange={(e) => setVialMg(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1"
-                    style={{
-                      backgroundColor: "#000101",
-                      color: "#FFFCF2",
-                      border: "1px solid #186784",
-                    }}
-                    placeholder="e.g. 5"
-                  />
-                </div>
-
-                {/* BAC water */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: "#FFFCF2" }}>
-                    Bacteriostatic Water Added (mL)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.5"
-                    value={bacWaterMl}
-                    onChange={(e) => setBacWaterMl(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1"
-                    style={{
-                      backgroundColor: "#000101",
-                      color: "#FFFCF2",
-                      border: "1px solid #186784",
-                    }}
-                    placeholder="e.g. 2"
-                  />
-                </div>
-
-                {/* Desired dose */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: "#FFFCF2" }}>
-                    Desired Dose (mcg)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="50"
-                    value={doseMcg}
-                    onChange={(e) => setDoseMcg(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1"
-                    style={{
-                      backgroundColor: "#000101",
-                      color: "#FFFCF2",
-                      border: "1px solid #186784",
-                    }}
-                    placeholder="e.g. 250"
-                  />
-                </div>
+                {[
+                  { label: "Vial Size (mg)", value: vialMg, setter: setVialMg, step: "0.5", placeholder: "e.g. 5" },
+                  { label: "Bacteriostatic Water Added (mL)", value: bacWaterMl, setter: setBacWaterMl, step: "0.5", placeholder: "e.g. 2" },
+                  { label: "Desired Dose (mcg)", value: doseMcg, setter: setDoseMcg, step: "50", placeholder: "e.g. 250" },
+                ].map((field) => (
+                  <div key={field.label}>
+                    <label className="block text-sm font-medium mb-2" style={{ color: "#1D1D1F" }}>
+                      {field.label}
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step={field.step}
+                      value={field.value}
+                      onChange={(e) => field.setter(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                      style={{
+                        backgroundColor: "#F5F5F7",
+                        color: "#1D1D1F",
+                        border: "1px solid #E5E5E7",
+                      }}
+                      placeholder={field.placeholder}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Results */}
-            <div
-              className="rounded-xl p-6 mb-8"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-            >
-              <h2 className="text-lg font-bold mb-6" style={{ color: "#FFFCF2" }}>Results</h2>
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#FFFFFF" }}>
+              <h2 className="font-semibold mb-6" style={{ color: "#1D1D1F" }}>Results</h2>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: "Concentration", value: concentration > 0 ? `${concentration.toFixed(0)} mcg/mL` : "—" },
-                  { label: "Draw Volume", value: drawVolumeMl > 0 ? `${drawVolumeMl.toFixed(3)} mL` : "—" },
+                  { label: "Concentration", value: concentration > 0 ? `${concentration.toFixed(0)} mcg/mL` : "—", highlight: false },
+                  { label: "Draw Volume", value: drawVolumeMl > 0 ? `${drawVolumeMl.toFixed(3)} mL` : "—", highlight: false },
                   { label: "Syringe Units (U-100)", value: drawVolumeUnits > 0 ? `${drawVolumeUnits.toFixed(1)} units` : "—", highlight: true },
-                  { label: "Doses Per Vial", value: dosesPerVial > 0 ? `${dosesPerVial} doses` : "—" },
+                  { label: "Doses Per Vial", value: dosesPerVial > 0 ? `${dosesPerVial} doses` : "—", highlight: false },
                 ].map((r) => (
-                  <div
-                    key={r.label}
-                    className="rounded-lg p-4"
-                    style={{ backgroundColor: "#000101" }}
-                  >
+                  <div key={r.label} className="rounded-xl p-4" style={{ backgroundColor: "#F5F5F7" }}>
                     <div
                       className="text-xl font-bold mb-1"
-                      style={{ color: r.highlight ? "#186784" : "#FFFCF2" }}
+                      style={{ color: r.highlight ? "#186784" : "#1D1D1F" }}
                     >
                       {r.value}
                     </div>
-                    <div className="text-xs" style={{ color: "#FFFCF2" }}>{r.label}</div>
+                    <div className="text-xs" style={{ color: "#6E6E73" }}>{r.label}</div>
                   </div>
                 ))}
               </div>
 
               {drawVolumeUnits > 0 && (
-                <div
-                  className="mt-6 p-4 rounded-lg text-sm"
-                  style={{ backgroundColor: "#000101", border: "1px solid #186784" }}
-                >
-                  <p style={{ color: "#FFFCF2" }}>
-                    <span className="font-semibold" style={{ color: "#FFFCF2" }}>Summary: </span>
-                    Draw <span style={{ color: "#186784" }}>{drawVolumeUnits.toFixed(1)} units</span> on a U-100 insulin syringe to deliver{" "}
-                    <span style={{ color: "#186784" }}>{doseMcgNum} mcg</span>. This reconstitution gives you{" "}
-                    <span style={{ color: "#186784" }}>{dosesPerVial} doses</span> per vial.
+                <div className="mt-5 p-4 rounded-xl text-sm" style={{ backgroundColor: "#F5F5F7" }}>
+                  <p style={{ color: "#6E6E73" }}>
+                    <span className="font-semibold" style={{ color: "#1D1D1F" }}>Summary: </span>
+                    Draw <span style={{ color: "#186784", fontWeight: 600 }}>{drawVolumeUnits.toFixed(1)} units</span> on a
+                    U-100 insulin syringe to deliver{" "}
+                    <span style={{ color: "#186784", fontWeight: 600 }}>{doseMcgNum} mcg</span>.
+                    This gives <span style={{ color: "#186784", fontWeight: 600 }}>{dosesPerVial} doses</span> per vial.
                   </p>
                 </div>
               )}
             </div>
 
             {/* Disclaimer */}
-            <div
-              className="rounded-xl p-5 text-sm"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #9A7C65" }}
-            >
-              <p className="font-semibold mb-2" style={{ color: "#FFFCF2" }}>⚠ Research Use Only</p>
-              <p style={{ color: "#FFFCF2" }}>
-                This calculator is for informational and research purposes only. Always verify calculations
-                independently. Peptide reconstitution and administration should only be performed by
-                qualified researchers following applicable regulations. This is not medical advice.
+            <div className="rounded-2xl p-5 text-sm" style={{ backgroundColor: "#FFFFFF", border: "1px solid #E5E5E7" }}>
+              <p className="font-semibold mb-2" style={{ color: "#1D1D1F" }}>⚠ Research Use Only</p>
+              <p style={{ color: "#6E6E73" }}>
+                For informational and research purposes only. Always verify calculations independently.
+                This is not medical advice.
               </p>
             </div>
-
           </div>
         </section>
       </div>

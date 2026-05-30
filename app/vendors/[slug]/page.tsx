@@ -6,10 +6,10 @@ import { mockVendors } from "@/lib/mock-data";
 import type { VendorStatus } from "@/lib/mock-data";
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
-  recommended:       { label: "Recommended",       bg: "#0a2e1a", text: "#22c55e" },
-  caution:           { label: "Use With Caution",  bg: "#2e1f00", text: "#eab308" },
-  "not-recommended": { label: "Not Recommended",   bg: "#3D1C0C", text: "#ef4444" },
-  "under-review":    { label: "Under Review",      bg: "#1a1a2e", text: "#a78bfa" },
+  recommended:       { label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },
+  caution:           { label: "Use With Caution", bg: "#FEF3C7", text: "#D97706" },
+  "not-recommended": { label: "Not Recommended", bg: "#FEE2E2", text: "#DC2626" },
+  "under-review":    { label: "Under Review",    bg: "#EDE9FE", text: "#7C3AED" },
 };
 
 const SCORE_LABELS: Record<string, { label: string; max: number }> = {
@@ -21,9 +21,9 @@ const SCORE_LABELS: Record<string, { label: string; max: number }> = {
 };
 
 function scoreColor(score: number) {
-  if (score >= 75) return "#22c55e";
-  if (score >= 50) return "#eab308";
-  return "#ef4444";
+  if (score >= 75) return "#16A34A";
+  if (score >= 50) return "#D97706";
+  return "#DC2626";
 }
 
 export async function generateStaticParams() {
@@ -43,39 +43,35 @@ export default async function VendorDetailPage({
   const color = scoreColor(vendor.overall_score);
 
   return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: "#000101", color: "#FFFCF2" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
       <Nav />
 
       <div className="pt-20">
-        <div className="max-w-5xl mx-auto px-6 py-12">
+        <div className="max-w-4xl mx-auto px-6 py-12">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "#FFFCF2" }}>
-            <Link href="/vendors" className="hover:text-white transition-colors">Supplier Reviews</Link>
+          <div className="flex items-center gap-2 text-sm mb-10" style={{ color: "#6E6E73" }}>
+            <Link href="/vendors" className="hover:text-black transition-colors">Supplier Reviews</Link>
             <span>›</span>
-            <span style={{ color: "#FFFCF2" }}>{vendor.name}</span>
+            <span style={{ color: "#1D1D1F" }}>{vendor.name}</span>
           </div>
 
-          {/* Vendor Header */}
-          <div
-            className="rounded-xl p-8 mb-8"
-            style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-          >
+          {/* Header card */}
+          <div className="rounded-2xl p-8 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
             <div className="flex flex-col md:flex-row md:items-start gap-6">
-              {/* Left */}
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2 flex-wrap">
-                  <h1 className="text-3xl font-bold" style={{ color: "#FFFCF2" }}>{vendor.name}</h1>
+                  <h1 className="text-3xl font-bold" style={{ color: "#1D1D1F" }}>{vendor.name}</h1>
                   <span
-                    className="text-xs px-3 py-1 rounded-full font-medium"
+                    className="text-xs font-semibold px-3 py-1 rounded-full"
                     style={{ backgroundColor: status.bg, color: status.text }}
                   >
                     {status.label}
                   </span>
                   {vendor.has_coa && (
                     <span
-                      className="text-xs px-3 py-1 rounded-full font-medium"
-                      style={{ backgroundColor: "#0a2e1a", color: "#22c55e" }}
+                      className="text-xs font-semibold px-3 py-1 rounded-full"
+                      style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}
                     >
                       ✓ COA Verified
                     </span>
@@ -92,12 +88,15 @@ export default async function VendorDetailPage({
                   {vendor.website} ↗
                 </a>
 
-                <div className="flex flex-wrap gap-6 mt-4 text-sm" style={{ color: "#FFFCF2" }}>
+                <div className="flex flex-wrap gap-5 mt-4 text-sm" style={{ color: "#6E6E73" }}>
                   <span>📍 {vendor.location}</span>
-                  <span>📅 Last reviewed {new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
+                  <span>
+                    Last reviewed{" "}
+                    {new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                  </span>
                 </div>
 
-                <p className="mt-4 text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
+                <p className="mt-4 text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
                   {vendor.notes}
                 </p>
               </div>
@@ -105,81 +104,66 @@ export default async function VendorDetailPage({
               {/* Score circle */}
               <div className="flex flex-col items-center shrink-0">
                 <div
-                  className="w-28 h-28 rounded-full flex items-center justify-center text-4xl font-bold"
-                  style={{
-                    backgroundColor: "#000101",
-                    color,
-                    border: `3px solid ${color}`,
-                  }}
+                  className="w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold"
+                  style={{ backgroundColor: `${color}14`, color }}
                 >
                   {vendor.overall_score}
                 </div>
                 <div className="text-sm font-semibold mt-2" style={{ color }}>
-                  {vendor.status === "recommended" ? "Recommended" :
-                   vendor.status === "caution" ? "Use With Caution" :
-                   vendor.status === "not-recommended" ? "Not Recommended" : "Under Review"}
+                  {status.label}
                 </div>
-                <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>Score out of 100</div>
+                <div className="text-xs mt-1" style={{ color: "#6E6E73" }}>out of 100</div>
               </div>
             </div>
           </div>
 
           {/* Verdict */}
-          <div
-            className="rounded-xl p-6 mb-8"
-            style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-          >
-            <h2 className="text-lg font-bold mb-3" style={{ color: "#FFFCF2" }}>Our Verdict</h2>
-            <p className="leading-relaxed" style={{ color: "#FFFCF2" }}>{vendor.verdict}</p>
+          <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+            <h2 className="font-semibold mb-3" style={{ color: "#1D1D1F" }}>Our Verdict</h2>
+            <p className="leading-relaxed" style={{ color: "#6E6E73" }}>{vendor.verdict}</p>
           </div>
 
-          {/* Score Breakdown */}
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Score Breakdown</h2>
-            <div
-              className="rounded-xl overflow-hidden"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-            >
+          {/* Score breakdown */}
+          <div className="mb-6">
+            <h2 className="text-xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Score Breakdown</h2>
+            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: "#F5F5F7" }}>
               {Object.entries(vendor.scores).map(([key, val], i, arr) => {
                 const meta = SCORE_LABELS[key];
                 const pct = Math.round((val / meta.max) * 100);
-                const barColor = pct >= 80 ? "#22c55e" : pct >= 60 ? "#eab308" : "#ef4444";
+                const barColor = pct >= 80 ? "#16A34A" : pct >= 60 ? "#D97706" : "#DC2626";
                 return (
                   <div
                     key={key}
                     className="px-6 py-5"
-                    style={{ borderBottom: i < arr.length - 1 ? "1px solid #186784" : "none" }}
+                    style={{ borderBottom: i < arr.length - 1 ? "1px solid #E5E5E7" : "none" }}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium" style={{ color: "#FFFCF2" }}>{meta.label}</span>
+                      <span className="text-sm font-medium" style={{ color: "#1D1D1F" }}>{meta.label}</span>
                       <span className="text-sm font-bold" style={{ color: barColor }}>
                         {val} / {meta.max}
                       </span>
                     </div>
-                    <div className="h-2 rounded-full" style={{ backgroundColor: "#000101" }}>
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{ width: `${pct}%`, backgroundColor: barColor }}
-                      />
+                    <div className="h-2 rounded-full" style={{ backgroundColor: "#E5E5E7" }}>
+                      <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: barColor }} />
                     </div>
-                    <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>{pct}%</div>
+                    <div className="text-xs mt-1" style={{ color: "#6E6E73" }}>{pct}%</div>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          {/* Peptide Inventory */}
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4" style={{ color: "#FFFCF2" }}>
+          {/* Peptide inventory */}
+          <div className="mb-10">
+            <h2 className="text-xl font-bold mb-4" style={{ color: "#1D1D1F" }}>
               Peptide Inventory ({vendor.peptide_inventory.length})
             </h2>
-            <div className="overflow-x-auto rounded-xl" style={{ border: "1px solid #186784" }}>
+            <div className="overflow-x-auto rounded-2xl" style={{ backgroundColor: "#F5F5F7" }}>
               <table className="w-full text-sm">
                 <thead>
-                  <tr style={{ backgroundColor: "#0C2E3D", borderBottom: "1px solid #186784" }}>
+                  <tr style={{ borderBottom: "1px solid #E5E5E7" }}>
                     {["Peptide", "Price", "Status"].map((h) => (
-                      <th key={h} className="text-left px-4 py-3 font-semibold" style={{ color: "#FFFCF2" }}>{h}</th>
+                      <th key={h} className="text-left px-5 py-3.5 font-semibold" style={{ color: "#6E6E73" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -187,19 +171,16 @@ export default async function VendorDetailPage({
                   {vendor.peptide_inventory.map((item, i) => (
                     <tr
                       key={item.name}
-                      style={{
-                        backgroundColor: i % 2 === 0 ? "#060f14" : "#000101",
-                        borderBottom: "1px solid #0C2E3D",
-                      }}
+                      style={{ borderBottom: i < vendor.peptide_inventory.length - 1 ? "1px solid #E5E5E7" : "none" }}
                     >
-                      <td className="px-4 py-3 font-medium" style={{ color: "#FFFCF2" }}>{item.name}</td>
-                      <td className="px-4 py-3" style={{ color: "#FFFCF2" }}>{item.price}</td>
-                      <td className="px-4 py-3">
+                      <td className="px-5 py-3.5 font-medium" style={{ color: "#1D1D1F" }}>{item.name}</td>
+                      <td className="px-5 py-3.5" style={{ color: "#6E6E73" }}>{item.price}</td>
+                      <td className="px-5 py-3.5">
                         <span
-                          className="text-xs px-2 py-1 rounded-full font-medium"
+                          className="text-xs font-medium px-2.5 py-1 rounded-full"
                           style={{
-                            backgroundColor: item.in_stock ? "#0a2e1a" : "#3D1C0C",
-                            color: item.in_stock ? "#22c55e" : "#ef4444",
+                            backgroundColor: item.in_stock ? "#DCFCE7" : "#FEE2E2",
+                            color: item.in_stock ? "#16A34A" : "#DC2626",
                           }}
                         >
                           {item.in_stock ? "In Stock" : "Out of Stock"}
@@ -212,15 +193,13 @@ export default async function VendorDetailPage({
             </div>
           </div>
 
-          {/* Back link */}
           <Link
             href="/vendors"
-            className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-            style={{ color: "#186784" }}
+            className="inline-flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-70"
+            style={{ color: "#1D1D1F" }}
           >
             ← Back to Supplier Reviews
           </Link>
-
         </div>
       </div>
 

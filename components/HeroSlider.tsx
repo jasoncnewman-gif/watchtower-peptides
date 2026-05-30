@@ -5,21 +5,24 @@ import Link from "next/link";
 
 const SLIDES = [
   {
+    eyebrow: "Independent Vendor Intelligence",
     headline: "Independent scoring. Transparent methodology. Zero conflicts.",
-    sub: "Watchtower Peptides tracks, scores, and monitors peptide vendors so researchers can make informed decisions. No affiliate bias. No paid placements.",
-    cta: { label: "Browse Vendors →", href: "/vendors" },
+    sub: "Watchtower Peptides tracks, scores, and monitors peptide vendors so researchers can make informed decisions.",
+    cta: { label: "Browse Vendors", href: "/vendors" },
     ctaSecondary: { label: "How We Score", href: "/about" },
   },
   {
+    eyebrow: "No Bias. No Kickbacks.",
     headline: "No affiliates. No kickbacks. No compromises.",
     sub: "Every score is based entirely on publicly verifiable data — third-party COAs, independent lab results, and verified community reviews.",
-    cta: { label: "See Vendor Scores →", href: "/vendors" },
+    cta: { label: "See Vendor Scores", href: "/vendors" },
     ctaSecondary: { label: "Peptide Library", href: "/peptides" },
   },
   {
+    eyebrow: "Ongoing Monitoring",
     headline: "We monitor vendors so you don't have to.",
     sub: "Get alerted when a vendor fails a test, changes ownership, receives fraud reports, or makes misleading health claims in their advertising.",
-    cta: { label: "View Vendor Directory →", href: "/vendors" },
+    cta: { label: "View Vendor Directory", href: "/vendors" },
     ctaSecondary: { label: "Reconstitution Calculator", href: "/calculator" },
   },
 ];
@@ -34,8 +37,8 @@ export default function HeroSlider() {
       setTimeout(() => {
         setCurrent((c) => (c + 1) % SLIDES.length);
         setFading(false);
-      }, 400);
-    }, 5000);
+      }, 350);
+    }, 5500);
     return () => clearInterval(timer);
   }, []);
 
@@ -45,7 +48,7 @@ export default function HeroSlider() {
     setTimeout(() => {
       setCurrent(i);
       setFading(false);
-    }, 400);
+    }, 350);
   };
 
   const slide = SLIDES[current];
@@ -53,63 +56,53 @@ export default function HeroSlider() {
   return (
     <section
       className="relative flex items-center justify-center min-h-screen px-6 pt-20"
-      style={{ background: "linear-gradient(160deg, #000101 0%, #0C2E3D 55%, #000101 100%)" }}
+      style={{ backgroundColor: "#FFFFFF" }}
     >
-      {/* Subtle dot grid overlay */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, #18678422 1px, transparent 0)",
-          backgroundSize: "48px 48px",
-        }}
-      />
-
-      <div
-        className="relative max-w-4xl mx-auto text-center px-4"
+        className="relative max-w-3xl mx-auto text-center"
         style={{
           opacity: fading ? 0 : 1,
-          transform: fading ? "translateY(10px)" : "translateY(0)",
-          transition: "opacity 0.4s ease, transform 0.4s ease",
+          transform: fading ? "translateY(8px)" : "translateY(0)",
+          transition: "opacity 0.35s ease, transform 0.35s ease",
         }}
       >
-        {/* Badge */}
-        <div
-          className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full mb-8"
-          style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784", color: "#FFFCF2" }}
+        {/* Eyebrow */}
+        <p
+          className="text-sm font-semibold tracking-widest uppercase mb-6"
+          style={{ color: "#186784" }}
         >
-          <span>⚑</span>
-          <span>Independent. Unbiased. Verified.</span>
-        </div>
+          {slide.eyebrow}
+        </p>
 
-        {/* Headline — no forced line breaks */}
+        {/* Headline */}
         <h1
-          className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6"
-          style={{ color: "#FFFCF2" }}
+          className="font-bold tracking-tight leading-tight mb-6"
+          style={{ color: "#1D1D1F", fontSize: "clamp(2.25rem, 5vw, 3.75rem)" }}
         >
           {slide.headline}
         </h1>
 
-        {/* Subtext */}
+        {/* Sub */}
         <p
-          className="text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-          style={{ color: "#FFFCF2" }}
+          className="text-lg max-w-xl mx-auto mb-10 leading-relaxed"
+          style={{ color: "#6E6E73" }}
         >
           {slide.sub}
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href={slide.cta.href}
-            className="font-semibold px-8 py-4 rounded-lg transition-opacity hover:opacity-90 text-lg"
-            style={{ backgroundColor: "#186784", color: "#FFFCF2" }}
+            className="font-semibold px-8 py-3.5 rounded-full transition-opacity hover:opacity-80 text-base"
+            style={{ backgroundColor: "#1D1D1F", color: "#FFFFFF" }}
           >
-            {slide.cta.label}
+            {slide.cta.label} →
           </Link>
           <Link
             href={slide.ctaSecondary.href}
-            className="font-semibold px-8 py-4 rounded-lg transition-opacity hover:opacity-90 text-lg"
-            style={{ backgroundColor: "#0C2E3D", color: "#FFFCF2", border: "1px solid #186784" }}
+            className="font-semibold px-8 py-3.5 rounded-full transition-opacity hover:opacity-80 text-base"
+            style={{ backgroundColor: "transparent", color: "#1D1D1F", border: "1.5px solid #1D1D1F" }}
           >
             {slide.ctaSecondary.label}
           </Link>
@@ -117,7 +110,7 @@ export default function HeroSlider() {
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2.5">
         {SLIDES.map((_, i) => (
           <button
             key={i}
@@ -125,9 +118,9 @@ export default function HeroSlider() {
             aria-label={`Go to slide ${i + 1}`}
             className="rounded-full transition-all"
             style={{
-              width: i === current ? "28px" : "10px",
-              height: "10px",
-              backgroundColor: i === current ? "#186784" : "#9A7C65",
+              width: i === current ? "24px" : "8px",
+              height: "8px",
+              backgroundColor: i === current ? "#1D1D1F" : "#D1D1D6",
             }}
           />
         ))}

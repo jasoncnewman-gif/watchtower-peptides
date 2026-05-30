@@ -5,9 +5,16 @@ import Footer from "@/components/Footer";
 import { mockPeptides, mockVendors } from "@/lib/mock-data";
 
 const FDA_CONFIG = {
-  approved:        { label: "FDA Approved",   bg: "#0a2e1a", text: "#22c55e" },
-  "not-approved":  { label: "Not Approved",   bg: "#2e1f00", text: "#eab308" },
-  "research-only": { label: "Research Only",  bg: "#1a1f2e", text: "#60a5fa" },
+  approved:        { label: "FDA Approved",  bg: "#DCFCE7", text: "#16A34A" },
+  "not-approved":  { label: "Not Approved",  bg: "#FEF3C7", text: "#D97706" },
+  "research-only": { label: "Research Only", bg: "#DBEAFE", text: "#2563EB" },
+};
+
+const VENDOR_STATUS_CONFIG = {
+  recommended:       { label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },
+  caution:           { label: "Use With Caution", bg: "#FEF3C7", text: "#D97706" },
+  "not-recommended": { label: "Not Recommended", bg: "#FEE2E2", text: "#DC2626" },
+  "under-review":    { label: "Under Review",    bg: "#EDE9FE", text: "#7C3AED" },
 };
 
 export async function generateStaticParams() {
@@ -27,69 +34,56 @@ export default async function PeptideDetailPage({
   const vendors = mockVendors.filter((v) => peptide.vendors.includes(v.slug));
 
   return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: "#000101", color: "#FFFCF2" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
       <Nav />
 
       <div className="pt-20">
         <div className="max-w-4xl mx-auto px-6 py-12">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "#FFFCF2" }}>
-            <Link href="/peptides" className="hover:text-white transition-colors">Peptide Library</Link>
+          <div className="flex items-center gap-2 text-sm mb-10" style={{ color: "#6E6E73" }}>
+            <Link href="/peptides" className="hover:text-black transition-colors">Peptide Library</Link>
             <span>›</span>
-            <span style={{ color: "#FFFCF2" }}>{peptide.name}</span>
+            <span style={{ color: "#1D1D1F" }}>{peptide.name}</span>
           </div>
 
           {/* Header */}
-          <div
-            className="rounded-xl p-8 mb-6"
-            style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-          >
+          <div className="rounded-2xl p-8 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
             <div className="flex items-start gap-4 flex-wrap mb-4">
-              <h1 className="text-3xl font-bold" style={{ color: "#FFFCF2" }}>{peptide.name}</h1>
+              <h1 className="text-3xl font-bold" style={{ color: "#1D1D1F" }}>{peptide.name}</h1>
               <span
-                className="text-sm px-3 py-1 rounded-full font-medium"
+                className="text-sm font-semibold px-3 py-1 rounded-full"
                 style={{ backgroundColor: fda.bg, color: fda.text }}
               >
                 {fda.label}
               </span>
             </div>
             {peptide.aliases.length > 0 && (
-              <p className="text-sm mb-4" style={{ color: "#FFFCF2" }}>
+              <p className="text-sm mb-4" style={{ color: "#6E6E73" }}>
                 Also known as: {peptide.aliases.join(", ")}
               </p>
             )}
-            <p className="text-base leading-relaxed" style={{ color: "#FFFCF2" }}>
+            <p className="text-base leading-relaxed" style={{ color: "#6E6E73" }}>
               {peptide.description}
             </p>
           </div>
 
           {/* Dosage & Reconstitution */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div
-              className="rounded-xl p-6"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-            >
-              <h2 className="text-lg font-bold mb-3" style={{ color: "#FFFCF2" }}>
-                💉 Typical Dosage
-              </h2>
-              <p className="text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
+          <div className="grid md:grid-cols-2 gap-5 mb-6">
+            <div className="rounded-2xl p-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-3" style={{ color: "#1D1D1F" }}>💉 Typical Dosage</h2>
+              <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
                 {peptide.typical_dosage}
               </p>
             </div>
-            <div
-              className="rounded-xl p-6"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-            >
-              <h2 className="text-lg font-bold mb-3" style={{ color: "#FFFCF2" }}>
-                🧪 Reconstitution
-              </h2>
-              <p className="text-sm leading-relaxed" style={{ color: "#FFFCF2" }}>
+            <div className="rounded-2xl p-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-3" style={{ color: "#1D1D1F" }}>🧪 Reconstitution</h2>
+              <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
                 {peptide.reconstitution}
               </p>
               <Link
                 href="/calculator"
-                className="inline-block mt-3 text-xs transition-colors hover:opacity-80"
+                className="inline-block mt-3 text-xs font-medium transition-opacity hover:opacity-70"
                 style={{ color: "#186784" }}
               >
                 Use the Reconstitution Calculator →
@@ -99,13 +93,8 @@ export default async function PeptideDetailPage({
 
           {/* Studies */}
           {peptide.studies.length > 0 && (
-            <div
-              className="rounded-xl p-6 mb-6"
-              style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
-            >
-              <h2 className="text-lg font-bold mb-4" style={{ color: "#FFFCF2" }}>
-                📚 Research Studies
-              </h2>
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>📚 Research Studies</h2>
               <div className="flex flex-col gap-3">
                 {peptide.studies.map((study, i) => (
                   <a
@@ -113,10 +102,10 @@ export default async function PeptideDetailPage({
                     href={study.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-start gap-3 text-sm hover:opacity-80 transition-opacity"
+                    className="flex items-start gap-3 text-sm hover:opacity-70 transition-opacity"
                   >
                     <span style={{ color: "#186784" }} className="shrink-0 mt-0.5">↗</span>
-                    <span style={{ color: "#FFFCF2" }} className="hover:underline">{study.title}</span>
+                    <span style={{ color: "#6E6E73" }} className="hover:underline">{study.title}</span>
                   </a>
                 ))}
               </div>
@@ -125,34 +114,43 @@ export default async function PeptideDetailPage({
 
           {/* Vendors */}
           {vendors.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-lg font-bold mb-4" style={{ color: "#FFFCF2" }}>
-                🏪 Available From ({vendors.length} vendor{vendors.length !== 1 ? "s" : ""})
+            <div className="mb-10">
+              <h2 className="text-xl font-bold mb-4" style={{ color: "#1D1D1F" }}>
+                Available From ({vendors.length} vendor{vendors.length !== 1 ? "s" : ""})
               </h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 {vendors.map((vendor) => {
                   const item = vendor.peptide_inventory.find(
                     (p) => p.name.toLowerCase() === peptide.name.toLowerCase()
                   );
+                  const vs = VENDOR_STATUS_CONFIG[vendor.status];
                   return (
                     <Link
                       key={vendor.slug}
                       href={`/vendors/${vendor.slug}`}
-                      className="flex items-center justify-between rounded-xl p-4 transition-opacity hover:opacity-80"
-                      style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
+                      className="flex items-center justify-between rounded-2xl p-5 transition-shadow hover:shadow-md"
+                      style={{ backgroundColor: "#F5F5F7" }}
                     >
                       <div>
-                        <p className="font-medium" style={{ color: "#FFFCF2" }}>{vendor.name}</p>
-                        {item && (
-                          <p className="text-sm mt-0.5" style={{ color: "#FFFCF2" }}>{item.price}</p>
-                        )}
+                        <p className="font-semibold" style={{ color: "#1D1D1F" }}>{vendor.name}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span
+                            className="text-xs font-medium px-2 py-0.5 rounded-full"
+                            style={{ backgroundColor: vs.bg, color: vs.text }}
+                          >
+                            {vs.label}
+                          </span>
+                          {item && (
+                            <span className="text-sm" style={{ color: "#6E6E73" }}>{item.price}</span>
+                          )}
+                        </div>
                       </div>
                       {item && (
                         <span
-                          className="text-xs px-2 py-1 rounded-full font-medium"
+                          className="text-xs font-medium px-2.5 py-1 rounded-full shrink-0"
                           style={{
-                            backgroundColor: item.in_stock ? "#0a2e1a" : "#3D1C0C",
-                            color: item.in_stock ? "#22c55e" : "#ef4444",
+                            backgroundColor: item.in_stock ? "#DCFCE7" : "#FEE2E2",
+                            color: item.in_stock ? "#16A34A" : "#DC2626",
                           }}
                         >
                           {item.in_stock ? "In Stock" : "Out of Stock"}
@@ -165,15 +163,13 @@ export default async function PeptideDetailPage({
             </div>
           )}
 
-          {/* Back link */}
           <Link
             href="/peptides"
-            className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-            style={{ color: "#186784" }}
+            className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-70"
+            style={{ color: "#1D1D1F" }}
           >
             ← Back to Peptide Library
           </Link>
-
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import HeroSlider from "@/components/HeroSlider";
 import { mockVendors, mockPeptides } from "@/lib/mock-data";
+import type { VendorStatus } from "@/lib/mock-data";
 
 const stats = [
   { label: "Vendors Tracked", value: "50+" },
@@ -11,98 +12,169 @@ const stats = [
   { label: "Independent Reviews", value: "100%" },
 ];
 
-const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  recommended:     { bg: "#0a2e1a", text: "#22c55e" },
-  caution:         { bg: "#2e1f00", text: "#eab308" },
-  "not-recommended": { bg: "#3D1C0C", text: "#ef4444" },
-  "under-review":  { bg: "#1a1a2e", text: "#a78bfa" },
+const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
+  recommended:       { label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },
+  caution:           { label: "Use With Caution", bg: "#FEF3C7", text: "#D97706" },
+  "not-recommended": { label: "Not Recommended", bg: "#FEE2E2", text: "#DC2626" },
+  "under-review":    { label: "Under Review",    bg: "#EDE9FE", text: "#7C3AED" },
 };
 
-const FDA_COLORS: Record<string, { bg: string; text: string }> = {
-  approved:       { bg: "#0a2e1a", text: "#22c55e" },
-  "not-approved": { bg: "#2e1f00", text: "#eab308" },
-  "research-only": { bg: "#1a1f2e", text: "#60a5fa" },
+const FDA_CONFIG = {
+  approved:        { label: "FDA Approved",  bg: "#DCFCE7", text: "#16A34A" },
+  "not-approved":  { label: "Not Approved",  bg: "#FEF3C7", text: "#D97706" },
+  "research-only": { label: "Research Only", bg: "#DBEAFE", text: "#2563EB" },
 };
+
+function scoreColor(score: number) {
+  if (score >= 75) return "#16A34A";
+  if (score >= 50) return "#D97706";
+  return "#DC2626";
+}
 
 export default function Home() {
   const topVendors = mockVendors
     .filter((v) => v.status === "recommended")
     .slice(0, 3);
   const featuredPeptides = mockPeptides.slice(0, 3);
+  const topVendor = mockVendors[0];
 
   return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: "#000101", color: "#FFFCF2" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
       <Nav />
       <HeroSlider />
 
-      {/* Stats Bar */}
-      <section
-        className="px-6 py-12"
-        style={{ backgroundColor: "#0C2E3D", borderTop: "1px solid #186784", borderBottom: "1px solid #186784" }}
-      >
+      {/* Stats bar — dark for contrast */}
+      <section style={{ backgroundColor: "#1D1D1F" }} className="px-6 py-12">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((stat) => (
             <div key={stat.label}>
-              <div className="text-3xl font-bold mb-1" style={{ color: "#186784" }}>{stat.value}</div>
-              <div className="text-sm" style={{ color: "#FFFCF2" }}>{stat.label}</div>
+              <div className="text-3xl font-bold mb-1" style={{ color: "#FFFFFF" }}>{stat.value}</div>
+              <div className="text-sm" style={{ color: "#6E6E73" }}>{stat.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Top Vendors Preview */}
-      <section className="px-6 py-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <h2 className="text-3xl font-bold mb-2" style={{ color: "#FFFCF2" }}>Top Recommended Vendors</h2>
-              <p style={{ color: "#FFFCF2" }}>Vendors with verified lab testing and strong community trust.</p>
-            </div>
+      {/* Alternating section 1 — Why Watchtower (white bg, left text / right visual) */}
+      <section className="px-6 py-24" style={{ backgroundColor: "#FFFFFF" }}>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          {/* Left: text */}
+          <div className="flex-1">
+            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#186784" }}>
+              Our Approach
+            </p>
+            <h2 className="text-4xl font-bold leading-tight mb-6" style={{ color: "#1D1D1F" }}>
+              Built for researchers who don't trust marketing.
+            </h2>
+            <p className="text-lg leading-relaxed mb-8" style={{ color: "#6E6E73" }}>
+              Every vendor is scored across five independently verified categories — lab testing,
+              purity accuracy, transparency, community reputation, and pricing reliability.
+              No sponsored placements. No affiliate links. Just data.
+            </p>
             <Link
-              href="/vendors"
-              className="hidden md:block text-sm font-semibold transition-opacity hover:opacity-80"
-              style={{ color: "#186784" }}
+              href="/about"
+              className="inline-flex items-center gap-2 font-semibold text-sm transition-opacity hover:opacity-70"
+              style={{ color: "#1D1D1F" }}
             >
-              View all vendors →
+              See how we score →
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          {/* Right: vendor score visual */}
+          <div className="flex-1 w-full max-w-sm md:max-w-none">
+            <div
+              className="rounded-2xl p-6"
+              style={{ backgroundColor: "#F5F5F7" }}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <p className="font-semibold text-lg" style={{ color: "#1D1D1F" }}>{topVendor.name}</p>
+                  <p className="text-sm mt-0.5" style={{ color: "#6E6E73" }}>{topVendor.website}</p>
+                </div>
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold"
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    color: scoreColor(topVendor.overall_score),
+                    border: `2px solid ${scoreColor(topVendor.overall_score)}20`,
+                  }}
+                >
+                  {topVendor.overall_score}
+                </div>
+              </div>
+              {Object.entries(topVendor.scores).map(([key, val]) => {
+                const maxes: Record<string, number> = {
+                  lab_testing: 30, purity_accuracy: 25, transparency: 20,
+                  community_reputation: 15, pricing_reliability: 10,
+                };
+                const label = key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+                const pct = Math.round((val / maxes[key]) * 100);
+                return (
+                  <div key={key} className="mb-3">
+                    <div className="flex justify-between text-xs mb-1" style={{ color: "#6E6E73" }}>
+                      <span>{label}</span>
+                      <span style={{ color: "#1D1D1F", fontWeight: 500 }}>{val}/{maxes[key]}</span>
+                    </div>
+                    <div className="h-1.5 rounded-full" style={{ backgroundColor: "#E5E5E7" }}>
+                      <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: "#186784" }} />
+                    </div>
+                  </div>
+                );
+              })}
+              <div className="mt-4">
+                <span className="text-xs font-medium px-2 py-1 rounded-full"
+                  style={{ backgroundColor: STATUS_CONFIG[topVendor.status].bg, color: STATUS_CONFIG[topVendor.status].text }}>
+                  {STATUS_CONFIG[topVendor.status].label}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Alternating section 2 — Top Vendors (gray bg, centered grid) */}
+      <section className="px-6 py-24" style={{ backgroundColor: "#F5F5F7" }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#186784" }}>
+              Supplier Reviews
+            </p>
+            <h2 className="text-4xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Top Recommended Vendors</h2>
+            <p className="text-lg max-w-xl mx-auto" style={{ color: "#6E6E73" }}>
+              Vendors with verified third-party lab testing and strong community trust.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
             {topVendors.map((vendor) => {
-              const badge = STATUS_COLORS[vendor.status] ?? STATUS_COLORS["under-review"];
+              const color = scoreColor(vendor.overall_score);
+              const status = STATUS_CONFIG[vendor.status];
               return (
                 <Link
                   key={vendor.slug}
                   href={`/vendors/${vendor.slug}`}
-                  className="block rounded-xl p-6 transition-all hover:opacity-90"
-                  style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
+                  className="block rounded-2xl p-6 transition-shadow hover:shadow-md"
+                  style={{ backgroundColor: "#FFFFFF" }}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="font-bold text-lg" style={{ color: "#FFFCF2" }}>{vendor.name}</h3>
-                      <p className="text-sm mt-0.5" style={{ color: "#FFFCF2" }}>{vendor.website}</p>
+                      <h3 className="font-semibold text-base" style={{ color: "#1D1D1F" }}>{vendor.name}</h3>
+                      <p className="text-xs mt-0.5" style={{ color: "#6E6E73" }}>{vendor.website}</p>
                     </div>
-                    <div className="text-center ml-4 shrink-0">
-                      <div
-                        className="text-2xl font-bold w-14 h-14 rounded-full flex items-center justify-center"
-                        style={{
-                          backgroundColor: "#000101",
-                          color: vendor.overall_score >= 75 ? "#22c55e" : vendor.overall_score >= 60 ? "#eab308" : "#ef4444",
-                          border: `2px solid ${vendor.overall_score >= 75 ? "#22c55e" : vendor.overall_score >= 60 ? "#eab308" : "#ef4444"}`,
-                        }}
-                      >
-                        {vendor.overall_score}
-                      </div>
-                      <div className="text-xs mt-1" style={{ color: "#FFFCF2" }}>/ 100</div>
+                    <div
+                      className="text-xl font-bold w-12 h-12 rounded-full flex items-center justify-center shrink-0 ml-3"
+                      style={{ backgroundColor: `${color}12`, color }}
+                    >
+                      {vendor.overall_score}
                     </div>
                   </div>
                   <span
-                    className="text-xs px-2 py-1 rounded-full font-medium capitalize"
-                    style={{ backgroundColor: badge.bg, color: badge.text }}
+                    className="text-xs font-medium px-2 py-1 rounded-full"
+                    style={{ backgroundColor: status.bg, color: status.text }}
                   >
-                    {vendor.status.replace(/-/g, " ")}
+                    {status.label}
                   </span>
-                  <p className="text-sm mt-3 line-clamp-2" style={{ color: "#FFFCF2" }}>
+                  <p className="text-sm mt-3 line-clamp-2 leading-relaxed" style={{ color: "#6E6E73" }}>
                     {vendor.verdict}
                   </p>
                 </Link>
@@ -110,83 +182,95 @@ export default function Home() {
             })}
           </div>
 
-          <div className="mt-6 text-center md:hidden">
-            <Link href="/vendors" className="text-sm font-semibold" style={{ color: "#186784" }}>
+          <div className="text-center mt-10">
+            <Link
+              href="/vendors"
+              className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3 rounded-full transition-opacity hover:opacity-80"
+              style={{ backgroundColor: "#1D1D1F", color: "#FFFFFF" }}
+            >
               View all vendors →
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Peptide Library Preview */}
-      <section className="px-6 py-20" style={{ borderTop: "1px solid #0C2E3D" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <h2 className="text-3xl font-bold mb-2" style={{ color: "#FFFCF2" }}>Peptide Library</h2>
-              <p style={{ color: "#FFFCF2" }}>Dosage, reconstitution, and research summaries for common peptides.</p>
+      {/* Alternating section 3 — Peptide Library (white bg, right text / left visual) */}
+      <section className="px-6 py-24" style={{ backgroundColor: "#FFFFFF" }}>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
+          {/* Right: text */}
+          <div className="flex-1">
+            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#186784" }}>
+              Peptide Library
+            </p>
+            <h2 className="text-4xl font-bold leading-tight mb-6" style={{ color: "#1D1D1F" }}>
+              Everything you need to know before you buy.
+            </h2>
+            <p className="text-lg leading-relaxed mb-8" style={{ color: "#6E6E73" }}>
+              Dosage guides, reconstitution instructions, FDA status, and curated research
+              studies for the most commonly studied peptides — all in one place.
+            </p>
+            <div className="flex gap-4">
+              <Link
+                href="/peptides"
+                className="inline-flex items-center gap-2 font-semibold text-sm transition-opacity hover:opacity-70"
+                style={{ color: "#1D1D1F" }}
+              >
+                Browse peptides →
+              </Link>
+              <Link
+                href="/calculator"
+                className="inline-flex items-center gap-2 font-semibold text-sm transition-opacity hover:opacity-70"
+                style={{ color: "#186784" }}
+              >
+                Reconstitution Calculator →
+              </Link>
             </div>
-            <Link
-              href="/peptides"
-              className="hidden md:block text-sm font-semibold transition-opacity hover:opacity-80"
-              style={{ color: "#186784" }}
-            >
-              View all peptides →
-            </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          {/* Left: peptide cards */}
+          <div className="flex-1 w-full flex flex-col gap-3">
             {featuredPeptides.map((peptide) => {
-              const fda = FDA_COLORS[peptide.fda_status] ?? FDA_COLORS["research-only"];
+              const fda = FDA_CONFIG[peptide.fda_status];
               return (
                 <Link
                   key={peptide.slug}
                   href={`/peptides/${peptide.slug}`}
-                  className="block rounded-xl p-6 transition-all hover:opacity-90"
-                  style={{ backgroundColor: "#0C2E3D", border: "1px solid #186784" }}
+                  className="flex items-center gap-4 rounded-xl px-5 py-4 transition-colors hover:opacity-80"
+                  style={{ backgroundColor: "#F5F5F7" }}
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-bold text-lg" style={{ color: "#FFFCF2" }}>{peptide.name}</h3>
-                    <span
-                      className="text-xs px-2 py-1 rounded-full font-medium shrink-0 ml-2"
-                      style={{ backgroundColor: fda.bg, color: fda.text }}
-                    >
-                      {peptide.fda_status === "approved" ? "FDA Approved" :
-                       peptide.fda_status === "research-only" ? "Research Only" : "Not Approved"}
-                    </span>
-                  </div>
-                  {peptide.aliases.length > 0 && (
-                    <p className="text-xs mb-2" style={{ color: "#FFFCF2" }}>
-                      {peptide.aliases.slice(0, 2).join(", ")}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span className="font-semibold" style={{ color: "#1D1D1F" }}>{peptide.name}</span>
+                      <span
+                        className="text-xs font-medium px-2 py-0.5 rounded-full"
+                        style={{ backgroundColor: fda.bg, color: fda.text }}
+                      >
+                        {fda.label}
+                      </span>
+                    </div>
+                    <p className="text-sm mt-1 line-clamp-1" style={{ color: "#6E6E73" }}>
+                      {peptide.aliases.slice(0, 2).join(" · ")}
                     </p>
-                  )}
-                  <p className="text-sm leading-relaxed line-clamp-3" style={{ color: "#FFFCF2" }}>
-                    {peptide.description}
-                  </p>
+                  </div>
+                  <span style={{ color: "#6E6E73" }}>›</span>
                 </Link>
               );
             })}
           </div>
-
-          <div className="mt-6 text-center md:hidden">
-            <Link href="/peptides" className="text-sm font-semibold" style={{ color: "#186784" }}>
-              View all peptides →
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="px-6 py-24 text-center" style={{ borderTop: "1px solid #0C2E3D" }}>
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4" style={{ color: "#FFFCF2" }}>Don't Buy Blind</h2>
-          <p className="text-lg mb-8" style={{ color: "#FFFCF2" }}>
+      {/* CTA banner — dark */}
+      <section className="px-6 py-20" style={{ backgroundColor: "#1D1D1F" }}>
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4" style={{ color: "#FFFFFF" }}>Don't buy blind.</h2>
+          <p className="text-lg mb-8" style={{ color: "#6E6E73" }}>
             Check any vendor's score, lab history, and active alerts before you order.
           </p>
           <Link
             href="/vendors"
-            className="font-semibold px-8 py-4 rounded-lg transition-opacity hover:opacity-90 text-lg inline-block"
-            style={{ backgroundColor: "#186784", color: "#FFFCF2" }}
+            className="font-semibold px-8 py-4 rounded-full transition-opacity hover:opacity-80 text-base inline-block"
+            style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}
           >
             View Vendor Directory →
           </Link>
