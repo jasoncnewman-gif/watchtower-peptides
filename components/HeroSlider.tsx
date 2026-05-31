@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const SLIDES = [
   {
@@ -10,6 +11,8 @@ const SLIDES = [
     sub: "Watchtower Peptides tracks, scores, and monitors peptide vendors so researchers can make informed decisions.",
     cta: { label: "Browse Vendors", href: "/vendors" },
     ctaSecondary: { label: "How We Score", href: "/about" },
+    image: "/images/slide-1.png",
+    imageAlt: "Athletic performance research",
   },
   {
     eyebrow: "No Bias. No Kickbacks.",
@@ -17,6 +20,8 @@ const SLIDES = [
     sub: "Every score is based entirely on publicly verifiable data — third-party COAs, independent lab results, and verified community reviews.",
     cta: { label: "See Vendor Scores", href: "/vendors" },
     ctaSecondary: { label: "Peptide Library", href: "/peptides" },
+    image: null,
+    imageAlt: null,
   },
   {
     eyebrow: "Ongoing Monitoring",
@@ -24,6 +29,8 @@ const SLIDES = [
     sub: "Get alerted when a vendor fails a test, changes ownership, receives fraud reports, or makes misleading health claims in their advertising.",
     cta: { label: "View Vendor Directory", href: "/vendors" },
     ctaSecondary: { label: "Reconstitution Calculator", href: "/calculator" },
+    image: null,
+    imageAlt: null,
   },
 ];
 
@@ -37,7 +44,7 @@ export default function HeroSlider() {
       setTimeout(() => {
         setCurrent((c) => (c + 1) % SLIDES.length);
         setFading(false);
-      }, 350);
+      }, 400);
     }, 5500);
     return () => clearInterval(timer);
   }, []);
@@ -48,69 +55,119 @@ export default function HeroSlider() {
     setTimeout(() => {
       setCurrent(i);
       setFading(false);
-    }, 350);
+    }, 400);
   };
 
   const slide = SLIDES[current];
 
   return (
     <section
-      className="relative flex items-center justify-center min-h-screen px-6 pt-20"
-      style={{ backgroundColor: "#FFFFFF" }}
+      className="relative flex items-center min-h-screen overflow-hidden"
+      style={{ backgroundColor: "#111111" }}
     >
+      {/* Background image layer — fades with slide */}
       <div
-        className="relative max-w-3xl mx-auto text-center"
-        style={{
-          opacity: fading ? 0 : 1,
-          transform: fading ? "translateY(8px)" : "translateY(0)",
-          transition: "opacity 0.35s ease, transform 0.35s ease",
-        }}
+        className="absolute inset-0 transition-opacity duration-700"
+        style={{ opacity: (slide.image && !fading) ? 1 : 0 }}
       >
-        {/* Eyebrow */}
-        <p
-          className="text-sm font-semibold tracking-widest uppercase mb-6"
-          style={{ color: "#186784" }}
-        >
-          {slide.eyebrow}
-        </p>
+        {SLIDES.map((s, i) =>
+          s.image ? (
+            <Image
+              key={i}
+              src={s.image}
+              alt={s.imageAlt ?? ""}
+              fill
+              priority={i === 0}
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+                opacity: i === current ? 1 : 0,
+                transition: "opacity 0.7s ease",
+              }}
+            />
+          ) : null
+        )}
+      </div>
 
-        {/* Headline */}
-        <h1
-          className="font-bold tracking-tight leading-tight mb-6"
-          style={{ color: "#1D1D1F", fontSize: "clamp(2.25rem, 5vw, 3.75rem)" }}
-        >
-          {slide.headline}
-        </h1>
+      {/* Gradient overlay — left-to-right, ensures text is always readable */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: slide.image
+            ? "linear-gradient(to right, rgba(0,0,0,0.88) 30%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.15) 100%)"
+            : "transparent",
+        }}
+      />
 
-        {/* Sub */}
-        <p
-          className="text-lg max-w-xl mx-auto mb-10 leading-relaxed"
-          style={{ color: "#6E6E73" }}
-        >
-          {slide.sub}
-        </p>
+      {/* Bottom fade for dots */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)" }}
+      />
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href={slide.cta.href}
-            className="font-semibold px-8 py-3.5 rounded-full transition-opacity hover:opacity-80 text-base"
-            style={{ backgroundColor: "#1D1D1F", color: "#FFFFFF" }}
+      {/* Content — left-aligned, Withings style */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-8 pt-24 pb-28">
+        <div
+          className="max-w-xl"
+          style={{
+            opacity: fading ? 0 : 1,
+            transform: fading ? "translateY(10px)" : "translateY(0)",
+            transition: "opacity 0.4s ease, transform 0.4s ease",
+          }}
+        >
+          {/* Eyebrow */}
+          <p
+            className="text-sm font-semibold tracking-widest uppercase mb-5"
+            style={{ color: "#186784" }}
           >
-            {slide.cta.label} →
-          </Link>
-          <Link
-            href={slide.ctaSecondary.href}
-            className="font-semibold px-8 py-3.5 rounded-full transition-opacity hover:opacity-80 text-base"
-            style={{ backgroundColor: "transparent", color: "#1D1D1F", border: "1.5px solid #1D1D1F" }}
+            {slide.eyebrow}
+          </p>
+
+          {/* Headline */}
+          <h1
+            className="font-bold tracking-tight leading-tight mb-6"
+            style={{
+              color: "#FFFFFF",
+              fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
+            }}
           >
-            {slide.ctaSecondary.label}
-          </Link>
+            {slide.headline}
+          </h1>
+
+          {/* Sub */}
+          <p
+            className="text-lg leading-relaxed mb-10"
+            style={{ color: "rgba(255,255,255,0.72)", maxWidth: "480px" }}
+          >
+            {slide.sub}
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href={slide.cta.href}
+              className="font-semibold px-7 py-3.5 rounded-full transition-opacity hover:opacity-80 text-sm text-center"
+              style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}
+            >
+              {slide.cta.label} →
+            </Link>
+            <Link
+              href={slide.ctaSecondary.href}
+              className="font-semibold px-7 py-3.5 rounded-full transition-opacity hover:opacity-80 text-sm text-center"
+              style={{
+                backgroundColor: "transparent",
+                color: "#FFFFFF",
+                border: "1.5px solid rgba(255,255,255,0.45)",
+              }}
+            >
+              {slide.ctaSecondary.label}
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Dot indicators */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2.5">
+      {/* Dot indicators — bottom left, aligned with text */}
+      <div className="absolute bottom-9 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
         {SLIDES.map((_, i) => (
           <button
             key={i}
@@ -120,7 +177,7 @@ export default function HeroSlider() {
             style={{
               width: i === current ? "24px" : "8px",
               height: "8px",
-              backgroundColor: i === current ? "#1D1D1F" : "#D1D1D6",
+              backgroundColor: i === current ? "#FFFFFF" : "rgba(255,255,255,0.35)",
             }}
           />
         ))}
