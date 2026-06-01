@@ -173,7 +173,7 @@ export default async function PeptideDetailPage({
         </div>
       </div>
 
-      <Footer />
+      <Footer verseIndex={2} />
     </div>
   );
 }

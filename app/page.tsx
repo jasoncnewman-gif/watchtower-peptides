@@ -277,7 +277,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+      <Footer verseIndex={0} />
     </div>
   );
 }

@@ -127,7 +127,7 @@ export default function VendorsPage() {
         </section>
       </div>
 
-      <Footer />
+      <Footer verseIndex={2} />
     </div>
   );
 }

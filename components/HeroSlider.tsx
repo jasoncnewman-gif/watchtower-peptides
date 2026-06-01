@@ -12,7 +12,7 @@ const SLIDES = [
     cta: { label: "Browse Vendors", href: "/vendors" },
     ctaSecondary: { label: "How We Score", href: "/about" },
     image: "/images/slide-1.png",
-    imageAlt: "Athletic performance research",
+    imageAlt: "Athletic performance",
   },
   {
     eyebrow: "No Bias. No Kickbacks.",
@@ -20,8 +20,8 @@ const SLIDES = [
     sub: "Every score is based entirely on publicly verifiable data — third-party COAs, independent lab results, and verified community reviews.",
     cta: { label: "See Vendor Scores", href: "/vendors" },
     ctaSecondary: { label: "Peptide Library", href: "/peptides" },
-    image: null,
-    imageAlt: null,
+    image: "/images/slide-2.png",
+    imageAlt: "Strength and conditioning training",
   },
   {
     eyebrow: "Ongoing Monitoring",
@@ -29,8 +29,8 @@ const SLIDES = [
     sub: "Get alerted when a vendor fails a test, changes ownership, receives fraud reports, or makes misleading health claims in their advertising.",
     cta: { label: "View Vendor Directory", href: "/vendors" },
     ctaSecondary: { label: "Reconstitution Calculator", href: "/calculator" },
-    image: null,
-    imageAlt: null,
+    image: "/images/slide-3.png",
+    imageAlt: "Recovery and resilience",
   },
 ];
 
@@ -65,44 +65,36 @@ export default function HeroSlider() {
       className="relative flex items-center min-h-screen overflow-hidden"
       style={{ backgroundColor: "#111111" }}
     >
-      {/* Background image layer — fades with slide */}
-      <div
-        className="absolute inset-0 transition-opacity duration-700"
-        style={{ opacity: (slide.image && !fading) ? 1 : 0 }}
-      >
-        {SLIDES.map((s, i) =>
-          s.image ? (
-            <Image
-              key={i}
-              src={s.image}
-              alt={s.imageAlt ?? ""}
-              fill
-              priority={i === 0}
-              style={{
-                objectFit: "cover",
-                objectPosition: "center",
-                opacity: i === current ? 1 : 0,
-                transition: "opacity 0.7s ease",
-              }}
-            />
-          ) : null
-        )}
-      </div>
+      {/* Background image layers — crossfade between slides */}
+      {SLIDES.map((s, i) => (
+        <div
+          key={i}
+          className="absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: i === current && !fading ? 1 : 0 }}
+        >
+          <Image
+            src={s.image}
+            alt={s.imageAlt}
+            fill
+            priority={i === 0}
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </div>
+      ))}
 
-      {/* Gradient overlay — left-to-right, ensures text is always readable */}
+      {/* Left-to-right gradient overlay — keeps text readable over any photo */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: slide.image
-            ? "linear-gradient(to right, rgba(0,0,0,0.88) 30%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.15) 100%)"
-            : "transparent",
+          background:
+            "linear-gradient(to right, rgba(0,0,0,0.88) 28%, rgba(0,0,0,0.52) 58%, rgba(0,0,0,0.12) 100%)",
         }}
       />
 
-      {/* Bottom fade for dots */}
+      {/* Subtle bottom fade for dots */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)" }}
+        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
+        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.45), transparent)" }}
       />
 
       {/* Content — left-aligned, Withings style */}
@@ -137,7 +129,7 @@ export default function HeroSlider() {
           {/* Sub */}
           <p
             className="text-lg leading-relaxed mb-10"
-            style={{ color: "rgba(255,255,255,0.72)", maxWidth: "480px" }}
+            style={{ color: "rgba(255,255,255,0.72)", maxWidth: "460px" }}
           >
             {slide.sub}
           </p>
@@ -166,7 +158,7 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Dot indicators — bottom left, aligned with text */}
+      {/* Dot indicators */}
       <div className="absolute bottom-9 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
         {SLIDES.map((_, i) => (
           <button
@@ -177,7 +169,8 @@ export default function HeroSlider() {
             style={{
               width: i === current ? "24px" : "8px",
               height: "8px",
-              backgroundColor: i === current ? "#FFFFFF" : "rgba(255,255,255,0.35)",
+              backgroundColor:
+                i === current ? "#FFFFFF" : "rgba(255,255,255,0.35)",
             }}
           />
         ))}

@@ -144,7 +144,7 @@ export default function AboutPage() {
         </section>
       </div>
 
-      <Footer />
+      <Footer verseIndex={1} />
     </div>
   );
 }

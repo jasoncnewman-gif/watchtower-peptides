@@ -154,7 +154,7 @@ export default function CalculatorPage() {
         </section>
       </div>
 
-      <Footer />
+      <Footer verseIndex={0} />
     </div>
   );
 }

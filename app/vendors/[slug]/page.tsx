@@ -203,7 +203,7 @@ export default async function VendorDetailPage({
         </div>
       </div>
 
-      <Footer />
+      <Footer verseIndex={0} />
     </div>
   );
 }

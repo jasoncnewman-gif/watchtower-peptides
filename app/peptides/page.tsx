@@ -75,7 +75,7 @@ export default function PeptidesPage() {
         </section>
       </div>
 
-      <Footer />
+      <Footer verseIndex={1} />
     </div>
   );
 }
