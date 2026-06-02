@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { mockVendors } from "@/lib/mock-data";
+import { supabase, dbVendorToVendor, type DbVendor, type DbVendorPeptide } from "@/lib/supabase";
 import type { VendorStatus } from "@/lib/mock-data";
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
@@ -27,7 +27,12 @@ function scoreColor(score: number) {
 }
 
 export async function generateStaticParams() {
-  return mockVendors.map((v) => ({ slug: v.slug }));
+  const { data } = await supabase
+    .from("vendors")
+    .select("slug")
+    .eq("status", "active")
+    .not("slug", "is", null);
+  return (data ?? []).map((v) => ({ slug: v.slug as string }));
 }
 
 export default async function VendorDetailPage({
@@ -36,9 +41,22 @@ export default async function VendorDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const vendor = mockVendors.find((v) => v.slug === slug);
-  if (!vendor) notFound();
 
+  const { data: vendorRow } = await supabase
+    .from("vendors")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (!vendorRow) notFound();
+
+  const { data: peptideRows } = await supabase
+    .from("vendor_peptides")
+    .select("*")
+    .eq("vendor_id", vendorRow.id)
+    .order("peptide_name");
+
+  const vendor = dbVendorToVendor(vendorRow as DbVendor, (peptideRows ?? []) as DbVendorPeptide[]);
   const status = STATUS_CONFIG[vendor.status];
   const color = scoreColor(vendor.overall_score);
 
@@ -92,7 +110,9 @@ export default async function VendorDetailPage({
                   <span>📍 {vendor.location}</span>
                   <span>
                     Last reviewed{" "}
-                    {new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                    {vendor.last_reviewed
+                      ? new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+                      : "—"}
                   </span>
                 </div>
 
@@ -168,26 +188,34 @@ export default async function VendorDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {vendor.peptide_inventory.map((item, i) => (
-                    <tr
-                      key={item.name}
-                      style={{ borderBottom: i < vendor.peptide_inventory.length - 1 ? "1px solid #E5E5E7" : "none" }}
-                    >
-                      <td className="px-5 py-3.5 font-medium" style={{ color: "#1D1D1F" }}>{item.name}</td>
-                      <td className="px-5 py-3.5" style={{ color: "#6E6E73" }}>{item.price}</td>
-                      <td className="px-5 py-3.5">
-                        <span
-                          className="text-xs font-medium px-2.5 py-1 rounded-full"
-                          style={{
-                            backgroundColor: item.in_stock ? "#DCFCE7" : "#FEE2E2",
-                            color: item.in_stock ? "#16A34A" : "#DC2626",
-                          }}
-                        >
-                          {item.in_stock ? "In Stock" : "Out of Stock"}
-                        </span>
+                  {vendor.peptide_inventory.length === 0 ? (
+                    <tr>
+                      <td colSpan={3} className="px-5 py-6 text-center" style={{ color: "#6E6E73" }}>
+                        No inventory data yet
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    vendor.peptide_inventory.map((item, i) => (
+                      <tr
+                        key={item.name}
+                        style={{ borderBottom: i < vendor.peptide_inventory.length - 1 ? "1px solid #E5E5E7" : "none" }}
+                      >
+                        <td className="px-5 py-3.5 font-medium" style={{ color: "#1D1D1F" }}>{item.name}</td>
+                        <td className="px-5 py-3.5" style={{ color: "#6E6E73" }}>{item.price}</td>
+                        <td className="px-5 py-3.5">
+                          <span
+                            className="text-xs font-medium px-2.5 py-1 rounded-full"
+                            style={{
+                              backgroundColor: item.in_stock ? "#DCFCE7" : "#FEE2E2",
+                              color: item.in_stock ? "#16A34A" : "#DC2626",
+                            }}
+                          >
+                            {item.in_stock ? "In Stock" : "Out of Stock"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

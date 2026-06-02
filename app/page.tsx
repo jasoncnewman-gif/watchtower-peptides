@@ -4,13 +4,7 @@ import Footer from "@/components/Footer";
 import HeroSlider from "@/components/HeroSlider";
 import { mockVendors, mockPeptides } from "@/lib/mock-data";
 import type { VendorStatus } from "@/lib/mock-data";
-
-const stats = [
-  { label: "Vendors Tracked", value: "50+" },
-  { label: "Lab Tests Reviewed", value: "500+" },
-  { label: "Red Flags Identified", value: "120+" },
-  { label: "Independent Reviews", value: "100%" },
-];
+import { supabase } from "@/lib/supabase";
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
   recommended:       { label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },
@@ -31,7 +25,24 @@ function scoreColor(score: number) {
   return "#DC2626";
 }
 
-export default function Home() {
+export default async function Home() {
+  const [{ count: activeCount }, { data: lastUpdatedRow }] = await Promise.all([
+    supabase.from("vendors").select("*", { count: "exact", head: true }).eq("status", "active"),
+    supabase.from("vendors").select("updated_at").order("updated_at", { ascending: false }).limit(1).single(),
+  ]);
+
+  const vendorCount = activeCount ?? 0;
+  const lastUpdated = lastUpdatedRow?.updated_at
+    ? new Date(lastUpdatedRow.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : "—";
+
+  const stats = [
+    { label: "Vendors Reviewed", value: String(vendorCount) },
+    { label: "Lab Tests Reviewed", value: "500+" },
+    { label: "Last Updated", value: lastUpdated },
+    { label: "Independent Reviews", value: "100%" },
+  ];
+
   const topVendors = mockVendors
     .filter((v) => v.status === "recommended")
     .slice(0, 3);

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { mockVendors } from "@/lib/mock-data";
+import { supabase, dbVendorToVendor, type DbVendor } from "@/lib/supabase";
 import type { VendorStatus } from "@/lib/mock-data";
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
@@ -17,8 +17,15 @@ function scoreColor(score: number) {
   return "#DC2626";
 }
 
-export default function VendorsPage() {
-  const vendors = [...mockVendors].sort((a, b) => b.overall_score - a.overall_score);
+export default async function VendorsPage() {
+  const { data, error } = await supabase
+    .from("vendors")
+    .select("id, name, slug, website, overall_score, status, location, has_coa, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, community_reputation_score, pricing_reliability_score, notes")
+    .eq("status", "active")
+    .order("overall_score", { ascending: false, nullsFirst: false });
+
+  if (error) console.error("vendors query error:", error.message);
+  const vendors = (data ?? []).map((v) => dbVendorToVendor(v as DbVendor));
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
@@ -117,7 +124,9 @@ export default function VendorsPage() {
                     </div>
                     <p className="text-xs mt-2" style={{ color: "#6E6E73" }}>
                       Last reviewed:{" "}
-                      {new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                      {vendor.last_reviewed
+                        ? new Date(vendor.last_reviewed).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+                        : "—"}
                     </p>
                   </Link>
                 );
