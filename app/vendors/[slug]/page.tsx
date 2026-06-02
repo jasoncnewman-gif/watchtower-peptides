@@ -94,6 +94,14 @@ export default async function VendorDetailPage({
                       ✓ COA Verified
                     </span>
                   )}
+                  {vendor.verified_domain && (
+                    <span
+                      className="text-xs font-semibold px-3 py-1 rounded-full"
+                      style={{ backgroundColor: "#DBEAFE", color: "#1D4ED8" }}
+                    >
+                      ✓ Verified Domain
+                    </span>
+                  )}
                 </div>
 
                 <a

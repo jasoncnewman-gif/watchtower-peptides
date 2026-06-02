@@ -26,7 +26,6 @@ type DbVendorRow = {
   id: string;
   slug: string;
   name: string;
-  overall_score: number | null;
   finnrick_rating: string | null;
   finnrick_score: number | null;
   finnrick_tests_count: number | null;
@@ -101,7 +100,7 @@ function deriveStatus(score: number): string {
 async function main() {
   const { data: vendors, error } = await db
     .from("vendors")
-    .select("id, slug, name, overall_score, finnrick_rating, finnrick_score, finnrick_tests_count, has_coa, status")
+    .select("id, slug, name, finnrick_rating, finnrick_score, finnrick_tests_count, has_coa, status")
     .in("status", ["active", "flagged"]);
 
   if (error) {
@@ -116,13 +115,6 @@ async function main() {
   let skipped = 0;
 
   for (const v of rows) {
-    // Skip vendors with a manually set overall_score > 0
-    if (v.overall_score && v.overall_score > 0) {
-      log(SCRIPT, `  ${v.name}: skipped (manual score ${v.overall_score})`);
-      skipped++;
-      continue;
-    }
-
     const lab        = labTestingScore(v.finnrick_tests_count, v.finnrick_rating);
     const purity     = purityAccuracyScore(v.finnrick_rating, v.finnrick_score);
     const trans      = transparencyScore(v.has_coa);

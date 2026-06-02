@@ -10,6 +10,7 @@ export type Vendor = {
   status: VendorStatus;
   location: string;
   has_coa: boolean;
+  verified_domain?: boolean;
   last_reviewed: string;
   verdict: string;
   notes: string;

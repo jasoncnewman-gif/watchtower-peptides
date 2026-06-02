@@ -43,6 +43,7 @@ export interface DbVendor {
   specialization: string[] | null
   formats_available: string[] | null
   has_coa: boolean
+  verified_domain: boolean
   is_gated: boolean
   gated_notes: string | null
   fda_warning: boolean
@@ -143,6 +144,7 @@ export function dbVendorToVendor(db: DbVendor, peptideItems: DbVendorPeptide[] =
     status: dbStatusToDisplayStatus(db.status, db.overall_score),
     location: db.location ?? locationParts.join(', '),
     has_coa: db.has_coa,
+    verified_domain: db.verified_domain,
     last_reviewed: db.last_reviewed ?? '',
     verdict: db.verdict ?? '',
     notes: db.notes ?? '',

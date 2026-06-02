@@ -12,7 +12,8 @@
     "scrape:products": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-vendor-products.ts",
     "scrape:coas": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-vendor-coas.ts",
     "compute:scores": "tsx --tsconfig scripts/tsconfig.json scripts/compute-scores.ts",
-    "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts"
+    "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts",
+    "verify:domains": "tsx --tsconfig scripts/tsconfig.json scripts/verify-domains.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
@@ -27,6 +28,7 @@
     "@types/react-dom": "^19",
     "cheerio": "^1.2.0",
     "dotenv": "^16.6.1",
+    "puppeteer": "^25.1.0",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5"

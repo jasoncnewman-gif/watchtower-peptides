@@ -20,7 +20,7 @@ function scoreColor(score: number) {
 export default async function VendorsPage() {
   const { data, error } = await supabase
     .from("vendors")
-    .select("id, name, slug, website, overall_score, status, location, has_coa, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, community_reputation_score, pricing_reliability_score, notes")
+    .select("id, name, slug, website, overall_score, status, location, has_coa, verified_domain, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, community_reputation_score, pricing_reliability_score, notes")
     .eq("status", "active")
     .order("overall_score", { ascending: false, nullsFirst: false });
 
@@ -92,6 +92,14 @@ export default async function VendorsPage() {
                           style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}
                         >
                           ✓ COA Verified
+                        </span>
+                      )}
+                      {vendor.verified_domain && (
+                        <span
+                          className="text-xs font-medium px-2.5 py-1 rounded-full"
+                          style={{ backgroundColor: "#DBEAFE", color: "#1D4ED8" }}
+                        >
+                          ✓ Verified Domain
                         </span>
                       )}
                       <span
