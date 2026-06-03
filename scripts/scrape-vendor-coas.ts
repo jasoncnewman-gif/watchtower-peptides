@@ -29,15 +29,15 @@ type CoaConfig = {
 
 const VENDOR_CONFIGS: CoaConfig[] = [
   { slug: "peptide-partners",        coaUrl: "https://peptidepartners.com/pages/lab-results" },
-  { slug: "ion-peptide",             coaUrl: "https://ionpeptide.com/coa" },
+  { slug: "ion-peptide",             coaUrl: "https://ionpeptide.com/lab-results/" },
   { slug: "core-peptides",           coaUrl: "https://corepeptides.com/pages/certificates-of-analysis" },
-  { slug: "limitless-biotech",       coaUrl: "https://limitlessbiotech.com/pages/lab-testing" },
+  { slug: "limitless-biotech",       coaUrl: "https://limitlessbiotech.us/pages/lab-testing" },
   { slug: "ascension-peptides",      coaUrl: "https://ascensionpeptides.com/pages/coa" },
   { slug: "nexaph",                  coaUrl: "https://nexaph.com/lab-results" },
   { slug: "mile-high-compounds",     coaUrl: "https://milehighcompounds.com/pages/coa" },
-  { slug: "crush-research",          coaUrl: "https://crushresearch.com/lab-testing" },
-  { slug: "omegamino",               coaUrl: "https://omegamino.com/pages/coa" },
-  { slug: "orbitrex-peptides",       coaUrl: "https://orbitrexpeptides.com/lab-results" },
+  { slug: "crush-research",          coaUrl: "https://crushresearch.shop/lab-testing" },
+  { slug: "omegamino",               coaUrl: "https://omegamino.net/pages/coa" },
+  { slug: "orbitrex-peptides",       coaUrl: "https://orbitrexpeptide.is/coas/" },
   { slug: "peptidology",             coaUrl: "https://peptidology.com/pages/lab-results" },
   { slug: "swiss-chems",             coaUrl: "https://swisschems.is/pages/certificates" },
   { slug: "pure-rawz",               coaUrl: "https://purerawz.co/pages/coa" },
@@ -46,25 +46,25 @@ const VENDOR_CONFIGS: CoaConfig[] = [
   { slug: "sports-technology-labs",  coaUrl: "https://sportstechnologylabs.com/pages/lab-results" },
   { slug: "polaris-peptides",        coaUrl: "https://polarispeptides.com/pages/coa" },
   { slug: "pivot-labs",              coaUrl: "https://pivotlabs.com/pages/testing" },
-  { slug: "ez-peptides",             coaUrl: "https://ezpeptides.com/pages/lab-results" },
+  { slug: "ez-peptides",             coaUrl: "https://ezpeptides.com/coa/" },
   { slug: "skye-peptides",           coaUrl: "https://skyepeptides.com/pages/coa" },
-  { slug: "bulk-peptide-supply",     coaUrl: "https://bulkpeptidesupply.com/pages/lab-results" },
+  { slug: "bulk-peptide-supply",     coaUrl: "https://bulkpeptidesupply.com/coa-library/" },
   { slug: "astro-peptides",          coaUrl: "https://astropeptides.com/pages/certificates" },
   { slug: "dynamic-peptide",         coaUrl: "https://dynamicpeptide.com/pages/coa" },
-  { slug: "glacier-aminos",          coaUrl: "https://glacieraminos.com/lab-results" },
+  { slug: "glacier-aminos",          coaUrl: "https://glaciersaminos.com/coas" },
   { slug: "penguin-peptides",        coaUrl: "https://penguinpeptides.com/pages/lab-testing" },
-  { slug: "paramount-peptides",      coaUrl: "https://paramountpeptides.com/pages/coa" },
-  { slug: "nuscience-peptides",      coaUrl: "https://nusciencepeptides.com/lab-results" },
-  { slug: "southern-peptides",       coaUrl: "https://southernpeptides.com/pages/coa" },
+  { slug: "paramount-peptides",      coaUrl: "https://paramountpeptides.com/coa/" },
+  { slug: "nuscience-peptides",      coaUrl: "https://nusciencepeptides.com/nuscience-lab-test-results/" },
+  { slug: "southern-peptides",       coaUrl: "https://southern-peptides-llc.myshopify.com/pages/coa" },
   { slug: "simple-peptide",          coaUrl: "https://simplepeptide.com/pages/lab-results" },
-  { slug: "verified-peptides",       coaUrl: "https://verifiedpeptides.com/pages/coa" },
-  { slug: "aavant-research",         coaUrl: "https://aavantresearch.com/pages/lab-testing" },
-  { slug: "nextechlabs",             coaUrl: "https://nextechlabs.com/pages/coa" },
+  { slug: "verified-peptides",       coaUrl: "https://verifiedpeptides.com/lab-reports/" },
+  { slug: "aavant-research",         coaUrl: "https://aavantacr.com/test-result-coas/" },
+  { slug: "nextechlabs",             coaUrl: "https://nextechlaboratories.com/pages/coa" },
   { slug: "apollo-peptide-sciences", coaUrl: "https://apollopeptidesciences.com/pages/lab-results" },
   { slug: "cernum-biosciences",      coaUrl: "https://cernumbiosciences.com/pages/certificates" },
   { slug: "peptide-crafters",        coaUrl: "https://peptidecrafters.com/pages/coa" },
   { slug: "lvlup-health",            coaUrl: "https://lvluphealth.com/pages/lab-results" },
-  { slug: "healthgevity",            coaUrl: "https://healthgevity.com/pages/testing" },
+  { slug: "healthgevity",            coaUrl: "https://healthgev.com/pages/testing" },
 ];
 
 // ── COA detection heuristics ──────────────────────────────────────────────
@@ -111,6 +111,72 @@ async function getVendorId(slug: string): Promise<string | null> {
 
 // ── Per-vendor COA check ──────────────────────────────────────────────────
 
+// COA-related link keywords (for homepage nav discovery)
+const COA_LINK_KEYWORDS = ["coa", "lab", "certificate", "test result", "analysis", "purity", "janoshik"];
+
+function isCoaNavLink(href: string, text: string): boolean {
+  const h = href.toLowerCase();
+  const t = text.toLowerCase();
+  return COA_LINK_KEYWORDS.some((kw) => h.includes(kw) || t.includes(kw));
+}
+
+async function getPageContent(page: import("puppeteer").Page, url: string): Promise<{ body: string; links: string[] } | null> {
+  try {
+    const response = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
+    if (!response || response.status() === 404) return null;
+    await new Promise((r) => setTimeout(r, 2500));
+    const body = await page.evaluate(() => document.body?.innerText ?? "");
+    const links = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("a[href]")).map((a) => (a as HTMLAnchorElement).href)
+    );
+    return { body, links };
+  } catch {
+    return null;
+  }
+}
+
+async function discoverCoaUrl(page: import("puppeteer").Page, baseUrl: string): Promise<string | null> {
+  const { protocol, hostname } = new URL(baseUrl);
+  const homeUrl = `${protocol}//${hostname}`;
+  const content = await getPageContent(page, homeUrl);
+  if (!content) return null;
+
+  // Find COA-related links in the homepage
+  const candidates = await page.evaluate((keywords: string[]) => {
+    return Array.from(document.querySelectorAll("a[href]"))
+      .map((a) => ({ href: (a as HTMLAnchorElement).href, text: a.textContent?.trim() ?? "" }))
+      .filter(({ href, text }) => {
+        const h = href.toLowerCase();
+        const t = text.toLowerCase();
+        return keywords.some((kw) => h.includes(kw) || t.includes(kw));
+      })
+      .map(({ href }) => href);
+  }, COA_LINK_KEYWORDS);
+
+  return candidates[0] ?? null;
+}
+
+async function saveCoaLinks(vendorId: string, slug: string, linkHrefs: string[]): Promise<void> {
+  const coaLinks = linkHrefs.filter(
+    (h) => h.includes("janoshik") || h.includes(".pdf") || h.includes("coa")
+  );
+  if (coaLinks.length === 0) return;
+  await db.from("lab_tests").delete().eq("vendor_id", vendorId);
+  const rows = coaLinks.slice(0, 50).map((href) => ({
+    vendor_id:       vendorId,
+    peptide_name:    null,
+    lab_name:        href.includes("janoshik") ? "Janoshik" : null,
+    test_type:       null,
+    purity_result:   null,
+    test_date:       null,
+    janoshik_tested: href.includes("janoshik"),
+    coa_url:         href,
+    verified:        false,
+  }));
+  await db.from("lab_tests").insert(rows);
+  log(SCRIPT, `  ✓ ${slug}: ${rows.length} COA links saved`);
+}
+
 async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> {
   const vendorId = await getVendorId(config.slug);
   if (!vendorId) {
@@ -119,57 +185,37 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
   }
 
   const page = await browser.newPage();
-  page.setDefaultNavigationTimeout(30000);
+  page.setDefaultNavigationTimeout(15000);
   await page.setUserAgent(USER_AGENT);
 
   try {
-    const response = await page.goto(config.coaUrl, { waitUntil: "networkidle2" });
+    // Stage 1: try the configured COA URL
+    let content = await getPageContent(page, config.coaUrl);
 
-    if (!response || response.status() === 404) {
-      log(SCRIPT, `  ${config.slug}: COA page not found (${response?.status() ?? "no response"})`);
+    // Stage 2: if 404/error, discover from homepage nav
+    if (!content) {
+      log(SCRIPT, `  ${config.slug}: guessed URL failed — searching homepage for COA links…`);
+      const discovered = await discoverCoaUrl(page, config.coaUrl);
+      if (discovered && discovered !== config.coaUrl) {
+        log(SCRIPT, `  ${config.slug}: found candidate → ${discovered}`);
+        content = await getPageContent(page, discovered);
+      }
+    }
+
+    if (!content) {
+      log(SCRIPT, `  — ${config.slug}: no COA page found`);
       await db.from("vendors").update({ has_coa: false }).eq("id", vendorId);
       return;
     }
 
-    // Short wait for lazy-loaded content
-    await new Promise((r) => setTimeout(r, 1500));
-
-    const bodyText = await page.evaluate(() => document.body?.innerText ?? "");
-    const linkHrefs = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("a[href]")).map((a) => (a as HTMLAnchorElement).href)
-    );
-
-    const hasCoa = hasCoaContent(bodyText, linkHrefs);
-
+    const hasCoa = hasCoaContent(content.body, content.links);
     await db.from("vendors").update({ has_coa: hasCoa }).eq("id", vendorId);
 
     if (hasCoa) {
       log(SCRIPT, `  ✓ ${config.slug}: COA content detected`);
-
-      // Save any discovered COA links as basic lab_test records
-      const coaLinks = linkHrefs.filter(
-        (h) => h.includes("janoshik") || h.includes(".pdf") || h.includes("coa")
-      );
-      if (coaLinks.length > 0) {
-        const now = new Date().toISOString();
-        // Remove stale records first
-        await db.from("lab_tests").delete().eq("vendor_id", vendorId);
-        const rows = coaLinks.slice(0, 50).map((href) => ({
-          vendor_id:       vendorId,
-          peptide_name:    null,
-          lab_name:        href.includes("janoshik") ? "Janoshik" : null,
-          test_type:       null,
-          purity_result:   null,
-          test_date:       null,
-          janoshik_tested: href.includes("janoshik"),
-          coa_url:         href,
-          verified:        false,
-        }));
-        await db.from("lab_tests").insert(rows);
-        log(SCRIPT, `  ✓ ${config.slug}: ${rows.length} COA links saved`);
-      }
+      await saveCoaLinks(vendorId, config.slug, content.links);
     } else {
-      log(SCRIPT, `  — ${config.slug}: no COA content found at ${config.coaUrl}`);
+      log(SCRIPT, `  — ${config.slug}: page exists but no COA content`);
     }
   } catch (err) {
     log(SCRIPT, `  ✗ ${config.slug}: ${(err as Error).message}`);

@@ -39,17 +39,17 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "peptide-partners",        catalogUrl: "https://peptide.partners/shop" },
   { slug: "ion-peptide",             catalogUrl: "https://ionpeptide.com/shop" },
   { slug: "core-peptides",           catalogUrl: "https://www.corepeptides.com/peptides/" },
-  { slug: "limitless-biotech",       catalogUrl: "https://limitlessbiotech.com/collections/peptides" },
+  { slug: "limitless-biotech",       catalogUrl: "https://limitlessbiotech.us/product-category/peptides/" },
   { slug: "ascension-peptides",      catalogUrl: "https://ascensionpeptides.com/collections/all" },
   { slug: "nexaph",                  catalogUrl: "https://nexaph.com/peptides" },
-  { slug: "mile-high-compounds",     catalogUrl: "https://milehighcompounds.com/collections/peptides" },
-  { slug: "crush-research",          catalogUrl: "https://crushresearch.com/shop" },
-  { slug: "omegamino",               catalogUrl: "https://omegamino.com/collections/all" },
-  { slug: "orbitrex-peptides",       catalogUrl: "https://orbitrexpeptides.com/shop" },
+  { slug: "mile-high-compounds",     catalogUrl: "", isGated: true },
+  { slug: "crush-research",          catalogUrl: "https://crushresearch.shop" },
+  { slug: "omegamino",               catalogUrl: "", isGated: true },
+  { slug: "orbitrex-peptides",       catalogUrl: "https://orbitrexpeptide.is" },
   { slug: "peptidology",             catalogUrl: "https://peptidology.com/collections/peptides" },
   { slug: "swiss-chems",             catalogUrl: "https://swisschems.is/product-category/peptides" },
   { slug: "pure-rawz",               catalogUrl: "https://purerawz.co/peptides" },
-  { slug: "loti-labs",               catalogUrl: "https://lotilabs.com/shop" },
+  { slug: "loti-labs",               catalogUrl: "", isGated: true },
   { slug: "biotech-peptides",        catalogUrl: "https://biotechpeptides.com/collections/all" },
   { slug: "sports-technology-labs",  catalogUrl: "https://sportstechnologylabs.com/shop" },
   { slug: "polaris-peptides",        catalogUrl: "https://polarispeptides.com/collections/peptides" },
@@ -57,22 +57,22 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "ez-peptides",             catalogUrl: "https://ezpeptides.com/collections/all" },
   { slug: "skye-peptides",           catalogUrl: "https://skyepeptides.com/collections/peptides" },
   { slug: "bulk-peptide-supply",     catalogUrl: "https://bulkpeptidesupply.com/shop" },
-  { slug: "astro-peptides",          catalogUrl: "https://astropeptides.com/collections/all" },
+  { slug: "astro-peptides",          catalogUrl: "https://astropeptides.com/products" },
   { slug: "dynamic-peptide",         catalogUrl: "https://dynamicpeptide.com/collections/peptides" },
-  { slug: "glacier-aminos",          catalogUrl: "https://glacieraminos.com/shop" },
+  { slug: "glacier-aminos",          catalogUrl: "https://glaciersaminos.com/shop" },
   { slug: "penguin-peptides",        catalogUrl: "https://penguinpeptides.com/collections/all" },
   { slug: "paramount-peptides",      catalogUrl: "https://paramountpeptides.com/collections/peptides" },
   { slug: "nuscience-peptides",      catalogUrl: "https://nusciencepeptides.com/shop" },
-  { slug: "southern-peptides",       catalogUrl: "https://southernpeptides.com/collections/all" },
+  { slug: "southern-peptides",       catalogUrl: "https://southern-peptides-llc.myshopify.com/collections/all" },
   { slug: "simple-peptide",          catalogUrl: "https://simplepeptide.com/shop" },
   { slug: "verified-peptides",       catalogUrl: "https://verifiedpeptides.com/shop" },
   { slug: "aavant-research",         catalogUrl: "https://aavantacr.com/shop" },
-  { slug: "nextechlabs",             catalogUrl: "https://nextechlabs.com/collections/all" },
+  { slug: "nextechlabs",             catalogUrl: "https://nextechlaboratories.com/collections/all" },
   { slug: "apollo-peptide-sciences", catalogUrl: "https://apollopeptidesciences.com/collections/all" },
   { slug: "cernum-biosciences",      catalogUrl: "https://cernumbiosciences.com/shop" },
   { slug: "peptide-crafters",        catalogUrl: "https://peptidecrafters.com/collections/peptides" },
   { slug: "lvlup-health",            catalogUrl: "https://lvluphealth.com/collections/all" },
-  { slug: "healthgevity",            catalogUrl: "https://healthgevity.com/shop" },
+  { slug: "healthgevity",            catalogUrl: "https://healthgev.com/shop" },
 ];
 
 // ── Peptide keyword filter ────────────────────────────────────────────────
@@ -114,39 +114,57 @@ type ShopifyProduct = {
   variants: ShopifyVariant[];
 };
 
-async function tryShopifyApi(catalogUrl: string): Promise<ProductData[] | null> {
+function parseShopifyProducts(products: ShopifyProduct[]): ProductData[] {
+  const results: ProductData[] = [];
+  for (const p of products) {
+    if (!isPeptideProduct(p.title)) continue;
+    const variant = p.variants[0];
+    const price = variant?.price ? parseFloat(variant.price) : null;
+    const compareAt = variant?.compare_at_price ? parseFloat(variant.compare_at_price) : null;
+    const isOnSale = compareAt !== null && price !== null && compareAt > price;
+    results.push({
+      peptide_name: p.title,
+      size_mg:      parseMg(p.title),
+      list_price:   isOnSale ? compareAt : price,
+      sale_price:   isOnSale ? price : null,
+      in_stock:     p.available ?? p.variants.some((v) => v.available),
+    });
+  }
+  return results;
+}
+
+async function tryShopifyApi(catalogUrl: string, browser: Browser): Promise<ProductData[] | null> {
+  const { protocol, hostname } = new URL(catalogUrl);
+  const apiUrl = `${protocol}//${hostname}/products.json?limit=250`;
+
+  // Stage 1a: plain fetch (fast, no browser overhead)
   try {
-    const { protocol, hostname } = new URL(catalogUrl);
-    const apiUrl = `${protocol}//${hostname}/products.json?limit=250`;
     const res = await fetch(apiUrl, {
       headers: { "User-Agent": USER_AGENT },
       signal: AbortSignal.timeout(10000),
     });
-    if (!res.ok) return null;
-    const ct = res.headers.get("content-type") ?? "";
-    if (!ct.includes("json")) return null;
-
-    const json = (await res.json()) as { products?: ShopifyProduct[] };
-    if (!json.products?.length) return null;
-
-    const results: ProductData[] = [];
-    for (const p of json.products) {
-      if (!isPeptideProduct(p.title)) continue;
-      const variant = p.variants[0];
-      const price = variant?.price ? parseFloat(variant.price) : null;
-      const compareAt = variant?.compare_at_price ? parseFloat(variant.compare_at_price) : null;
-      const isOnSale = compareAt !== null && price !== null && compareAt > price;
-      results.push({
-        peptide_name: p.title,
-        size_mg:      parseMg(p.title),
-        list_price:   isOnSale ? compareAt : price,
-        sale_price:   isOnSale ? price : null,
-        in_stock:     p.available ?? p.variants.some((v) => v.available),
-      });
+    if (res.ok && (res.headers.get("content-type") ?? "").includes("json")) {
+      const json = (await res.json()) as { products?: ShopifyProduct[] };
+      if (json.products?.length) return parseShopifyProducts(json.products);
     }
-    return results;
+  } catch {
+    // fall through to browser attempt
+  }
+
+  // Stage 1b: stealth browser fallback (handles Cloudflare-protected Shopify stores)
+  const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(15000);
+  await page.setUserAgent(USER_AGENT);
+  try {
+    await page.goto(apiUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+    const body = await page.evaluate(() => document.body?.innerText ?? "");
+    const json = JSON.parse(body) as { products?: ShopifyProduct[] };
+    if (!json.products?.length) return null;
+    return parseShopifyProducts(json.products);
   } catch {
     return null;
+  } finally {
+    await page.close();
   }
 }
 
@@ -283,8 +301,8 @@ async function scrapeVendor(browser: Browser, config: VendorCatalogConfig): Prom
     return;
   }
 
-  // Stage 1: Shopify API
-  const shopifyProducts = await tryShopifyApi(config.catalogUrl);
+  // Stage 1: Shopify API (plain fetch, browser fallback for Cloudflare-protected stores)
+  const shopifyProducts = await tryShopifyApi(config.catalogUrl, browser);
   if (shopifyProducts !== null) {
     log(SCRIPT, `  ${config.slug}: Shopify API → ${shopifyProducts.length} peptide products`);
     if (shopifyProducts.length > 0) await saveProducts(vendorId, config.slug, shopifyProducts);
