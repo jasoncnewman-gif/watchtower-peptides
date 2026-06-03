@@ -31,6 +31,8 @@ type DbVendorRow = {
   finnrick_tests_count: number | null;
   has_coa: boolean;
   status: string;
+  peptide_critic_rating: number | null;
+  peptide_critic_reviews_count: number | null;
 };
 
 type DbProductRow = {
@@ -85,9 +87,16 @@ function transparencyScore(hasCoa: boolean): number {
   return hasCoa ? 16 : 8;
 }
 
-// Placeholder until Peptide Critic data is in
-function communityReputationScore(): number {
-  return 8;
+function communityReputationScore(rating: number | null, reviews: number | null): number {
+  if (!rating) return 7; // not on Peptide Critic — neutral default
+
+  // Rating component: 0–10 pts (rating is 0–5 stars)
+  const ratingPts = (rating / 5) * 10;
+
+  // Volume bonus: 0–5 pts, log scale, saturates around 100 reviews
+  const volumePts = Math.min(5, (Math.log((reviews ?? 0) + 1) / Math.log(101)) * 5);
+
+  return Math.max(0, Math.min(15, Math.round(ratingPts + volumePts)));
 }
 
 // ── Pricing score ─────────────────────────────────────────────────────────
@@ -182,7 +191,7 @@ function deriveStatus(score: number): string {
 async function main() {
   const [{ data: vendors, error }, { data: products, error: prodError }] = await Promise.all([
     db.from("vendors")
-      .select("id, slug, name, finnrick_rating, finnrick_score, finnrick_tests_count, has_coa, status")
+      .select("id, slug, name, finnrick_rating, finnrick_score, finnrick_tests_count, has_coa, status, peptide_critic_rating, peptide_critic_reviews_count")
       .in("status", ["active", "flagged"]),
     db.from("vendor_peptides")
       .select("vendor_id, peptide_name, size_mg, list_price, sale_price")
@@ -205,7 +214,7 @@ async function main() {
     const lab        = labTestingScore(v.finnrick_tests_count, v.finnrick_rating);
     const purity     = purityAccuracyScore(v.finnrick_rating, v.finnrick_score);
     const trans      = transparencyScore(v.has_coa);
-    const community  = communityReputationScore();
+    const community  = communityReputationScore(v.peptide_critic_rating, v.peptide_critic_reviews_count);
     const pricing    = pricingReliabilityScore(v.id, allProducts, marketMedians);
     const overall    = lab + purity + trans + community + pricing;
 

@@ -1,217 +1,154 @@
 /**
  * scripts/scrape-peptide-critic.ts
- * Scrapes Peptide Critic vendor review pages and writes results to vendors table.
- *
- * Extracts: star rating, review count, review verbatims (up to 3 positive + 3 negative),
- * coupon codes, credit card accepted flag, established year, and location.
- *
- * ⚠️  SELECTOR VERIFICATION REQUIRED
- * Inspect live Peptide Critic vendor pages and confirm the CSS selectors below.
+ * Scrapes Peptide Critic vendor pages via stealth browser.
+ * Extracts star rating, review count, description, location, price range.
+ * Writes peptide_critic_rating + peptide_critic_reviews_count to vendors table.
  *
  * Run: npm run scrape:peptide-critic
  */
 
+import puppeteerExtra from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import type { Browser } from "puppeteer";
+
+puppeteerExtra.use(StealthPlugin());
 import { db } from "./lib/client.js";
-import { fetchHtml, clean, parsePrice, log, sleep } from "./lib/scraper.js";
+import { log, sleep } from "./lib/scraper.js";
 
 const SCRIPT = "scrape-peptide-critic";
+const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
+  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+const BASE = "https://peptidecritic.com/vendor";
 
-const BASE_URL = "https://peptidecritic.com";
+// ── Vendor slug → Peptide Critic URL slug ────────────────────────────────
+// Only vendors confirmed to have a Peptide Critic page are listed.
+// Vendors not present here get community_reputation_score = null (compute-scores defaults to 7).
 
-// Our vendor slug → Peptide Critic URL for that vendor's reviews page
-const VENDOR_TARGETS: Record<string, string> = {
-  "peptide-partners":       `${BASE_URL}/vendor/peptide-partners`,
-  "ion-peptide":            `${BASE_URL}/vendor/ion-peptide`,
-  "core-peptides":          `${BASE_URL}/vendor/core-peptides`,
-  "limitless-biotech":      `${BASE_URL}/vendor/limitless-biotech`,
-  "ascension-peptides":     `${BASE_URL}/vendor/ascension-peptides`,
-  "nexaph":                 `${BASE_URL}/vendor/nexaph`,
-  "mile-high-compounds":    `${BASE_URL}/vendor/mile-high-compounds`,
-  "crush-research":         `${BASE_URL}/vendor/crush-research`,
-  "omegamino":              `${BASE_URL}/vendor/omegamino`,
-  "orbitrex-peptides":      `${BASE_URL}/vendor/orbitrex-peptides`,
-  "peptidology":            `${BASE_URL}/vendor/peptidology`,
-  "swiss-chems":            `${BASE_URL}/vendor/swisschems`,
-  "pure-rawz":              `${BASE_URL}/vendor/pure-rawz`,
-  "loti-labs":              `${BASE_URL}/vendor/loti-labs`,
-  "biotech-peptides":       `${BASE_URL}/vendor/biotech-peptides`,
-  "sports-technology-labs": `${BASE_URL}/vendor/sports-technology-labs`,
-  "polaris-peptides":       `${BASE_URL}/vendor/polaris-peptides`,
-  "pivot-labs":             `${BASE_URL}/vendor/pivot-labs`,
-  "skye-peptides":          `${BASE_URL}/vendor/skye-peptides`,
-  "loti-labs-2":            `${BASE_URL}/vendor/loti-labs`,
-};
-
-// ── Selectors ─────────────────────────────────────────────────────────────
-const SEL = {
-  starRating:       ".star-rating, .rating-value, [data-rating], .vendor-score",
-  reviewCount:      ".review-count, .reviews-total, [data-review-count]",
-  // Individual review cards
-  reviewCard:       ".review-card, .review-item, .user-review",
-  reviewText:       ".review-text, .review-body, p",
-  reviewSentiment:  ".sentiment, .review-type, [data-sentiment]",
-  // Vendor metadata
-  couponCode:       ".coupon-code, .promo-code, [data-coupon]",
-  creditCard:       ".payment-method, .accepts-cc, [data-payment]",
-  established:      ".established, .founded-year, [data-established]",
-  location:         ".location, .vendor-location, [data-location]",
-};
-
-// ── Types ─────────────────────────────────────────────────────────────────
-
-type PeptideCriticResult = {
-  slug: string;
-  peptide_critic_rating: number | null;
-  peptide_critic_reviews_count: number | null;
-  peptide_critic_url: string;
-  coupon_code: string | null;
-  credit_card_accepted: boolean;
-  established_year: number | null;
-  location: string | null;
-  review_1: string | null;
-  review_2: string | null;
-  review_3: string | null;
-  positive_review_summary: string | null;
-  negative_review_summary: string | null;
+const VENDOR_MAP: Record<string, string> = {
+  "peptide-partners":       "peptide-partners",
+  "ion-peptide":            "ion-peptides",
+  "core-peptides":          "core-peptides",
+  "limitless-biotech":      "limitless-life-nootropics",
+  "ascension-peptides":     "ascension-peptides",
+  "nexaph":                 "nexaph",
+  "mile-high-compounds":    "mile-high-compounds",
+  "crush-research":         "crush-research",
+  "omegamino":              "omegamino",
+  "orbitrex-peptides":      "orbitrex-peptides",
+  "peptidology":            "peptidology",
+  "swiss-chems":            "swiss-chems",
+  "pure-rawz":              "pure-rawz",
+  "loti-labs":              "loti-labs",
+  "biotech-peptides":       "biotech-peptides",
+  "paradigm-peptides":      "paradigm-peptides",
+  "ez-peptides":            "ez-peptides",
+  "glacier-aminos":         "glacier-aminos",
+  "penguin-peptides":       "penguin-peptides",
+  "paramount-peptides":     "paramount-peptides",
+  "nuscience-peptides":     "nuscience-peptides",
+  "southern-peptides":      "southern-aminos",
+  "simple-peptide":         "simple-peptide",
+  "verified-peptides":      "verified-peptides",
+  "prime-peptides":         "prime-peptides",
+  "astro-peptides":         "astro-peptides-usa",
+  "peptide-crafters":       "peptide-crafters",
+  "felix-chemical-supply":  "felix-chem",
 };
 
 // ── Scraper ───────────────────────────────────────────────────────────────
 
-async function scrapeVendorPage(
-  vendorSlug: string,
-  url: string
-): Promise<PeptideCriticResult | null> {
+type PCResult = {
+  slug: string;
+  rating: number | null;
+  reviewCount: number | null;
+  description: string | null;
+  location: string | null;
+  priceRange: string | null;
+};
+
+async function scrapeVendor(browser: Browser, ourSlug: string, pcSlug: string): Promise<PCResult> {
+  const url = `${BASE}/${pcSlug}`;
+  const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(15000);
+  await page.setUserAgent(USER_AGENT);
+
   try {
-    const $ = await fetchHtml(url);
+    const response = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
+    if (!response || response.status() === 404) {
+      log(SCRIPT, `  — ${ourSlug}: 404`);
+      return { slug: ourSlug, rating: null, reviewCount: null, description: null, location: null, priceRange: null };
+    }
 
-    // Star rating (expect "4.2" or "4.2/5" or "84")
-    const ratingRaw = clean($(SEL.starRating).first().text());
-    const rating = ratingRaw
-      ? parseFloat(ratingRaw.match(/([\d.]+)/)?.[1] ?? "") || null
-      : null;
+    await new Promise((r) => setTimeout(r, 2000));
 
-    // Review count
-    const countRaw = clean($(SEL.reviewCount).first().text());
-    const reviewCount = countRaw
-      ? parseInt(countRaw.replace(/[^0-9]/g, ""), 10) || null
-      : null;
+    const data = await page.evaluate(() => {
+      const text = document.body?.innerText ?? "";
 
-    // Coupon code — look for text matching pattern like "SAVE10", "PEPTIDE15", etc.
-    let coupon: string | null = null;
-    $(SEL.couponCode).each((_, el) => {
-      const txt = clean($(el).text());
-      if (txt && /^[A-Z0-9]{3,20}$/.test(txt)) {
-        coupon = txt;
-        return false; // break
-      }
+      // Rating: a number like "4.9" immediately followed by "(N reviews)"
+      const ratingMatch = text.match(/([\d.]+)\s*\n\s*\((\d+)\s+reviews?\)/i);
+      const rating = ratingMatch ? parseFloat(ratingMatch[1]) : null;
+      const reviewCount = ratingMatch ? parseInt(ratingMatch[2], 10) : null;
+
+      // Description: line after the reviews line (skip "Sign in to save favorites")
+      const descMatch = text.match(/\(\d+\s+reviews?\)\s*\n([^\n]+)/i);
+      const description = descMatch ? descMatch[1].trim() : null;
+
+      // Location (line after "Location\n")
+      const locMatch = text.match(/Location\s*\n([^\n]+)/i);
+      const location = locMatch ? locMatch[1].trim() : null;
+
+      // Price Range (line after "Price Range\n")
+      const priceMatch = text.match(/Price Range\s*\n([^\n]+)/i);
+      const priceRange = priceMatch ? priceMatch[1].trim() : null;
+
+      return { rating, reviewCount, description, location, priceRange };
     });
-    // Fallback: scan all text for inline coupon patterns
-    if (!coupon) {
-      const bodyText = $("body").text();
-      const couponMatch = bodyText.match(
-        /(?:coupon|promo|code|discount)[:\s]+([A-Z0-9]{4,20})/i
-      );
-      if (couponMatch) coupon = couponMatch[1];
-    }
-
-    // Credit card accepted
-    const ccText = $(SEL.creditCard).text().toLowerCase() + $("body").text().toLowerCase();
-    const creditCardAccepted =
-      ccText.includes("credit card") || ccText.includes("visa") || ccText.includes("mastercard");
-
-    // Established year
-    const estRaw = clean($(SEL.established).first().text());
-    let establishedYear: number | null = null;
-    if (estRaw) {
-      const yearMatch = estRaw.match(/(20\d{2})/);
-      if (yearMatch) establishedYear = parseInt(yearMatch[1], 10);
-    }
-    if (!establishedYear) {
-      const bodyYearMatch = $("body").text().match(/(?:founded|established|since)\s+(20\d{2})/i);
-      if (bodyYearMatch) establishedYear = parseInt(bodyYearMatch[1], 10);
-    }
-
-    // Location
-    const location = clean($(SEL.location).first().text());
-
-    // Review verbatims — collect up to 3, labelled by sentiment if available
-    const reviews: { text: string; positive: boolean }[] = [];
-    $(SEL.reviewCard).each((_, el) => {
-      if (reviews.length >= 6) return false;
-      const text = clean($(el).find(SEL.reviewText).first().text());
-      const sentimentEl = $(el).find(SEL.reviewSentiment).text().toLowerCase();
-      const positive = sentimentEl.includes("positive") || sentimentEl.includes("good") ||
-        !sentimentEl.includes("negative");
-      if (text && text.length > 20) {
-        reviews.push({ text, positive });
-      }
-    });
-
-    const positiveReviews = reviews.filter((r) => r.positive).map((r) => r.text);
-    const negativeReviews = reviews.filter((r) => !r.positive).map((r) => r.text);
 
     log(
       SCRIPT,
-      `  ${vendorSlug}: rating=${rating}  reviews=${reviewCount}  coupon=${coupon}`
+      `  ✓ ${ourSlug}: ${data.rating ?? "?"}/5  (${data.reviewCount ?? 0} reviews)  ${data.location ?? ""}`
     );
 
-    return {
-      slug: vendorSlug,
-      peptide_critic_rating: rating,
-      peptide_critic_reviews_count: reviewCount,
-      peptide_critic_url: url,
-      coupon_code: coupon,
-      credit_card_accepted: creditCardAccepted,
-      established_year: establishedYear,
-      location: location,
-      review_1: positiveReviews[0] ?? null,
-      review_2: positiveReviews[1] ?? null,
-      review_3: negativeReviews[0] ?? null,
-      positive_review_summary: positiveReviews.slice(0, 3).join(" | ") || null,
-      negative_review_summary: negativeReviews.slice(0, 3).join(" | ") || null,
-    };
+    return { slug: ourSlug, ...data };
   } catch (err) {
-    log(SCRIPT, `  ✗ ${vendorSlug}: ${(err as Error).message}`);
-    return null;
+    log(SCRIPT, `  ✗ ${ourSlug}: ${(err as Error).message}`);
+    return { slug: ourSlug, rating: null, reviewCount: null, description: null, location: null, priceRange: null };
+  } finally {
+    await page.close();
   }
 }
 
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  const targets = Object.entries(VENDOR_TARGETS);
-  log(SCRIPT, `Scraping ${targets.length} vendor pages from ${BASE_URL}…`);
+  const entries = Object.entries(VENDOR_MAP);
+  log(SCRIPT, `Scraping ${entries.length} vendors from Peptide Critic…`);
 
-  for (const [vendorSlug, url] of targets) {
-    const result = await scrapeVendorPage(vendorSlug, url);
-    if (!result) continue;
+  const browser = await puppeteerExtra.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  }) as unknown as Browser;
 
-    const { error } = await db
-      .from("vendors")
-      .update({
-        peptide_critic_rating:        result.peptide_critic_rating,
-        peptide_critic_reviews_count: result.peptide_critic_reviews_count,
-        peptide_critic_url:           result.peptide_critic_url,
-        coupon_code:                  result.coupon_code,
-        credit_card_accepted:         result.credit_card_accepted,
-        established_year:             result.established_year,
-        location:                     result.location,
-        review_1:                     result.review_1,
-        review_2:                     result.review_2,
-        review_3:                     result.review_3,
-        positive_review_summary:      result.positive_review_summary,
-        negative_review_summary:      result.negative_review_summary,
-        updated_at:                   new Date().toISOString(),
-      })
-      .eq("slug", result.slug);
+  try {
+    for (const [ourSlug, pcSlug] of entries) {
+      const result = await scrapeVendor(browser, ourSlug, pcSlug);
 
-    if (error) {
-      log(SCRIPT, `  ✗ DB write failed for ${result.slug}: ${error.message}`);
-    } else {
-      log(SCRIPT, `  ✓ Saved ${result.slug}`);
+      const { error } = await db
+        .from("vendors")
+        .update({
+          peptide_critic_rating:        result.rating,
+          peptide_critic_reviews_count: result.reviewCount,
+          updated_at:                   new Date().toISOString(),
+        })
+        .eq("slug", result.slug);
+
+      if (error) log(SCRIPT, `  ✗ DB write failed for ${result.slug}: ${error.message}`);
+
+      await sleep(1500);
     }
-
-    await sleep(200);
+  } finally {
+    await browser.close();
   }
 
   log(SCRIPT, "Done.");
