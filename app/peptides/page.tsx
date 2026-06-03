@@ -15,7 +15,7 @@ export default async function PeptidesPage() {
   const [{ data: peptideRows }, { data: vpRows }] = await Promise.all([
     supabase
       .from('peptides')
-      .select('id, name, slug, full_name, tagline, fda_status, research_status, studies')
+      .select('id, name, slug, full_name, tagline, fda_status, research_status, studies, category')
       .order('name'),
     supabase
       .from('vendor_peptides')
@@ -45,6 +45,7 @@ export default async function PeptidesPage() {
     slug: p.slug as string,
     vendorCount: vendorsBySlug.get(p.slug as string)?.size ?? 0,
     studyCount: Array.isArray(p.studies) ? (p.studies as unknown[]).length : 0,
+    category: (p.category as string | null) ?? null,
   }))
 
   return (

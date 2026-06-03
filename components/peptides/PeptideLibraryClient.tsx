@@ -12,6 +12,7 @@ interface PeptideItem {
   slug: string
   vendorCount: number
   studyCount: number
+  category: string | null
 }
 
 export default function PeptideLibraryClient({ peptides }: { peptides: PeptideItem[] }) {

@@ -16,12 +16,14 @@ interface PeptideCardProps {
   slug: string
   vendorCount: number
   studyCount: number
+  category: string | null
 }
 
 export default function PeptideCard({
-  name, fullName, tagline, fdaStatus, researchStatus, slug, vendorCount, studyCount,
+  name, fullName, tagline, fdaStatus, researchStatus, slug, vendorCount, studyCount, category,
 }: PeptideCardProps) {
-  const fda = fdaStatus ? FDA_CONFIG[fdaStatus] : null
+  const isBlend = category === 'blend'
+  const fda = !isBlend && fdaStatus ? FDA_CONFIG[fdaStatus] : null
 
   return (
     <Link
@@ -31,7 +33,14 @@ export default function PeptideCard({
     >
       <div className="flex items-start justify-between gap-3 mb-1">
         <h2 className="font-bold text-xl" style={{ color: '#1D1D1F' }}>{name}</h2>
-        {fda && (
+        {isBlend ? (
+          <span
+            className="text-xs font-medium px-2.5 py-1 rounded-full shrink-0"
+            style={{ backgroundColor: '#EDE9FE', color: '#7C3AED' }}
+          >
+            Blend
+          </span>
+        ) : fda && (
           <span
             className="text-xs font-medium px-2.5 py-1 rounded-full shrink-0"
             style={{ backgroundColor: fda.bg, color: fda.text }}
