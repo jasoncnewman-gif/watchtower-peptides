@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
+
+export const metadata: Metadata = {
+  title: "Peptide Vendor Reviews",
+  description: "Independent scores for every major peptide supplier — ranked by lab testing, purity accuracy, transparency, and community reputation. Updated regularly.",
+  alternates: { canonical: "/vendors" },
+};
 import Footer from "@/components/Footer";
 import { supabase, dbVendorToVendor, type DbVendor } from "@/lib/supabase";
 import type { VendorStatus } from "@/lib/mock-data";

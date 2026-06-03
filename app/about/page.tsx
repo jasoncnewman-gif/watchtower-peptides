@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "About — Scoring Methodology",
+  description: "How Watchtower Peptides independently scores vendors across lab testing, purity accuracy, transparency, community reputation, and pricing. No affiliates, no bias.",
+  alternates: { canonical: "/about" },
+};
 
 const SCORE_CATEGORIES = [
   { name: "Lab Testing", points: 30, description: "Number of independently tested products, diversity of labs used, and whether COAs are publicly accessible." },

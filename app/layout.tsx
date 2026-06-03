@@ -9,8 +9,12 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Watchtower Peptides — Independent Vendor Review",
+  title: {
+    default: "Watchtower Peptides — Independent Vendor Review",
+    template: "%s | Watchtower Peptides",
+  },
   description: "Independent research platform tracking, scoring, and monitoring peptide vendors. No affiliate bias. No paid placements.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://watchtowerpeptides.com"),
 };
 
 export default function RootLayout({

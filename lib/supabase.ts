@@ -63,17 +63,67 @@ export interface DbVendor {
   updated_at: string
 }
 
+export interface DbPeptideMechanism {
+  title: string
+  body: string
+}
+
+export interface DbPeptideApplication {
+  area: string
+  evidence: string
+  description: string
+}
+
+export interface DbPeptideDosageRange {
+  route: string
+  range: string
+  frequency: string
+  notes: string
+}
+
+export interface DbPeptideDosage {
+  disclaimer: string
+  ranges: DbPeptideDosageRange[]
+}
+
+export interface DbPeptideSafetyProfile {
+  rating: string
+  known_effects: string[]
+  unknown_risks: string[]
+}
+
+export interface DbPeptideStudy {
+  title: string
+  authors: string
+  year: number
+  journal: string
+  pmid: string
+  url: string
+}
+
 export interface DbPeptide {
   id: string
   name: string
+  full_name: string | null
   slug: string
+  tagline: string | null
   aliases: string[] | null
   description: string | null
   what_it_does: string | null
+  overview: string | null
   fda_status: 'approved' | 'not-approved' | 'research-only' | null
+  research_status: string | null
+  half_life: string | null
+  molecular_weight: string | null
+  sequence: string | null
   typical_dosage: string | null
   reconstitution_instructions: string | null
   research_links: string[] | null
+  mechanism: DbPeptideMechanism[] | null
+  research_applications: DbPeptideApplication[] | null
+  dosage: DbPeptideDosage | null
+  safety_profile: DbPeptideSafetyProfile | null
+  studies: DbPeptideStudy[] | null
   category: string | null
   created_at: string
   updated_at: string

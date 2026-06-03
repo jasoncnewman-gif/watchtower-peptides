@@ -1,9 +1,36 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { supabase, dbVendorToVendor, type DbVendor, type DbVendorPeptide } from "@/lib/supabase";
 import type { VendorStatus } from "@/lib/mock-data";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const { data } = await supabase
+    .from("vendors")
+    .select("name, verdict, overall_score")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (!data) return { title: "Vendor Not Found" };
+
+  const score = data.overall_score != null ? ` — Score: ${data.overall_score}/100` : "";
+  const desc = data.verdict
+    ? data.verdict.slice(0, 155)
+    : `Independent review of ${data.name}${score}. Lab testing, purity accuracy, transparency, and community reputation.`;
+
+  return {
+    title: `${data.name} Review`,
+    description: desc,
+    alternates: { canonical: `/vendors/${slug}` },
+  };
+}
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
   recommended:       { label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },

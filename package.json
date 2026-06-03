@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "seed": "tsx --tsconfig scripts/tsconfig.json scripts/seed-vendors.ts",
+    "seed:peptides": "tsx --tsconfig scripts/tsconfig.json scripts/seed-peptides.ts",
+    "debug:slugs": "tsx --tsconfig scripts/tsconfig.json scripts/debug-slugs.ts",
     "scrape:finnrick": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-finnrick.ts",
     "scrape:peptide-critic": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-peptide-critic.ts",
     "scrape:products": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-vendor-products.ts",
