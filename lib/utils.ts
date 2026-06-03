@@ -10,8 +10,12 @@ export function generateSlug(name: string): string {
 // Strip trailing size/quantity suffixes so "ipamorelin-10mg" normalises to "ipamorelin"
 export function stripSizeSuffix(slug: string): string {
   return slug
+    .replace(/-8211-\d+(\.\d+)?(mg|mcg|g|iu|ml)$/, '')   // HTML em-dash entity + size: -8211-10mg
+    .replace(/-8211$/, '')                                // bare HTML em-dash entity
     .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)-\d+-vials?(kit)?$/, '') // -10mg-10-vials
     .replace(/-\d+-vials?(kit)?$/, '')                               // -10-vials
     .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)$/, '')                   // -10mg, -500mcg
     .replace(/-\d+(x\d+)?(ct|caps?|tabs?|tablets?)$/, '')            // -30-caps
+    .replace(/-peptide$/, '')                                        // -peptide suffix
+    .replace(/^receptor-grade-/, '')                                 // quality grade prefix
 }

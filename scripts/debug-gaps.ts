@@ -4,6 +4,18 @@ function generateSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-')
 }
 
+function stripSizeSuffix(slug: string): string {
+  return slug
+    .replace(/-8211-\d+(\.\d+)?(mg|mcg|g|iu|ml)$/, '')
+    .replace(/-8211$/, '')
+    .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)-\d+-vials?(kit)?$/, '')
+    .replace(/-\d+-vials?(kit)?$/, '')
+    .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)$/, '')
+    .replace(/-\d+(x\d+)?(ct|caps?|tabs?|tablets?)$/, '')
+    .replace(/-peptide$/, '')
+    .replace(/^receptor-grade-/, '')
+}
+
 async function main() {
   const [{ data: vpRows }, { data: peptideRows }] = await Promise.all([
     db.from('vendor_peptides').select('peptide_name, vendor_id'),
@@ -21,9 +33,14 @@ async function main() {
     bySlug.get(slug)!.names.add(r.peptide_name)
   }
 
-  // Find slugs not covered by a peptide profile, with 2+ vendors (i.e., real products)
+  // Find slugs not covered by a profile (exact OR size-stripped), with 2+ vendors
   const gaps = [...bySlug.entries()]
-    .filter(([slug, { vendors }]) => !existingSlugs.has(slug) && vendors.size >= 2)
+    .filter(([slug, { vendors }]) => {
+      if (vendors.size < 2) return false
+      if (existingSlugs.has(slug)) return false
+      if (existingSlugs.has(stripSizeSuffix(slug))) return false
+      return true
+    })
     .sort((a, b) => b[1].vendors.size - a[1].vendors.size)
 
   console.log(`\nGaps: ${gaps.length} vendor slugs with 2+ vendors and no peptide profile\n`)
