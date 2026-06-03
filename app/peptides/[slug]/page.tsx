@@ -5,7 +5,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import PeptideDetailTabs, { type PeptideDetailData, type VendorTabData } from '@/components/peptides/PeptideDetailTabs'
 import { supabase } from '@/lib/supabase'
-import { generateSlug } from '@/lib/utils'
+import { generateSlug, stripSizeSuffix } from '@/lib/utils'
 
 export async function generateMetadata({
   params,
@@ -61,10 +61,11 @@ export default async function PeptideDetailPage({
 
   if (!peptideRow) notFound()
 
-  // Match vendor_peptides rows to this peptide by slug (include null size_mg)
-  const matchingRows = (vpAll ?? []).filter(
-    r => generateSlug(r.peptide_name) === slug
-  )
+  // Match vendor_peptides rows: exact slug OR size-stripped slug (e.g. "ipamorelin-10mg" → "ipamorelin")
+  const matchingRows = (vpAll ?? []).filter(r => {
+    const vpSlug = generateSlug(r.peptide_name)
+    return vpSlug === slug || stripSizeSuffix(vpSlug) === slug
+  })
 
   // Fetch vendor details for matched rows
   const vendorIds = [...new Set(matchingRows.map(r => r.vendor_id))]

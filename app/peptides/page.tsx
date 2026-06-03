@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 import Footer from '@/components/Footer'
 import PeptideLibraryClient from '@/components/peptides/PeptideLibraryClient'
 import { supabase } from '@/lib/supabase'
-import { generateSlug } from '@/lib/utils'
+import { generateSlug, stripSizeSuffix } from '@/lib/utils'
 
 export default async function PeptidesPage() {
   const [{ data: peptideRows }, { data: vpRows }] = await Promise.all([
@@ -22,12 +22,18 @@ export default async function PeptidesPage() {
       .select('peptide_name, vendor_id'),
   ])
 
-  // Build vendor count map: peptide slug → unique vendor count
+  // Build vendor count map: normalise size suffixes so "ipamorelin-10mg" → "ipamorelin"
   const vendorsBySlug = new Map<string, Set<string>>()
   for (const row of vpRows ?? []) {
-    const slug = generateSlug(row.peptide_name)
+    const raw = generateSlug(row.peptide_name)
+    const slug = stripSizeSuffix(raw)
     if (!vendorsBySlug.has(slug)) vendorsBySlug.set(slug, new Set())
     vendorsBySlug.get(slug)!.add(row.vendor_id)
+    // also index the raw slug so exact matches still work
+    if (slug !== raw) {
+      if (!vendorsBySlug.has(raw)) vendorsBySlug.set(raw, new Set())
+      vendorsBySlug.get(raw)!.add(row.vendor_id)
+    }
   }
 
   const peptides = (peptideRows ?? []).map(p => ({
