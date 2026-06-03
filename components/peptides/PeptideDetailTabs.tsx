@@ -11,6 +11,7 @@ interface ApplicationEntry { area: string; evidence: string; description: string
 interface DosageRange      { route: string; range: string; frequency: string; notes: string }
 interface StudyEntry       { title: string; authors: string; year: number; journal: string; pmid: string; url: string }
 interface PriceEntry       { size: number; price: number; onSale: boolean; inStock: boolean }
+interface BlendComponent   { name: string; slug: string; dose_mg: number | null; contribution: string }
 
 interface VendorPriceRow {
   id: string
@@ -42,6 +43,7 @@ export interface PeptideDetailData {
   dosage: { disclaimer: string; ranges: DosageRange[] } | null
   safety_profile: { rating: string; known_effects: string[]; unknown_risks: string[] } | null
   studies: StudyEntry[] | null
+  blend_components: BlendComponent[] | null
 }
 
 export interface VendorTabData {
@@ -465,9 +467,50 @@ function VendorsTab({ vendorData }: { vendorData: VendorTabData }) {
   )
 }
 
+function ComponentsTab({ components }: { components: BlendComponent[] }) {
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl p-4 flex gap-3" style={{ backgroundColor: '#F5F5F7', border: '1px solid #E5E5E7' }}>
+        <span className="text-sm shrink-0">ℹ️</span>
+        <p className="text-sm" style={{ color: '#6E6E73' }}>
+          Exact formulations may vary by vendor. Always verify the Certificate of Analysis for the specific
+          batch you receive. Click any ingredient to read its full research profile.
+        </p>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        {components.map((c, i) => (
+          <Link
+            key={i}
+            href={`/peptides/${c.slug}`}
+            className="block rounded-2xl p-6 transition-shadow hover:shadow-md"
+            style={{ backgroundColor: '#F5F5F7' }}
+          >
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h3 className="font-semibold text-base" style={{ color: '#1D1D1F' }}>{c.name}</h3>
+              {c.dose_mg != null && (
+                <span
+                  className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
+                  style={{ backgroundColor: '#186784', color: '#FFFFFF' }}
+                >
+                  {c.dose_mg}mg
+                </span>
+              )}
+            </div>
+            <p className="text-sm leading-relaxed" style={{ color: '#6E6E73' }}>{c.contribution}</p>
+            <p className="text-xs font-medium mt-3" style={{ color: '#186784' }}>
+              View full profile →
+            </p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── main component ─────────────────────────────────────────────────────────
 
-const TABS = [
+const BASE_TABS = [
   { id: 'overview',   label: 'Overview'   },
   { id: 'mechanism',  label: 'Mechanism'  },
   { id: 'research',   label: 'Research'   },
@@ -484,6 +527,16 @@ export default function PeptideDetailTabs({
   peptide: PeptideDetailData
   vendorData: VendorTabData
 }) {
+  const hasComponents = (peptide.blend_components?.length ?? 0) > 0
+
+  const TABS = hasComponents
+    ? [
+        { id: 'overview',    label: 'Overview'    },
+        { id: 'components',  label: 'Components'  },
+        ...BASE_TABS.slice(1),
+      ]
+    : BASE_TABS
+
   const [activeTab, setActiveTab] = useState('overview')
 
   return (
@@ -508,8 +561,9 @@ export default function PeptideDetailTabs({
       </div>
 
       {/* Tab content */}
-      {activeTab === 'overview'  && <OverviewTab  peptide={peptide} />}
-      {activeTab === 'mechanism' && <MechanismTab entries={peptide.mechanism} />}
+      {activeTab === 'overview'   && <OverviewTab      peptide={peptide} />}
+      {activeTab === 'components' && <ComponentsTab    components={peptide.blend_components ?? []} />}
+      {activeTab === 'mechanism'  && <MechanismTab entries={peptide.mechanism} />}
       {activeTab === 'research'  && <ResearchTab  entries={peptide.research_applications} />}
       {activeTab === 'dosage'    && <DosageTab    dosage={peptide.dosage} typical={peptide.typical_dosage} />}
       {activeTab === 'safety'    && <SafetyTab    profile={peptide.safety_profile} />}

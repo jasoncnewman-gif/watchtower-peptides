@@ -101,6 +101,13 @@ export interface DbPeptideStudy {
   url: string
 }
 
+export interface DbBlendComponent {
+  name: string
+  slug: string
+  dose_mg: number | null
+  contribution: string
+}
+
 export interface DbPeptide {
   id: string
   name: string
@@ -124,6 +131,7 @@ export interface DbPeptide {
   dosage: DbPeptideDosage | null
   safety_profile: DbPeptideSafetyProfile | null
   studies: DbPeptideStudy[] | null
+  blend_components: DbBlendComponent[] | null
   category: string | null
   created_at: string
   updated_at: string

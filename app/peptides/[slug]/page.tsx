@@ -61,10 +61,15 @@ export default async function PeptideDetailPage({
 
   if (!peptideRow) notFound()
 
-  // Match vendor_peptides rows: exact slug OR size-stripped slug (e.g. "ipamorelin-10mg" → "ipamorelin")
+  const isBlend = peptideRow.category === 'blend'
+
+  // Match vendor_peptides: exact slug, size-stripped slug, or (for blends) prefix match
   const matchingRows = (vpAll ?? []).filter(r => {
     const vpSlug = generateSlug(r.peptide_name)
-    return vpSlug === slug || stripSizeSuffix(vpSlug) === slug
+    if (vpSlug === slug) return true
+    if (stripSizeSuffix(vpSlug) === slug) return true
+    if (isBlend && vpSlug.startsWith(slug + '-')) return true
+    return false
   })
 
   // Fetch vendor details for matched rows
@@ -130,6 +135,7 @@ export default async function PeptideDetailPage({
     dosage:                   (peptideRow.dosage as PeptideDetailData['dosage']) ?? null,
     safety_profile:           (peptideRow.safety_profile as PeptideDetailData['safety_profile']) ?? null,
     studies:                  (peptideRow.studies as PeptideDetailData['studies']) ?? null,
+    blend_components:         (peptideRow.blend_components as PeptideDetailData['blend_components']) ?? null,
   }
 
   const fda = peptide.fda_status ? FDA_CONFIG[peptide.fda_status] : null
