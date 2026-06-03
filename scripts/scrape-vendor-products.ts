@@ -8,8 +8,12 @@
  * Run: npm run scrape:products
  */
 
-import puppeteer, { type Browser } from "puppeteer";
+import puppeteerExtra from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import type { Browser } from "puppeteer";
 import * as cheerio from "cheerio";
+
+puppeteerExtra.use(StealthPlugin());
 import { db } from "./lib/client.js";
 import { clean, parsePrice, parseMg, log, sleep } from "./lib/scraper.js";
 
@@ -32,9 +36,9 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "alpha-biomed-labs",     catalogUrl: "", isGated: true },
 
   // Active vendors
-  { slug: "peptide-partners",        catalogUrl: "https://peptidepartners.com/collections/peptides" },
+  { slug: "peptide-partners",        catalogUrl: "https://peptide.partners/shop" },
   { slug: "ion-peptide",             catalogUrl: "https://ionpeptide.com/shop" },
-  { slug: "core-peptides",           catalogUrl: "https://corepeptides.com/collections/all" },
+  { slug: "core-peptides",           catalogUrl: "https://www.corepeptides.com/peptides/" },
   { slug: "limitless-biotech",       catalogUrl: "https://limitlessbiotech.com/collections/peptides" },
   { slug: "ascension-peptides",      catalogUrl: "https://ascensionpeptides.com/collections/all" },
   { slug: "nexaph",                  catalogUrl: "https://nexaph.com/peptides" },
@@ -62,7 +66,7 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "southern-peptides",       catalogUrl: "https://southernpeptides.com/collections/all" },
   { slug: "simple-peptide",          catalogUrl: "https://simplepeptide.com/shop" },
   { slug: "verified-peptides",       catalogUrl: "https://verifiedpeptides.com/shop" },
-  { slug: "aavant-research",         catalogUrl: "https://aavantresearch.com/shop" },
+  { slug: "aavant-research",         catalogUrl: "https://aavantacr.com/shop" },
   { slug: "nextechlabs",             catalogUrl: "https://nextechlabs.com/collections/all" },
   { slug: "apollo-peptide-sciences", catalogUrl: "https://apollopeptidesciences.com/collections/all" },
   { slug: "cernum-biosciences",      catalogUrl: "https://cernumbiosciences.com/shop" },
@@ -154,38 +158,40 @@ type WooProduct = {
   is_in_stock: boolean;
 };
 
-async function tryWooCommerceApi(catalogUrl: string, slug: string): Promise<ProductData[] | null> {
+async function tryWooCommerceApi(catalogUrl: string, slug: string, browser: Browser): Promise<ProductData[] | null> {
   try {
     const { protocol, hostname } = new URL(catalogUrl);
     const apiUrl = `${protocol}//${hostname}/wp-json/wc/store/v1/products?per_page=100`;
-    const res = await fetch(apiUrl, {
-      headers: { "User-Agent": USER_AGENT },
-      signal: AbortSignal.timeout(12000),
-    });
-    if (!res.ok) return null;
-    const ct = res.headers.get("content-type") ?? "";
-    if (!ct.includes("json")) return null;
 
-    const json = (await res.json()) as WooProduct[];
-    if (!Array.isArray(json) || json.length === 0) return null;
+    // Use stealth browser so Cloudflare-protected sites let the API call through
+    const page = await browser.newPage();
+    page.setDefaultNavigationTimeout(15000);
+    await page.setUserAgent(USER_AGENT);
+    try {
+      await page.goto(apiUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+      const body = await page.evaluate(() => document.body?.innerText ?? "");
+      const json = JSON.parse(body) as WooProduct[];
+      if (!Array.isArray(json) || json.length === 0) return null;
 
-    const results: ProductData[] = [];
-    for (const p of json) {
-      if (!isPeptideProduct(p.name)) continue;
-      // Prices come back as strings in minor units (cents) — divide by 100
-      const rawPrice    = p.prices?.price ? parseInt(p.prices.price) / 100 : null;
-      const rawRegular  = p.prices?.regular_price ? parseInt(p.prices.regular_price) / 100 : null;
-      const rawSale     = p.prices?.sale_price ? parseInt(p.prices.sale_price) / 100 : null;
-      const isOnSale    = rawSale !== null && rawRegular !== null && rawSale < rawRegular;
-      results.push({
-        peptide_name: p.name,
-        size_mg:      parseMg(p.name),
-        list_price:   isOnSale ? rawRegular : rawPrice,
-        sale_price:   isOnSale ? rawSale : null,
-        in_stock:     p.is_in_stock ?? true,
-      });
+      const results: ProductData[] = [];
+      for (const p of json) {
+        if (!isPeptideProduct(p.name)) continue;
+        const rawPrice   = p.prices?.price         ? parseInt(p.prices.price)         / 100 : null;
+        const rawRegular = p.prices?.regular_price  ? parseInt(p.prices.regular_price) / 100 : null;
+        const rawSale    = p.prices?.sale_price     ? parseInt(p.prices.sale_price)    / 100 : null;
+        const isOnSale   = rawSale !== null && rawRegular !== null && rawSale < rawRegular;
+        results.push({
+          peptide_name: p.name,
+          size_mg:      parseMg(p.name),
+          list_price:   isOnSale ? rawRegular : rawPrice,
+          sale_price:   isOnSale ? rawSale : null,
+          in_stock:     p.is_in_stock ?? true,
+        });
+      }
+      return results;
+    } finally {
+      await page.close();
     }
-    return results;
   } catch (err) {
     log(SCRIPT, `  ${slug}: WooCommerce API error — ${(err as Error).message}`);
     return null;
@@ -205,11 +211,11 @@ async function scrapeWithPuppeteer(
   config: VendorCatalogConfig
 ): Promise<ProductData[]> {
   const page = await browser.newPage();
-  page.setDefaultNavigationTimeout(30000);
+  page.setDefaultNavigationTimeout(15000);
   await page.setUserAgent(USER_AGENT);
 
   try {
-    await page.goto(config.catalogUrl, { waitUntil: "networkidle2" });
+    await page.goto(config.catalogUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
     // Extra wait for lazy-rendered product grids
     await new Promise((r) => setTimeout(r, 2000));
     const html = await page.content();
@@ -285,8 +291,8 @@ async function scrapeVendor(browser: Browser, config: VendorCatalogConfig): Prom
     return;
   }
 
-  // Stage 2: WooCommerce Store API
-  const wooProducts = await tryWooCommerceApi(config.catalogUrl, config.slug);
+  // Stage 2: WooCommerce Store API (via stealth browser — bypasses Cloudflare)
+  const wooProducts = await tryWooCommerceApi(config.catalogUrl, config.slug, browser);
   if (wooProducts !== null) {
     log(SCRIPT, `  ${config.slug}: WooCommerce API → ${wooProducts.length} peptide products`);
     if (wooProducts.length > 0) await saveProducts(vendorId, config.slug, wooProducts);
@@ -306,10 +312,10 @@ async function scrapeVendor(browser: Browser, config: VendorCatalogConfig): Prom
 async function main() {
   log(SCRIPT, `Processing ${VENDOR_CONFIGS.length} vendors…`);
 
-  const browser = await puppeteer.launch({
+  const browser = await puppeteerExtra.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  }) as unknown as Browser;
 
   try {
     for (const config of VENDOR_CONFIGS) {

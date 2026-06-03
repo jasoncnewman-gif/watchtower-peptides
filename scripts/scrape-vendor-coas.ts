@@ -7,7 +7,11 @@
  * Run: npm run scrape:coas
  */
 
-import puppeteer, { type Browser } from "puppeteer";
+import puppeteerExtra from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import type { Browser } from "puppeteer";
+
+puppeteerExtra.use(StealthPlugin());
 import { db } from "./lib/client.js";
 import { log, sleep } from "./lib/scraper.js";
 
@@ -179,10 +183,10 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
 async function main() {
   log(SCRIPT, `Processing ${VENDOR_CONFIGS.length} vendors…`);
 
-  const browser = await puppeteer.launch({
+  const browser = await puppeteerExtra.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  }) as unknown as Browser;
 
   try {
     for (const config of VENDOR_CONFIGS) {
