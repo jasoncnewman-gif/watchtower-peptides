@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
 
 export const metadata: Metadata = {
   title: "About — Scoring Methodology",
@@ -23,7 +24,28 @@ const STATUS_THRESHOLDS = [
   { label: "Under Review", range: "—", bg: "#EDE9FE", text: "#7C3AED", description: "New vendor or recent ownership change — test results pending re-evaluation." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [
+    { data: statusCounts },
+    { count: labCount },
+    { data: lastUpdatedRow },
+    { count: peptideCount },
+  ] = await Promise.all([
+    supabase.from("vendors").select("status"),
+    supabase.from("lab_tests").select("*", { count: "exact", head: true }),
+    supabase.from("vendors").select("updated_at").order("updated_at", { ascending: false }).limit(1).single(),
+    supabase.from("peptides").select("*", { count: "exact", head: true }).not("category", "eq", "blend"),
+  ]);
+
+  const distribution = { recommended: 0, caution: 0, "not-recommended": 0, "under-review": 0 };
+  for (const v of statusCounts ?? []) {
+    if (v.status in distribution) distribution[v.status as keyof typeof distribution]++;
+  }
+  const totalVendors = Object.values(distribution).reduce((a, b) => a + b, 0);
+  const lastUpdated = lastUpdatedRow?.updated_at
+    ? new Date(lastUpdatedRow.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : "—";
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
       <Nav />
@@ -43,6 +65,50 @@ export default function AboutPage() {
               relationships, accept no paid placements, and receive no compensation from any vendor.
               Our scoring is based entirely on publicly verifiable data.
             </p>
+          </div>
+        </section>
+
+        {/* Live stats bar */}
+        <section style={{ backgroundColor: "#1D1D1F" }} className="px-6 py-12">
+          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { value: String(totalVendors), label: "Vendors Reviewed" },
+              { value: labCount && labCount > 0 ? `${Math.floor(labCount / 50) * 50}+` : "—", label: "Lab Tests Reviewed" },
+              { value: String(peptideCount ?? 0), label: "Peptide Profiles" },
+              { value: lastUpdated, label: "Last Updated" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-3xl font-bold mb-1" style={{ color: "#FFFFFF" }}>{stat.value}</div>
+                <div className="text-sm" style={{ color: "#6E6E73" }}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Vendor distribution */}
+        <section className="px-6 py-16" style={{ backgroundColor: "#F5F5F7" }}>
+          <div className="max-w-3xl mx-auto">
+            <p className="text-sm font-semibold tracking-widest uppercase mb-4 text-center" style={{ color: "#186784" }}>
+              Current Data
+            </p>
+            <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: "#1D1D1F" }}>Vendor Distribution</h2>
+            <div className="grid sm:grid-cols-4 gap-4">
+              {[
+                { key: "recommended",       label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },
+                { key: "caution",           label: "Use With Caution", bg: "#FEF3C7", text: "#D97706" },
+                { key: "not-recommended",   label: "Not Recommended", bg: "#FEE2E2", text: "#DC2626" },
+                { key: "under-review",      label: "Under Review",    bg: "#EDE9FE", text: "#7C3AED" },
+              ].map((s) => (
+                <div key={s.key} className="rounded-2xl p-5 text-center" style={{ backgroundColor: "#FFFFFF" }}>
+                  <div className="text-3xl font-bold mb-2" style={{ color: s.text }}>
+                    {distribution[s.key as keyof typeof distribution]}
+                  </div>
+                  <span className="text-xs font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: s.bg, color: s.text }}>
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
