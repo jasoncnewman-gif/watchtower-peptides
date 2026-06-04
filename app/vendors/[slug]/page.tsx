@@ -189,10 +189,11 @@ export default async function VendorDetailPage({
             )}
           </div>
 
-          {/* Shipping */}
-          {(vendor.shipping_flat_fee != null || vendor.shipping_free_threshold != null) && (
+          {/* Shipping & Payment */}
+          {(vendor.shipping_flat_fee != null || vendor.shipping_free_threshold != null ||
+            vendor.ships_internationally || vendor.credit_card_accepted || vendor.crypto_accepted || vendor.paypal_accepted) && (
             <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
-              <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>Shipping</h2>
+              <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>Shipping &amp; Payment</h2>
               <div className="flex flex-wrap gap-3">
                 {vendor.shipping_free_threshold === 0 ? (
                   <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}>
@@ -210,6 +211,26 @@ export default async function VendorDetailPage({
                     <span className="font-medium">
                       {vendor.shipping_flat_fee === 0 ? "Free shipping" : `Flat rate: $${vendor.shipping_flat_fee.toFixed(2)}`}
                     </span>
+                  </div>
+                )}
+                {vendor.ships_internationally && (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#DBEAFE", color: "#1D4ED8" }}>
+                    <span className="font-medium">Ships internationally</span>
+                  </div>
+                )}
+                {vendor.credit_card_accepted && (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#F5F5F7", color: "#6E6E73", border: "1px solid #E5E5E7" }}>
+                    <span className="font-medium">Credit card</span>
+                  </div>
+                )}
+                {vendor.crypto_accepted && (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#FEF3C7", color: "#D97706" }}>
+                    <span className="font-medium">Crypto accepted</span>
+                  </div>
+                )}
+                {vendor.paypal_accepted && (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#DBEAFE", color: "#1D4ED8" }}>
+                    <span className="font-medium">PayPal accepted</span>
                   </div>
                 )}
               </div>
