@@ -68,9 +68,12 @@ const FREE_THRESHOLD_PATTERNS = [
   /orders?\s+(?:over|above)\s+\$\s*(\d+(?:\.\d+)?)\s+(?:get|receive|qualify\s+for)?\s*free\s+shipping/i,
   /\$\s*(\d+(?:\.\d+)?)\s*(?:\+|or\s+more)\s+(?:gets?\s+)?free\s+shipping/i,
   /free\s+shipping\s+with\s+(?:a\s+)?\$\s*(\d+(?:\.\d+)?)\s+(?:minimum|order)/i,
-  /complimentary\s+shipping\s+on\s+orders?\s+(?:over|above)\s+\$\s*(\d+(?:\.\d+)?)/i,
+  /complimentary\s+(?:standard\s+)?shipping\s+on\s+(?:all\s+)?(?:domestic\s+)?orders?\s+(?:over|above|exceeding)\s+\$\s*(\d+(?:\.\d+)?)/i,
   /spend\s+\$\s*(\d+(?:\.\d+)?)\s+(?:or\s+more\s+)?(?:to\s+get\s+|for\s+)?free\s+shipping/i,
-  /free\s+standard\s+shipping\s+on\s+orders?\s+(?:over|above)\s+\$\s*(\d+(?:\.\d+)?)/i,
+  /free\s+(?:standard\s+)?shipping\s+on\s+(?:all\s+)?(?:domestic\s+)?orders?\s+(?:over|above|exceeding|of)\s+\$\s*(\d+(?:\.\d+)?)/i,
+  /(?:domestic\s+)?orders?\s+\$\s*(\d+(?:\.\d+)?)\s+(?:and\s+)?(?:over|above|up)\s+(?:ship|receive|qualify\s+for)?\s*free/i,
+  /minimum\s+order\s+(?:of\s+)?\$\s*(\d+(?:\.\d+)?)\s+(?:for\s+)?free\s+(?:standard\s+)?shipping/i,
+  /free\s+(?:USPS|UPS|FedEx|priority)\s+shipping\s+(?:on\s+orders?\s+)?(?:over|above)\s+\$\s*(\d+(?:\.\d+)?)/i,
 ];
 
 const FREE_ALL_PATTERNS = [
@@ -155,9 +158,9 @@ function extractShipping(text: string): ShippingResult {
 
 async function getPageText(page: Page, url: string): Promise<string | null> {
   try {
-    const resp = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
+    const resp = await page.goto(url, { waitUntil: "networkidle2", timeout: 20000 });
     if (!resp || resp.status() >= 400) return null;
-    await sleep(800);
+    await sleep(500);
     return await page.evaluate(() => document.body?.innerText ?? "");
   } catch {
     return null;
