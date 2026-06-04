@@ -13,6 +13,7 @@
     "seed:blends": "tsx --tsconfig scripts/tsconfig.json scripts/seed-blends.ts",
     "seed:cartalax": "tsx --tsconfig scripts/tsconfig.json scripts/seed-cartalax.ts",
     "seed:peptides4": "tsx --tsconfig scripts/tsconfig.json scripts/seed-peptides-4.ts",
+    "seed:blend-stacks": "tsx --tsconfig scripts/tsconfig.json scripts/seed-blend-stacks.ts",
     "migrate:categories": "tsx --tsconfig scripts/tsconfig.json scripts/migrate-categories.ts",
     "debug:blends": "tsx --tsconfig scripts/tsconfig.json scripts/debug-blends.ts",
     "debug:shipping": "tsx --tsconfig scripts/tsconfig.json scripts/debug-shipping.ts",

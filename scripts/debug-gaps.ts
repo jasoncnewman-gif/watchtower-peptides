@@ -1,7 +1,11 @@
 import { db } from "./lib/client.js"
 
 function generateSlug(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-')
+  return name
+    .replace(/&#038;/g, ' ').replace(/&amp;/g, ' ')
+    .replace(/&#8211;/g, '-').replace(/&#\d+;/g, ' ')
+    .toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim()
+    .replace(/\s+/g, '-').replace(/-+/g, '-')
 }
 
 function stripSizeSuffix(slug: string): string {
@@ -10,8 +14,13 @@ function stripSizeSuffix(slug: string): string {
     .replace(/-8211$/, '')
     .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)-\d+-vials?(kit)?$/, '')
     .replace(/-\d+-vials?(kit)?$/, '')
+    .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)-\d+(\.\d+)?(mg|mcg|g|iu|ml)$/, '') // -5mg-10mg range
+    .replace(/-\d+(\.\d+)?-(mg|mcg|g|iu|ml)$/, '')                              // -10-mg (hyphenated unit)
     .replace(/-\d+(\.\d+)?(mg|mcg|g|iu|ml)$/, '')
     .replace(/-\d+(x\d+)?(ct|caps?|tabs?|tablets?)$/, '')
+    // Known compound-name suffixes that vendors append (these ARE the same compound)
+    .replace(/-thymosin-beta-4$/, '')       // "TB-500 Thymosin Beta-4" → tb-500
+    .replace(/-mod-grf-1-29$/, '')          // "CJC-1295 No DAC Mod GRF 1-29" → cjc-1295-no-dac
     .replace(/-peptide$/, '')
     .replace(/^receptor-grade-/, '')
 }
