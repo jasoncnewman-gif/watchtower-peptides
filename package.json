@@ -16,6 +16,7 @@
     "debug:shipping": "tsx --tsconfig scripts/tsconfig.json scripts/debug-shipping.ts",
     "scrape:shipping": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-shipping.ts",
     "scrape:shipping:puppeteer": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-shipping-puppeteer.ts",
+    "debug:shipping:text": "tsx --tsconfig scripts/tsconfig.json scripts/debug-shipping-text.ts",
     "debug:slugs": "tsx --tsconfig scripts/tsconfig.json scripts/debug-slugs.ts",
     "debug:popular": "tsx --tsconfig scripts/tsconfig.json scripts/debug-popular.ts",
     "debug:gaps": "tsx --tsconfig scripts/tsconfig.json scripts/debug-gaps.ts",
