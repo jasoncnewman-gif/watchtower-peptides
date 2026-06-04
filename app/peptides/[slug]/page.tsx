@@ -9,12 +9,12 @@ import { supabase } from '@/lib/supabase'
 import { generateSlug, stripSizeSuffix } from '@/lib/utils'
 
 const CATEGORY_PHOTO: Record<string, string> = {
-  hormones:          '/images/slide-1.png',
-  metabolic:         '/images/slide-1.png',
-  healing:           '/images/slide-3.png',
-  blend:             '/images/slide-3.png',
-  'brain-longevity': '/images/slide-2.png',
-  immune:            '/images/slide-2.png',
+  healing:           '/images/category-healing.png',
+  hormones:          '/images/category-hormones.png',
+  metabolic:         '/images/category-metabolic.png',
+  'brain-longevity': '/images/category-brain-longevity.png',
+  immune:            '/images/category-immune.png',
+  blend:             '/images/category-healing.png',
 }
 
 export async function generateMetadata({
