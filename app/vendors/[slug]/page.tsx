@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -95,18 +96,29 @@ export default async function VendorDetailPage({
         <div className="max-w-4xl mx-auto px-6 py-12">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-10" style={{ color: "#6E6E73" }}>
+          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: "#6E6E73" }}>
             <Link href="/vendors" className="hover:text-black transition-colors">Supplier Reviews</Link>
             <span>›</span>
             <span style={{ color: "#1D1D1F" }}>{vendor.name}</span>
           </div>
 
-          {/* Header card */}
-          <div className="rounded-2xl p-8 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
-            <div className="flex flex-col md:flex-row md:items-start gap-6">
+          {/* Photo header */}
+          <div className="rounded-2xl overflow-hidden mb-6 relative" style={{ minHeight: '200px' }}>
+            <Image
+              src="/images/slide-2.png"
+              alt={vendor.name}
+              fill
+              priority
+              style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.25) 100%)' }}
+            />
+            <div className="relative z-10 p-8 flex flex-col md:flex-row md:items-center gap-6" style={{ minHeight: '200px' }}>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2 flex-wrap">
-                  <h1 className="text-3xl font-bold" style={{ color: "#1D1D1F" }}>{vendor.name}</h1>
+                  <h1 className="text-3xl font-bold" style={{ color: "#FFFFFF" }}>{vendor.name}</h1>
                   <span
                     className="text-xs font-semibold px-3 py-1 rounded-full"
                     style={{ backgroundColor: status.bg, color: status.text }}
@@ -116,7 +128,7 @@ export default async function VendorDetailPage({
                   {vendor.has_coa && (
                     <span
                       className="text-xs font-semibold px-3 py-1 rounded-full"
-                      style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}
+                      style={{ backgroundColor: "rgba(220,252,231,0.90)", color: "#16A34A" }}
                     >
                       ✓ COA Verified
                     </span>
@@ -124,7 +136,7 @@ export default async function VendorDetailPage({
                   {vendor.verified_domain && (
                     <span
                       className="text-xs font-semibold px-3 py-1 rounded-full"
-                      style={{ backgroundColor: "#DBEAFE", color: "#1D4ED8" }}
+                      style={{ backgroundColor: "rgba(219,234,254,0.90)", color: "#1D4ED8" }}
                     >
                       ✓ Verified Domain
                     </span>
@@ -136,12 +148,12 @@ export default async function VendorDetailPage({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm hover:underline"
-                  style={{ color: "#186784" }}
+                  style={{ color: "#5BA4C4" }}
                 >
                   {vendor.website} ↗
                 </a>
 
-                <div className="flex flex-wrap gap-5 mt-4 text-sm" style={{ color: "#6E6E73" }}>
+                <div className="flex flex-wrap gap-5 mt-3 text-sm" style={{ color: "rgba(255,255,255,0.60)" }}>
                   <span>📍 {vendor.location}</span>
                   <span>
                     Last reviewed{" "}
@@ -150,24 +162,20 @@ export default async function VendorDetailPage({
                       : "—"}
                   </span>
                 </div>
-
-                <p className="mt-4 text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
-                  {vendor.notes}
-                </p>
               </div>
 
               {/* Score circle */}
               <div className="flex flex-col items-center shrink-0">
                 <div
                   className="w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold"
-                  style={{ backgroundColor: `${color}14`, color }}
+                  style={{ backgroundColor: "rgba(255,255,255,0.12)", color: "#FFFFFF", border: `2px solid ${color}` }}
                 >
                   {vendor.overall_score}
                 </div>
                 <div className="text-sm font-semibold mt-2" style={{ color }}>
                   {status.label}
                 </div>
-                <div className="text-xs mt-1" style={{ color: "#6E6E73" }}>out of 100</div>
+                <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.50)" }}>out of 100</div>
               </div>
             </div>
           </div>
@@ -176,6 +184,9 @@ export default async function VendorDetailPage({
           <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
             <h2 className="font-semibold mb-3" style={{ color: "#1D1D1F" }}>Our Verdict</h2>
             <p className="leading-relaxed" style={{ color: "#6E6E73" }}>{vendor.verdict}</p>
+            {vendor.notes && (
+              <p className="text-sm leading-relaxed mt-3" style={{ color: "#6E6E73" }}>{vendor.notes}</p>
+            )}
           </div>
 
           {/* Shipping */}

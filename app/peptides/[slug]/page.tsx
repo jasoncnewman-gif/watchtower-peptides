@@ -1,11 +1,20 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import PeptideDetailTabs, { type PeptideDetailData, type VendorTabData } from '@/components/peptides/PeptideDetailTabs'
 import { supabase } from '@/lib/supabase'
 import { generateSlug, stripSizeSuffix } from '@/lib/utils'
+
+const CATEGORY_PHOTO: Record<string, string> = {
+  performance:     '/images/slide-1.png',
+  'weight-loss':   '/images/slide-1.png',
+  'sexual-health': '/images/slide-2.png',
+  healing:         '/images/slide-3.png',
+  blend:           '/images/slide-3.png',
+}
 
 export async function generateMetadata({
   params,
@@ -139,6 +148,7 @@ export default async function PeptideDetailPage({
   }
 
   const fda = peptide.fda_status ? FDA_CONFIG[peptide.fda_status] : null
+  const headerPhoto = CATEGORY_PHOTO[peptideRow.category ?? ''] ?? '/images/slide-2.png'
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FFFFFF', color: '#1D1D1F' }}>
@@ -148,35 +158,48 @@ export default async function PeptideDetailPage({
         <div className="max-w-5xl mx-auto px-6 py-12">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-10" style={{ color: '#6E6E73' }}>
+          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: '#6E6E73' }}>
             <Link href="/peptides" className="hover:text-black transition-colors">Peptide Library</Link>
             <span>›</span>
             <span style={{ color: '#1D1D1F' }}>{peptide.name}</span>
           </div>
 
-          {/* Header */}
-          <div className="rounded-2xl p-8 mb-8" style={{ backgroundColor: '#F5F5F7' }}>
-            <div className="flex items-start gap-3 flex-wrap mb-2">
-              <h1 className="text-3xl font-bold" style={{ color: '#1D1D1F' }}>{peptide.name}</h1>
-              {fda && (
-                <span className="text-sm font-semibold px-3 py-1 rounded-full" style={{ backgroundColor: fda.bg, color: fda.text }}>
-                  {fda.label}
-                </span>
+          {/* Photo header */}
+          <div className="rounded-2xl overflow-hidden mb-8 relative" style={{ minHeight: '220px' }}>
+            <Image
+              src={headerPhoto}
+              alt={peptide.name}
+              fill
+              priority
+              style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.20) 100%)' }}
+            />
+            <div className="relative z-10 p-8 flex flex-col justify-center" style={{ minHeight: '220px' }}>
+              <div className="flex items-start gap-3 flex-wrap mb-2">
+                <h1 className="text-3xl font-bold" style={{ color: '#FFFFFF' }}>{peptide.name}</h1>
+                {fda && (
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ backgroundColor: fda.bg, color: fda.text }}>
+                    {fda.label}
+                  </span>
+                )}
+                {peptide.research_status && (
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)', border: '1px solid rgba(255,255,255,0.25)' }}>
+                    {peptide.research_status} Evidence
+                  </span>
+                )}
+              </div>
+
+              {peptide.full_name && (
+                <p className="text-sm mb-2" style={{ color: 'rgba(255,255,255,0.65)' }}>{peptide.full_name}</p>
               )}
-              {peptide.research_status && (
-                <span className="text-sm font-semibold px-3 py-1 rounded-full" style={{ backgroundColor: '#F5F5F7', color: '#6E6E73', border: '1px solid #E5E5E7' }}>
-                  {peptide.research_status} Evidence
-                </span>
+
+              {peptide.tagline && (
+                <p className="text-sm leading-relaxed max-w-xl" style={{ color: 'rgba(255,255,255,0.72)' }}>{peptide.tagline}</p>
               )}
             </div>
-
-            {peptide.full_name && (
-              <p className="text-base mb-2" style={{ color: '#6E6E73' }}>{peptide.full_name}</p>
-            )}
-
-            {peptide.tagline && (
-              <p className="text-sm leading-relaxed" style={{ color: '#6E6E73' }}>{peptide.tagline}</p>
-            )}
           </div>
 
           {/* Tabs */}

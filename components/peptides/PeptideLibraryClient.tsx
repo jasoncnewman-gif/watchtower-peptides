@@ -15,13 +15,29 @@ interface PeptideItem {
   category: string | null
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  healing:       'Healing',
+  performance:   'Performance',
+  'weight-loss': 'Weight Loss',
+  'sexual-health': 'Sexual Health',
+  blend:         'Blends',
+}
+
+const CATEGORY_ORDER = ['healing', 'performance', 'weight-loss', 'sexual-health', 'blend']
+
 export default function PeptideLibraryClient({ peptides }: { peptides: PeptideItem[] }) {
   const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('')
 
   const statuses = useMemo(() => {
     const set = new Set(peptides.map(p => p.researchStatus).filter(Boolean) as string[])
     return [...set].sort()
+  }, [peptides])
+
+  const availableCategories = useMemo(() => {
+    const set = new Set(peptides.map(p => p.category).filter(Boolean) as string[])
+    return CATEGORY_ORDER.filter(c => set.has(c))
   }, [peptides])
 
   const filtered = useMemo(() => {
@@ -32,12 +48,45 @@ export default function PeptideLibraryClient({ peptides }: { peptides: PeptideIt
         (p.tagline?.toLowerCase().includes(q) ?? false) ||
         (p.fullName?.toLowerCase().includes(q) ?? false)
       const matchesStatus = !statusFilter || p.researchStatus === statusFilter
-      return matchesQuery && matchesStatus
+      const matchesCategory = !categoryFilter || p.category === categoryFilter
+      return matchesQuery && matchesStatus && matchesCategory
     })
-  }, [peptides, query, statusFilter])
+  }, [peptides, query, statusFilter, categoryFilter])
 
   return (
     <>
+      {/* Category pills */}
+      {availableCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-5">
+          <button
+            onClick={() => setCategoryFilter('')}
+            className="text-sm font-medium px-4 py-1.5 rounded-full transition-colors"
+            style={
+              !categoryFilter
+                ? { backgroundColor: '#1D1D1F', color: '#FFFFFF' }
+                : { backgroundColor: '#F5F5F7', color: '#6E6E73' }
+            }
+          >
+            All
+          </button>
+          {availableCategories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setCategoryFilter(cat === categoryFilter ? '' : cat)}
+              className="text-sm font-medium px-4 py-1.5 rounded-full transition-colors"
+              style={
+                categoryFilter === cat
+                  ? { backgroundColor: '#186784', color: '#FFFFFF' }
+                  : { backgroundColor: '#F5F5F7', color: '#6E6E73' }
+              }
+            >
+              {CATEGORY_LABELS[cat] ?? cat}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Search + evidence filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <input
           type="text"

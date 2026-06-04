@@ -27,11 +27,13 @@ function scoreColor(score: number) {
 export default async function Home() {
   const [
     { count: activeCount },
+    { count: labTestCount },
     { data: lastUpdatedRow },
     { data: topVendorRows },
     { data: peptideRows },
   ] = await Promise.all([
     supabase.from("vendors").select("*", { count: "exact", head: true }).eq("status", "active"),
+    supabase.from("lab_tests").select("*", { count: "exact", head: true }),
     supabase.from("vendors").select("updated_at").order("updated_at", { ascending: false }).limit(1).single(),
     supabase
       .from("vendors")
@@ -47,15 +49,17 @@ export default async function Home() {
   ]);
 
   const vendorCount = activeCount ?? 0;
+  const labCount = labTestCount ?? 0;
+  const labCountLabel = labCount === 0 ? "—" : labCount >= 100 ? `${Math.floor(labCount / 50) * 50}+` : String(labCount);
   const lastUpdated = lastUpdatedRow?.updated_at
     ? new Date(lastUpdatedRow.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "—";
 
   const stats = [
     { label: "Vendors Reviewed",   value: String(vendorCount) },
-    { label: "Lab Tests Reviewed", value: "500+"              },
-    { label: "Last Updated",       value: lastUpdated         },
-    { label: "Independent Reviews",value: "100%"              },
+    { label: "Lab Tests Reviewed", value: labCountLabel        },
+    { label: "Last Updated",       value: lastUpdated          },
+    { label: "Independent Reviews",value: "100%"               },
   ];
 
   const allVendors = (topVendorRows ?? []).map((v) => dbVendorToVendor(v as DbVendor));
