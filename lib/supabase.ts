@@ -33,6 +33,7 @@ export interface DbVendor {
   state: string | null
   city: string | null
   location: string | null
+  shipping_flat_fee: number | null
   shipping_free_threshold: number | null
   ships_internationally: boolean
   credit_card_accepted: boolean
@@ -233,6 +234,7 @@ export function dbVendorToVendor(db: DbVendor, peptideItems: DbVendorPeptide[] =
     state: db.state ?? undefined,
     city: db.city ?? undefined,
     established_year: db.established_year ?? undefined,
+    shipping_flat_fee: db.shipping_flat_fee ?? undefined,
     shipping_free_threshold: db.shipping_free_threshold ?? undefined,
     ships_internationally: db.ships_internationally,
     credit_card_accepted: db.credit_card_accepted,

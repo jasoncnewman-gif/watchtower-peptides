@@ -127,6 +127,19 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
                   <span className="text-xs px-2.5 py-1 rounded-full" style={{ backgroundColor: '#F5F5F7', color: '#6E6E73' }}>
                     {vendor.location}
                   </span>
+                  {vendor.shipping_free_threshold === 0 ? (
+                    <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: '#DCFCE7', color: '#16A34A' }}>
+                      Free shipping
+                    </span>
+                  ) : vendor.shipping_free_threshold != null ? (
+                    <span className="text-xs px-2.5 py-1 rounded-full" style={{ backgroundColor: '#F5F5F7', color: '#6E6E73' }}>
+                      Free ship ${vendor.shipping_free_threshold}+
+                    </span>
+                  ) : vendor.shipping_flat_fee != null ? (
+                    <span className="text-xs px-2.5 py-1 rounded-full" style={{ backgroundColor: '#F5F5F7', color: '#6E6E73' }}>
+                      {vendor.shipping_flat_fee === 0 ? 'Free shipping' : `Ship $${vendor.shipping_flat_fee.toFixed(2)}`}
+                    </span>
+                  ) : null}
                 </div>
 
                 {/* Verdict */}

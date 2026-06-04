@@ -178,6 +178,33 @@ export default async function VendorDetailPage({
             <p className="leading-relaxed" style={{ color: "#6E6E73" }}>{vendor.verdict}</p>
           </div>
 
+          {/* Shipping */}
+          {(vendor.shipping_flat_fee != null || vendor.shipping_free_threshold != null) && (
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>Shipping</h2>
+              <div className="flex flex-wrap gap-3">
+                {vendor.shipping_free_threshold === 0 ? (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}>
+                    <span>✓</span>
+                    <span className="font-medium">Free shipping on all orders</span>
+                  </div>
+                ) : vendor.shipping_free_threshold != null && (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}>
+                    <span>✓</span>
+                    <span className="font-medium">Free shipping on orders over ${vendor.shipping_free_threshold}</span>
+                  </div>
+                )}
+                {vendor.shipping_flat_fee != null && (
+                  <div className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl" style={{ backgroundColor: "#F5F5F7", color: "#6E6E73", border: "1px solid #E5E5E7" }}>
+                    <span className="font-medium">
+                      {vendor.shipping_flat_fee === 0 ? "Free shipping" : `Flat rate: $${vendor.shipping_flat_fee.toFixed(2)}`}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Score breakdown */}
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Score Breakdown</h2>

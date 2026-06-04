@@ -43,6 +43,7 @@ export type Vendor = {
   established_year?: number;
 
   // shipping & payment
+  shipping_flat_fee?: number;
   shipping_free_threshold?: number;
   ships_internationally?: boolean;
   credit_card_accepted?: boolean;
