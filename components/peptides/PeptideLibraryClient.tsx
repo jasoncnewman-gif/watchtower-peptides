@@ -16,14 +16,15 @@ interface PeptideItem {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  healing:       'Healing',
-  performance:   'Performance',
-  'weight-loss': 'Weight Loss',
-  'sexual-health': 'Sexual Health',
-  blend:         'Blends',
+  healing:          'Healing & Recovery',
+  hormones:         'Hormones & Performance',
+  metabolic:        'Weight & Metabolic',
+  'brain-longevity': 'Brain & Longevity',
+  immune:           'Immune & Protective',
+  blend:            'Blends',
 }
 
-const CATEGORY_ORDER = ['healing', 'performance', 'weight-loss', 'sexual-health', 'blend']
+const CATEGORY_ORDER = ['healing', 'hormones', 'metabolic', 'brain-longevity', 'immune', 'blend']
 
 export default function PeptideLibraryClient({ peptides }: { peptides: PeptideItem[] }) {
   const [query, setQuery] = useState('')
