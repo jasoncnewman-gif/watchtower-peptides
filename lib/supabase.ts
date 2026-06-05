@@ -1,5 +1,79 @@
 import { createClient } from '@supabase/supabase-js'
-import type { Vendor, Peptide, VendorStatus } from './mock-data'
+
+// ── Display types ────────────────────────────────────────────────────────────
+
+export type VendorStatus = "recommended" | "caution" | "not-recommended" | "under-review";
+
+export type Vendor = {
+  id: string;
+  slug: string;
+  name: string;
+  website: string;
+  overall_score: number;
+  status: VendorStatus;
+  location: string;
+  has_coa: boolean;
+  verified_domain?: boolean;
+  last_reviewed: string;
+  verdict: string;
+  notes: string;
+  scores: {
+    lab_testing: number;
+    purity_accuracy: number;
+    transparency: number;
+    community_reputation: number;
+    pricing_reliability: number;
+  };
+  peptide_inventory: { name: string; price: string; in_stock: boolean }[];
+  finnrick_rating?: string;
+  finnrick_score?: number;
+  finnrick_tests_count?: number;
+  finnrick_url?: string;
+  peptide_critic_rating?: number;
+  peptide_critic_reviews_count?: number;
+  peptide_critic_url?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  established_year?: number;
+  shipping_flat_fee?: number;
+  shipping_free_threshold?: number;
+  ships_internationally?: boolean;
+  credit_card_accepted?: boolean;
+  crypto_accepted?: boolean;
+  paypal_accepted?: boolean;
+  average_price_per_unit?: number;
+  total_products?: number;
+  specialization?: string[];
+  formats_available?: string[];
+  is_gated?: boolean;
+  gated_notes?: string;
+  fda_warning?: boolean;
+  fda_warning_date?: string;
+  fda_notes?: string;
+  reddit_sentiment?: "positive" | "mixed" | "negative";
+  positive_review_summary?: string;
+  negative_review_summary?: string;
+  review_1?: string;
+  review_2?: string;
+  review_3?: string;
+  coupon_code?: string;
+};
+
+export type Peptide = {
+  id: string;
+  slug: string;
+  name: string;
+  aliases: string[];
+  description: string;
+  what_it_does?: string;
+  fda_status: "approved" | "not-approved" | "research-only";
+  typical_dosage: string;
+  reconstitution: string;
+  studies: { title: string; url: string }[];
+  vendors: string[];
+  category?: "healing" | "weight-loss" | "performance" | "sexual-health";
+};
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!

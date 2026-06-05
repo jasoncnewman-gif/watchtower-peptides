@@ -2,8 +2,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import HeroSlider from "@/components/HeroSlider";
-import { supabase, dbVendorToVendor, type DbVendor } from "@/lib/supabase";
-import type { VendorStatus } from "@/lib/mock-data";
+import { supabase, dbVendorToVendor, type DbVendor, type VendorStatus } from "@/lib/supabase";
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
   recommended:       { label: "Recommended",     bg: "#DCFCE7", text: "#16A34A" },

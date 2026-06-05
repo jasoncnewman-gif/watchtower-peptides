@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import type { Vendor, VendorStatus } from '@/lib/mock-data'
+import type { Vendor, VendorStatus } from '@/lib/supabase'
 
 const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
   recommended:       { label: 'Recommended',      bg: '#DCFCE7', text: '#16A34A' },

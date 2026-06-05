@@ -34,14 +34,14 @@ const VENDOR_CONFIGS: CoaConfig[] = [
   { slug: "limitless-biotech",       coaUrl: "https://limitlessbiotech.us/pages/lab-testing" },
   { slug: "ascension-peptides",      coaUrl: "https://ascensionpeptides.com/pages/coa" },
   { slug: "nexaph",                  coaUrl: "https://nexaph.com/lab-results" },
-  { slug: "mile-high-compounds",     coaUrl: "https://milehighcompounds.com/pages/coa" },
+  { slug: "mile-high-compounds",     coaUrl: "https://milehighcompounds.is/pages/coa" },
   { slug: "crush-research",          coaUrl: "https://crushresearch.shop/lab-testing" },
   { slug: "omegamino",               coaUrl: "https://omegamino.net/pages/coa" },
   { slug: "orbitrex-peptides",       coaUrl: "https://orbitrexpeptide.is/coas/" },
-  { slug: "peptidology",             coaUrl: "https://peptidology.com/pages/lab-results" },
+  { slug: "peptidology",             coaUrl: "https://peptidology.co/lab-results/" },
   { slug: "swiss-chems",             coaUrl: "https://swisschems.is/pages/certificates" },
   { slug: "pure-rawz",               coaUrl: "https://purerawz.co/pages/coa" },
-  { slug: "loti-labs",               coaUrl: "https://lotilabs.com/pages/lab-test-results" },
+  { slug: "loti-labs",               coaUrl: "https://lotilabs.com/coas-updated/" },
   { slug: "biotech-peptides",        coaUrl: "https://biotechpeptides.com/pages/certificates-of-analysis" },
   { slug: "sports-technology-labs",  coaUrl: "https://sportstechnologylabs.com/pages/lab-results" },
   { slug: "polaris-peptides",        coaUrl: "https://polarispeptides.com/pages/coa" },
@@ -62,7 +62,7 @@ const VENDOR_CONFIGS: CoaConfig[] = [
   { slug: "nextechlabs",             coaUrl: "https://nextechlaboratories.com/pages/coa" },
   { slug: "apollo-peptide-sciences", coaUrl: "https://apollopeptidesciences.com/pages/lab-results" },
   { slug: "cernum-biosciences",      coaUrl: "https://cernumbiosciences.com/pages/certificates" },
-  { slug: "peptide-crafters",        coaUrl: "https://peptidecrafters.com/pages/coa" },
+  { slug: "peptide-crafters",        coaUrl: "https://peptidecrafters.com/lab-test-reports/" },
   { slug: "lvlup-health",            coaUrl: "https://lvluphealth.com/pages/lab-results" },
   { slug: "healthgevity",            coaUrl: "https://healthgev.com/pages/testing" },
 ];
@@ -227,15 +227,22 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  log(SCRIPT, `Processing ${VENDOR_CONFIGS.length} vendors…`);
+  // Optional: pass slug args to target specific vendors, e.g. "npm run scrape:coas -- ion-peptide loti-labs"
+  const filter = process.argv.slice(2);
+  const configs = filter.length
+    ? VENDOR_CONFIGS.filter((c) => filter.includes(c.slug))
+    : VENDOR_CONFIGS;
+
+  log(SCRIPT, `Processing ${configs.length} vendors${filter.length ? ` (filtered: ${filter.join(", ")})` : ""}…`);
 
   const browser = await puppeteerExtra.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-blink-features=AutomationControlled"],
   }) as unknown as Browser;
 
   try {
-    for (const config of VENDOR_CONFIGS) {
+    for (const config of configs) {
       await checkCoaPage(browser, config);
       await sleep(1500);
     }

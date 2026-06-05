@@ -32,7 +32,8 @@
     "compute:scores": "tsx --tsconfig scripts/tsconfig.json scripts/compute-scores.ts",
     "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts",
     "verify:domains": "tsx --tsconfig scripts/tsconfig.json scripts/verify-domains.ts",
-    "fix:vendor-urls": "tsx --tsconfig scripts/tsconfig.json scripts/fix-vendor-urls.ts"
+    "fix:vendor-urls": "tsx --tsconfig scripts/tsconfig.json scripts/fix-vendor-urls.ts",
+    "scrape:gated": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-gated-vendors.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",

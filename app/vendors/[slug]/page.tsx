@@ -4,8 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { supabase, dbVendorToVendor, type DbVendor, type DbVendorPeptide } from "@/lib/supabase";
-import type { VendorStatus } from "@/lib/mock-data";
+import { supabase, dbVendorToVendor, type DbVendor, type DbVendorPeptide, type VendorStatus } from "@/lib/supabase";
 
 export async function generateMetadata({
   params,
