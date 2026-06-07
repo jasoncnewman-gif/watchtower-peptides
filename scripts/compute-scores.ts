@@ -45,8 +45,11 @@ type DbProductRow = {
 
 // ── Scoring functions ─────────────────────────────────────────────────────
 
-function labTestingScore(testsCount: number | null, grade: string | null): number {
-  if (!testsCount || testsCount === 0) return 0;
+function labTestingScore(testsCount: number | null, grade: string | null, hasCoa: boolean): number {
+  if (!testsCount || testsCount === 0) {
+    // No Finnrick data — give partial credit if they publish COAs (can't verify quality without Finnrick)
+    return hasCoa ? 5 : 0;
+  }
 
   // Logarithmic scale: 30 points at ~100 tests
   const base = Math.min(30, Math.round((Math.log(testsCount + 1) / Math.log(101)) * 30));
@@ -211,7 +214,7 @@ async function main() {
   let skipped = 0;
 
   for (const v of rows) {
-    const lab        = labTestingScore(v.finnrick_tests_count, v.finnrick_rating);
+    const lab        = labTestingScore(v.finnrick_tests_count, v.finnrick_rating, v.has_coa);
     const purity     = purityAccuracyScore(v.finnrick_rating, v.finnrick_score);
     const trans      = transparencyScore(v.has_coa);
     const community  = communityReputationScore(v.peptide_critic_rating, v.peptide_critic_reviews_count);

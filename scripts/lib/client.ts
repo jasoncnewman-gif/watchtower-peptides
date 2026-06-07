@@ -20,6 +20,16 @@ if (!serviceKey) {
   process.exit(1);
 }
 
+// Cheerio (imported in scraper scripts) patches Node 26's native fetch in a way
+// that causes gzip-encoded PostgREST responses to arrive un-decoded. Force
+// identity encoding so responses are always plain JSON.
+const noGzipFetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const headers = new Headers(init?.headers as HeadersInit | undefined);
+  headers.set("Accept-Encoding", "identity");
+  return fetch(input, { ...init, headers });
+};
+
 export const db: SupabaseClient = createClient(url, serviceKey, {
   auth: { persistSession: false },
+  global: { fetch: noGzipFetch },
 });

@@ -7,13 +7,12 @@
  * Run: npm run scrape:coas
  */
 
-import puppeteerExtra from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser } from "puppeteer";
-
-puppeteerExtra.use(StealthPlugin());
 import { db } from "./lib/client.js";
 import { log, sleep } from "./lib/scraper.js";
+
+// Puppeteer is lazy-imported in main() so the stealth plugin doesn't patch
+// Node's fetch before the Supabase DB queries complete (same fix as scrape-gated-vendors.ts).
 
 const SCRIPT = "scrape-coas";
 const USER_AGENT =
@@ -21,13 +20,16 @@ const USER_AGENT =
   "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
 // ── Vendor COA page URLs ──────────────────────────────────────────────────
+// Primary source: coa_url column on vendors table (set via seed-vendor-creds.ts).
+// The FALLBACK_CONFIGS below are used for vendors that pre-date the DB column
+// or haven't been seeded yet.
 
 type CoaConfig = {
   slug: string;
   coaUrl: string;
 };
 
-const VENDOR_CONFIGS: CoaConfig[] = [
+const FALLBACK_CONFIGS: CoaConfig[] = [
   { slug: "peptide-partners",        coaUrl: "https://peptidepartners.com/pages/lab-results" },
   { slug: "ion-peptide",             coaUrl: "https://ionpeptide.com/lab-results/" },
   { slug: "core-peptides",           coaUrl: "https://corepeptides.com/pages/certificates-of-analysis" },
@@ -38,7 +40,7 @@ const VENDOR_CONFIGS: CoaConfig[] = [
   { slug: "crush-research",          coaUrl: "https://crushresearch.shop/lab-testing" },
   { slug: "omegamino",               coaUrl: "https://omegamino.net/pages/coa" },
   { slug: "orbitrex-peptides",       coaUrl: "https://orbitrexpeptide.is/coas/" },
-  { slug: "peptidology",             coaUrl: "https://peptidology.co/lab-results/" },
+  { slug: "peptidology",             coaUrl: "https://peptidology.co/certificates/" },
   { slug: "swiss-chems",             coaUrl: "https://swisschems.is/pages/certificates" },
   { slug: "pure-rawz",               coaUrl: "https://purerawz.co/pages/coa" },
   { slug: "loti-labs",               coaUrl: "https://lotilabs.com/coas-updated/" },
@@ -157,9 +159,12 @@ async function discoverCoaUrl(page: import("puppeteer").Page, baseUrl: string): 
 }
 
 async function saveCoaLinks(vendorId: string, slug: string, linkHrefs: string[]): Promise<void> {
-  const coaLinks = linkHrefs.filter(
-    (h) => h.includes("janoshik") || h.includes(".pdf") || h.includes("coa")
-  );
+  const coaLinks = linkHrefs.filter((h) => {
+    // Must be an actual document link, not a page anchor or nav link
+    if (h.includes("#") && !h.includes("janoshik")) return false;
+    if (h.includes("login") || h.includes("account") || h.includes("cart")) return false;
+    return h.includes("janoshik") || h.includes(".pdf");
+  });
   if (coaLinks.length === 0) return;
   await db.from("lab_tests").delete().eq("vendor_id", vendorId);
   const rows = coaLinks.slice(0, 50).map((href) => ({
@@ -208,14 +213,29 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
       return;
     }
 
-    const hasCoa = hasCoaContent(content.body, content.links);
+    let hasCoa = hasCoaContent(content.body, content.links);
+
+    // Stage 3: configured URL had a page but no COA content — try homepage discovery
+    if (!hasCoa) {
+      log(SCRIPT, `  ${config.slug}: configured URL has no COA content — trying homepage discovery…`);
+      const discovered = await discoverCoaUrl(page, config.coaUrl);
+      if (discovered && discovered !== config.coaUrl) {
+        log(SCRIPT, `  ${config.slug}: found candidate → ${discovered}`);
+        const discoveredContent = await getPageContent(page, discovered);
+        if (discoveredContent) {
+          hasCoa = hasCoaContent(discoveredContent.body, discoveredContent.links);
+          if (hasCoa) content = discoveredContent;
+        }
+      }
+    }
+
     await db.from("vendors").update({ has_coa: hasCoa }).eq("id", vendorId);
 
     if (hasCoa) {
       log(SCRIPT, `  ✓ ${config.slug}: COA content detected`);
       await saveCoaLinks(vendorId, config.slug, content.links);
     } else {
-      log(SCRIPT, `  — ${config.slug}: page exists but no COA content`);
+      log(SCRIPT, `  — ${config.slug}: no COA content found`);
     }
   } catch (err) {
     log(SCRIPT, `  ✗ ${config.slug}: ${(err as Error).message}`);
@@ -229,17 +249,37 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
 async function main() {
   // Optional: pass slug args to target specific vendors, e.g. "npm run scrape:coas -- ion-peptide loti-labs"
   const filter = process.argv.slice(2);
+
+  // Pull coa_url from DB for vendors that have it set; merge with fallback config list
+  const { data: dbRows } = await db
+    .from("vendors")
+    .select("slug, coa_url")
+    .not("coa_url", "is", null);
+
+  const dbCoaMap = new Map<string, string>(
+    (dbRows ?? []).filter((r: any) => r.coa_url).map((r: any) => [r.slug, r.coa_url])
+  );
+
+  // Start from fallback list, override/add with DB values
+  const fallbackMap = new Map(FALLBACK_CONFIGS.map((c) => [c.slug, c.coaUrl]));
+  for (const [slug, url] of dbCoaMap) fallbackMap.set(slug, url);
+  const allConfigs: CoaConfig[] = Array.from(fallbackMap.entries()).map(([slug, coaUrl]) => ({ slug, coaUrl }));
+
   const configs = filter.length
-    ? VENDOR_CONFIGS.filter((c) => filter.includes(c.slug))
-    : VENDOR_CONFIGS;
+    ? allConfigs.filter((c) => filter.includes(c.slug))
+    : allConfigs;
 
   log(SCRIPT, `Processing ${configs.length} vendors${filter.length ? ` (filtered: ${filter.join(", ")})` : ""}…`);
 
-  const browser = await puppeteerExtra.launch({
+  const { default: puppeteerExtra } = await import("puppeteer-extra");
+  const { default: StealthPlugin } = await import("puppeteer-extra-plugin-stealth");
+  puppeteerExtra.use(StealthPlugin());
+
+  const browser = await (puppeteerExtra as any).launch({
     headless: true,
     executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-blink-features=AutomationControlled"],
-  }) as unknown as Browser;
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled"],
+  }) as Browser;
 
   try {
     for (const config of configs) {

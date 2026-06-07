@@ -33,6 +33,7 @@
     "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts",
     "verify:domains": "tsx --tsconfig scripts/tsconfig.json scripts/verify-domains.ts",
     "fix:vendor-urls": "tsx --tsconfig scripts/tsconfig.json scripts/fix-vendor-urls.ts",
+    "seed:creds": "tsx --tsconfig scripts/tsconfig.json scripts/seed-vendor-creds.ts",
     "scrape:gated": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-gated-vendors.ts"
   },
   "dependencies": {

@@ -1,119 +1,44 @@
 /**
  * scripts/scrape-gated-vendors.ts
  * Logs in to gated vendor sites and scrapes products + shipping.
- * Also handles status corrections for Ion Peptide and Apollo Peptide Sciences.
+ * Credentials and catalog paths are read from the vendors table
+ * (login_email, login_password, login_username, login_path, catalog_paths, login_platform).
  *
  * Run: npm run scrape:gated
+ *      npm run scrape:gated -- loti-labs felix-chemical-supply
  */
 
-import puppeteerExtra from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import * as cheerio from "cheerio";
 import { db } from "./lib/client.js";
 import { clean, parsePrice, parseMg, log, sleep } from "./lib/scraper.js";
 
-puppeteerExtra.use(StealthPlugin());
+// Puppeteer is lazy-imported in launchBrowser() so its stealth plugin doesn't
+// patch Node's fetch before the Supabase DB queries run.
 
 const SCRIPT = "scrape-gated";
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
   "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
-// ── Config ────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────
 
 type Platform = "woocommerce" | "shopify" | "custom";
 
-type GatedVendorConfig = {
+type GatedVendorRow = {
+  id: string;
   slug: string;
   name: string;
-  baseUrl: string;
-  loginPath: string;
-  catalogPaths: string[];
-  username?: string;     // if site uses username field
-  email: string;         // used if no username field, or as fallback
-  password: string;
-  platform: Platform;
-  newWebsite?: string;   // update website URL in DB if changed
+  website: string;
+  login_username: string | null;
+  login_email: string | null;
+  login_password: string | null;
+  login_path: string | null;
+  catalog_paths: string[] | null;
+  login_platform: string | null;
+  coa_url: string | null;
+  newWebsite?: string;
 };
-
-const GATED_VENDORS: GatedVendorConfig[] = [
-  {
-    slug: "felix-chemical-supply",
-    name: "Felix Chemical Supply",
-    baseUrl: "https://felixchem.is",
-    loginPath: "/felix-chemical-supply/",
-    catalogPaths: ["/felix-chemical-supply/shop/", "/shop/", "/products/"],
-    username: "watchtower",
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "woocommerce",
-    newWebsite: "https://felixchem.is/felix-chemical-supply/",
-  },
-  {
-    slug: "loti-labs",
-    name: "Loti Labs",
-    baseUrl: "https://lotilabs.com",
-    loginPath: "/my-account/",
-    catalogPaths: ["/peptides/", "/catalog/", "/capsules/"],
-    username: "watchtower",
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "woocommerce",
-  },
-  {
-    slug: "mile-high-compounds",
-    name: "Mile High Compounds",
-    baseUrl: "https://milehighcompounds.is",
-    loginPath: "/my-account/",
-    catalogPaths: ["/shop/", "/products/", "/peptides/"],
-    username: "watchtower",
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "woocommerce",
-  },
-  {
-    slug: "omegamino",
-    name: "Omegamino",
-    baseUrl: "https://omegamino.net",
-    loginPath: "/my-account/",
-    catalogPaths: ["/shop/", "/products/", "/peptides/"],
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "woocommerce",
-  },
-  {
-    slug: "ascension-peptides",
-    name: "Ascension Peptides",
-    baseUrl: "https://ascensionpeptides.com",
-    loginPath: "/my-account/",
-    catalogPaths: ["/collections/all", "/shop/", "/products/"],
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "woocommerce",
-  },
-  {
-    slug: "ion-peptide",
-    name: "Ion Peptide",
-    baseUrl: "https://ionpeptide.com",
-    loginPath: "/my-account/",
-    catalogPaths: ["/shop/", "/products/", "/collections/all"],
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "custom",  // site appears to be publicly accessible
-  },
-  {
-    slug: "peptidology",
-    name: "Peptidology",
-    baseUrl: "https://peptidology.co",
-    loginPath: "/login/",
-    catalogPaths: ["/products/", "/shop/", "/collections/all"],
-    email: "info@watchtowerpeptides.com",
-    password: "jikHip-6dewje-xytgih",
-    platform: "custom",
-    newWebsite: "https://peptidology.co",
-  },
-];
 
 // ── Peptide filter ────────────────────────────────────────────────────────
 
@@ -145,7 +70,6 @@ type ProductData = {
 
 // ── Login helpers ─────────────────────────────────────────────────────────
 
-// Fill a form field by direct value injection (avoids per-keystroke CDP calls that time out)
 async function fillField(page: Page, selector: string, value: string): Promise<boolean> {
   try {
     await page.waitForSelector(selector, { timeout: 8000 });
@@ -160,55 +84,86 @@ async function fillField(page: Page, selector: string, value: string): Promise<b
   }
 }
 
-async function loginWooCommerce(
-  page: Page,
-  config: GatedVendorConfig
-): Promise<boolean> {
-  const loginUrl = `${config.baseUrl}${config.loginPath}`;
+async function loginWooCommerce(page: Page, config: GatedVendorRow): Promise<boolean> {
+  const baseUrl = new URL(config.website).origin;
+  const loginPath = config.login_path ?? "/my-account/";
+  const loginUrl = `${baseUrl}${loginPath}`;
   log(SCRIPT, `  → Navigating to ${loginUrl}`);
 
   try {
     await page.goto(loginUrl, { waitUntil: "domcontentloaded", timeout: 25000 });
     await sleep(1500);
 
-    // Accept any age gate if present
+    // Dismiss cookie consent / age gate overlays before interacting with the form
+    const dismissSels = [
+      "#zc-manage",                                          // ZCB cookie banner (Ascension Peptides)
+      ".zcb-button-primary",                                 // ZCB variant
+      "button[class*='accept'], a[class*='accept']",         // generic accept
+      "button[class*='agree'], a[class*='agree']",           // agree variant
+      "button[class*='age'], .age-gate__submit, input[value*='Enter']",
+    ];
+    for (const sel of dismissSels) {
+      try {
+        const el = await page.$(sel);
+        if (el) { await el.click(); await sleep(600); break; }
+      } catch { /* continue */ }
+    }
+
+    // Detect username vs email field — WP uses name="log", others use name="username"
+    const userSel = "input[name='log'], input[name='username'], input[type='email']";
+    const hasUsernameField = !!(await page.$(userSel).catch(() => null));
+    const loginValue = (hasUsernameField && config.login_username) ? config.login_username : config.login_email!;
+
+    // Use page.type() for real keystroke events (required by some JS-validated forms)
     try {
-      const ageBtn = await page.$("button[class*='age'], .age-gate__submit, input[value*='Enter']");
-      if (ageBtn) { await ageBtn.click(); await sleep(800); }
-    } catch { /* no age gate */ }
-
-    // Detect username vs email field
-    const hasUsernameField = !!(await page.$("input[name='username']").catch(() => null));
-    const loginValue = hasUsernameField && config.username ? config.username : config.email;
-    const userSel = "input[name='username'], input[type='email'], input[name='log']";
-
-    const filledUser = await fillField(page, userSel, loginValue);
-    const filledPass = await fillField(page, "input[name='password'], input[type='password']", config.password);
-
-    if (!filledUser || !filledPass) {
-      log(SCRIPT, `  ✗ Could not find login form fields`);
+      await page.waitForSelector(userSel, { timeout: 8000 });
+      await page.click(userSel);
+      await page.type(userSel, loginValue, { delay: 40 });
+    } catch {
+      log(SCRIPT, `  ✗ Could not find username/email field`);
       return false;
     }
 
-    const submitSel = "button[name='login'], input[name='login'], button[type='submit'], input[type='submit']";
+    const passSel = "input[name='pwd'], input[name='password'], input[type='password']";
+    try {
+      await page.waitForSelector(passSel, { timeout: 8000 });
+      await page.click(passSel);
+      await page.type(passSel, config.login_password!, { delay: 40 });
+    } catch {
+      log(SCRIPT, `  ✗ Could not find password field`);
+      return false;
+    }
+
+    const submitSel = "input[name='wp-submit'], button[name='login'], input[name='login'], button[type='submit'], input[type='submit']";
     await page.click(submitSel);
-    await page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 20000 }).catch(() => {});
+
+    // Wait for either a navigation or an AJAX-driven DOM change (JetEngine, etc.)
+    await Promise.race([
+      page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 15000 }),
+      sleep(6000),
+    ]).catch(() => {});
     await sleep(1500);
 
-    const currentUrl = page.url();
     const pageText = await page.evaluate(() => document.body?.innerText ?? "").catch(() => "");
     const lower = pageText.toLowerCase();
 
-    if (lower.includes("incorrect") || lower.includes("invalid username") || lower.includes("wrong password")) {
-      log(SCRIPT, `  ✗ Login failed — credentials rejected at ${currentUrl}`);
+    if (lower.includes("incorrect") || lower.includes("invalid username") || lower.includes("wrong password") || lower.includes("error")) {
+      log(SCRIPT, `  ✗ Login failed — credentials rejected`);
       return false;
     }
 
     const isLoggedIn = lower.includes("log out") || lower.includes("logout") ||
-                       lower.includes("dashboard") || lower.includes("orders");
+                       lower.includes("my account") || lower.includes("dashboard") ||
+                       lower.includes("orders") || lower.includes("welcome");
     if (isLoggedIn) { log(SCRIPT, `  ✓ Logged in successfully`); return true; }
 
-    log(SCRIPT, `  ? Login status unclear at ${currentUrl} — proceeding`);
+    // If still on the login page, login failed
+    if (page.url().includes("/login") || page.url().includes("my-account") && lower.includes("username")) {
+      log(SCRIPT, `  ✗ Login failed — still on login page`);
+      return false;
+    }
+
+    log(SCRIPT, `  ? Login status unclear at ${page.url()} — proceeding`);
     return true;
   } catch (err: any) {
     log(SCRIPT, `  ✗ Login error: ${err.message?.slice(0, 80)}`);
@@ -216,19 +171,18 @@ async function loginWooCommerce(
   }
 }
 
-async function loginShopify(
-  page: Page,
-  config: GatedVendorConfig
-): Promise<boolean> {
-  const loginUrl = `${config.baseUrl}${config.loginPath}`;
+async function loginShopify(page: Page, config: GatedVendorRow): Promise<boolean> {
+  const baseUrl = new URL(config.website).origin;
+  const loginPath = config.login_path ?? "/account/login";
+  const loginUrl = `${baseUrl}${loginPath}`;
   log(SCRIPT, `  → Navigating to ${loginUrl}`);
 
   try {
     await page.goto(loginUrl, { waitUntil: "domcontentloaded", timeout: 25000 });
     await sleep(1500);
 
-    const filledEmail = await fillField(page, "input[type='email'], input[name='customer[email]']", config.email);
-    const filledPass  = await fillField(page, "input[type='password'], input[name='customer[password]']", config.password);
+    const filledEmail = await fillField(page, "input[type='email'], input[name='customer[email]']", config.login_email!);
+    const filledPass  = await fillField(page, "input[type='password'], input[name='customer[password]']", config.login_password!);
 
     if (!filledEmail || !filledPass) {
       log(SCRIPT, `  ✗ Could not find Shopify login fields`);
@@ -356,22 +310,18 @@ async function scrapeShipping(page: Page, baseUrl: string): Promise<Record<strin
       const text = await page.evaluate(() => document.body?.innerText ?? "").catch(() => "");
       if (text.length < 100) continue;
 
-      // Free threshold
       const freeThresholdMatch = text.match(/free\s+shipping\s+on\s+(?:all\s+)?orders?\s+(?:over|above)?\s*\$\s*(\d+)/i);
       const freeAllMatch = /free\s+shipping\s+on\s+all\s+(?:domestic\s+)?orders?(?!\s+over|\s+above)/i.test(text);
       if (freeAllMatch) result.shipping_free_threshold = 0;
       else if (freeThresholdMatch) result.shipping_free_threshold = parseFloat(freeThresholdMatch[1]);
 
-      // Flat fee
       const flatFeeMatch = text.match(/flat[\s-]rate\s+shipping\s+(?:of\s+)?\$\s*(\d+)/i) ??
                            text.match(/\$\s*(\d+)\s+flat[\s-]rate/i);
       if (flatFeeMatch) result.shipping_flat_fee = parseFloat(flatFeeMatch[1]);
 
-      // International
       if (/only\s+ship|domestic\s+only|US\s+only/i.test(text)) result.ships_internationally = false;
       else if (/ship(?:ping)?\s+(?:world[-\s]?wide|internationally)/i.test(text)) result.ships_internationally = true;
 
-      // Payment
       if (/visa|mastercard|credit\s+card|debit/i.test(text)) result.credit_card_accepted = true;
       if (/bitcoin|ethereum|crypto|btc|eth\b/i.test(text)) result.crypto_accepted = true;
       if (/paypal/i.test(text)) result.paypal_accepted = true;
@@ -382,14 +332,57 @@ async function scrapeShipping(page: Page, baseUrl: string): Promise<Record<strin
   return result;
 }
 
-// ── DB helpers ────────────────────────────────────────────────────────────
+// ── COA keywords (mirrors scrape-vendor-coas.ts) ─────────────────────────
 
-async function getVendorId(slug: string): Promise<string | null> {
-  const { data } = await db.from("vendors").select("id").eq("slug", slug).single();
-  return data?.id ?? null;
+const COA_KEYWORDS = [
+  "certificate of analysis", "janoshik", "hplc", "lc-ms", "lc/ms",
+  "purity:", "purity %", "test result", "lab result", "batch", "lot number",
+  "download coa", "view coa", "pdf",
+];
+
+async function checkCoaPage(page: Page, vendorId: string, slug: string, coaUrl: string): Promise<void> {
+  try {
+    const res = await page.goto(coaUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+    if (!res || res.status() === 404) {
+      log(SCRIPT, `  — COA page 404 at ${coaUrl}`);
+      return;
+    }
+    await sleep(2000);
+    const body  = await page.evaluate(() => document.body?.innerText ?? "");
+    const links = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("a[href]")).map((a) => (a as HTMLAnchorElement).href)
+    );
+    const lower = body.toLowerCase();
+    const keywordHit = COA_KEYWORDS.some((kw) => lower.includes(kw));
+    const linkHit = links.some((h) => h.includes("janoshik") || h.includes(".pdf") || h.includes("coa"));
+    const hasCoa = keywordHit || linkHit;
+
+    await db.from("vendors").update({ has_coa: hasCoa }).eq("id", vendorId);
+
+    if (hasCoa) {
+      log(SCRIPT, `  ✓ COA content detected at ${coaUrl}`);
+      const coaLinks = links.filter((h) => h.includes("janoshik") || h.includes(".pdf") || h.includes("coa")).slice(0, 50);
+      if (coaLinks.length > 0) {
+        await db.from("lab_tests").delete().eq("vendor_id", vendorId);
+        const rows = coaLinks.map((href) => ({
+          vendor_id: vendorId, peptide_name: null, lab_name: href.includes("janoshik") ? "Janoshik" : null,
+          test_type: null, purity_result: null, test_date: null,
+          janoshik_tested: href.includes("janoshik"), coa_url: href, verified: false,
+        }));
+        await db.from("lab_tests").insert(rows);
+        log(SCRIPT, `  ✓ ${coaLinks.length} COA links saved`);
+      }
+    } else {
+      log(SCRIPT, `  — No COA content found at ${coaUrl}`);
+    }
+  } catch (err: any) {
+    log(SCRIPT, `  — COA check failed: ${err.message?.slice(0, 60)}`);
+  }
 }
 
-async function saveProducts(vendorId: string, slug: string, products: ProductData[]): Promise<void> {
+// ── DB helpers ────────────────────────────────────────────────────────────
+
+async function saveProducts(vendorId: string, products: ProductData[]): Promise<void> {
   const now = new Date().toISOString();
   const rows = products.map((p) => ({ ...p, vendor_id: vendorId, last_checked: now }));
   await db.from("vendor_peptides").delete().eq("vendor_id", vendorId);
@@ -404,14 +397,15 @@ async function saveProducts(vendorId: string, slug: string, products: ProductDat
 
 // ── Per-vendor orchestration ──────────────────────────────────────────────
 
-async function handleVendor(browser: Browser, config: GatedVendorConfig): Promise<void> {
-  console.log(`\n── ${config.name} ─────────────────────────────`);
+async function handleVendor(browser: Browser, v: GatedVendorRow): Promise<void> {
+  console.log(`\n── ${v.name} ─────────────────────────────`);
 
-  const vendorId = await getVendorId(config.slug);
-  if (!vendorId) {
-    log(SCRIPT, `  SKIP — not found in DB`);
-    return;
-  }
+  const baseUrl = (() => {
+    try { return new URL(v.website).origin; } catch { return v.website; }
+  })();
+
+  const catalogPaths = v.catalog_paths ?? ["/shop/", "/products/", "/peptides/"];
+  const platform = (v.login_platform ?? "woocommerce") as Platform;
 
   const page = await browser.newPage();
   await page.setUserAgent(UA);
@@ -419,92 +413,92 @@ async function handleVendor(browser: Browser, config: GatedVendorConfig): Promis
   page.setDefaultNavigationTimeout(20000);
 
   try {
-    // Update website URL if changed
-    if (config.newWebsite) {
-      await db.from("vendors").update({ website: config.newWebsite }).eq("id", vendorId);
-      log(SCRIPT, `  ↪ Updated website → ${config.newWebsite}`);
-    }
-
-    // Special case: Ion Peptide — just activate and scrape without login
-    if (config.slug === "ion-peptide") {
+    // Ion Peptide: publicly accessible — no login needed
+    if (v.slug === "ion-peptide") {
       log(SCRIPT, `  ℹ Site is publicly accessible — attempting direct scrape`);
-      let products: ProductData[] | null = null;
-
-      // Try Shopify API first
-      products = await tryShopifyApi(page, config.baseUrl);
+      let products: ProductData[] | null = await tryShopifyApi(page, baseUrl);
+      if (!products) products = await tryWooCommerceApi(page, baseUrl);
       if (!products) {
-        // Try WooCommerce API
-        products = await tryWooCommerceApi(page, config.baseUrl);
-      }
-      if (!products) {
-        // Try HTML scrape from each catalog path
-        for (const path of config.catalogPaths) {
-          const scraped = await scrapeProductsFromHtml(page, `${config.baseUrl}${path}`);
+        for (const path of catalogPaths) {
+          const scraped = await scrapeProductsFromHtml(page, `${baseUrl}${path}`);
           if (scraped.length > 0) { products = scraped; break; }
         }
       }
-
       if (products && products.length > 0) {
-        await saveProducts(vendorId, config.slug, products);
-        await db.from("vendors").update({ status: "active" }).eq("id", vendorId);
+        await saveProducts(v.id, products);
+        await db.from("vendors").update({ status: "active" }).eq("id", v.id);
         log(SCRIPT, `  ✓ Reactivated vendor`);
       } else {
-        log(SCRIPT, `  ? No peptide products found via auto-detect — activating anyway`);
-        await db.from("vendors").update({ status: "active" }).eq("id", vendorId);
+        log(SCRIPT, `  ? No peptide products found — activating anyway`);
+        await db.from("vendors").update({ status: "active" }).eq("id", v.id);
       }
-      const shipping = await scrapeShipping(page, config.baseUrl);
+      const shipping = await scrapeShipping(page, baseUrl);
       if (Object.keys(shipping).length > 0) {
-        await db.from("vendors").update(shipping).eq("id", vendorId);
+        await db.from("vendors").update(shipping).eq("id", v.id);
         log(SCRIPT, `  ✓ Shipping data updated`);
+      }
+      if (v.coa_url) await checkCoaPage(page, v.id, v.slug, v.coa_url);
+      return;
+    }
+
+    // Try public APIs first
+    log(SCRIPT, `  ℹ Trying APIs without login first…`);
+    let products: ProductData[] | null = await tryShopifyApi(page, baseUrl);
+    if (!products) products = await tryWooCommerceApi(page, baseUrl);
+
+    if (products && products.length > 0) {
+      log(SCRIPT, `  ✓ API accessible without login — ${products.length} products`);
+      await saveProducts(v.id, products);
+      const shipping = await scrapeShipping(page, baseUrl);
+      if (Object.keys(shipping).length > 0) {
+        await db.from("vendors").update(shipping).eq("id", v.id);
+        log(SCRIPT, `  ✓ Shipping: ${JSON.stringify(shipping)}`);
+      }
+      await db.from("vendors").update({ is_gated: false }).eq("id", v.id);
+      // COA page may still be gated even if the product API is public — try logging in first
+      if (v.coa_url && v.login_email && v.login_password) {
+        const loggedIn = platform === "shopify"
+          ? await loginShopify(page, v)
+          : await loginWooCommerce(page, v);
+        if (loggedIn) await checkCoaPage(page, v.id, v.slug, v.coa_url);
+        else await checkCoaPage(page, v.id, v.slug, v.coa_url); // try anyway (might be public)
+      } else if (v.coa_url) {
+        await checkCoaPage(page, v.id, v.slug, v.coa_url);
       }
       return;
     }
 
-    // Try APIs without login first (some "gated" sites still expose public product APIs)
-    log(SCRIPT, `  ℹ Trying APIs without login first…`);
-    let products: ProductData[] | null = null;
-    products = await tryShopifyApi(page, config.baseUrl);
-    if (!products) products = await tryWooCommerceApi(page, config.baseUrl);
-
-    if (products && products.length > 0) {
-      log(SCRIPT, `  ✓ API accessible without login — ${products.length} products`);
-      await saveProducts(vendorId, config.slug, products);
-      const shipping = await scrapeShipping(page, config.baseUrl);
-      if (Object.keys(shipping).length > 0) {
-        await db.from("vendors").update(shipping).eq("id", vendorId);
-        log(SCRIPT, `  ✓ Shipping: ${JSON.stringify(shipping)}`);
-      }
-      await db.from("vendors").update({ is_gated: false }).eq("id", vendorId);
+    if (!v.login_email || !v.login_password) {
+      log(SCRIPT, `  ✗ No credentials in DB — skipping login`);
       return;
     }
 
     // Attempt login
     let loggedIn = false;
-    if (config.platform === "shopify") {
-      loggedIn = await loginShopify(page, config);
+    if (platform === "shopify") {
+      loggedIn = await loginShopify(page, v);
     } else {
-      loggedIn = await loginWooCommerce(page, config);
+      loggedIn = await loginWooCommerce(page, v);
     }
 
     if (!loggedIn) {
       log(SCRIPT, `  ✗ Could not log in — skipping product scrape`);
-      await db.from("vendors").update({ is_gated: true }).eq("id", vendorId);
+      await db.from("vendors").update({ is_gated: true }).eq("id", v.id);
       return;
     }
 
-    // Try to get products post-login
+    // Try APIs post-login, then HTML scrape
     products = null;
-    if (config.platform === "shopify") {
-      products = await tryShopifyApi(page, config.baseUrl);
+    if (platform === "shopify") {
+      products = await tryShopifyApi(page, baseUrl);
     } else {
-      products = await tryWooCommerceApi(page, config.baseUrl);
+      products = await tryWooCommerceApi(page, baseUrl);
     }
 
-    // Fall back to HTML scraping
     if (!products || products.length === 0) {
       log(SCRIPT, `  ℹ API returned no results — trying HTML scrape`);
-      for (const path of config.catalogPaths) {
-        const scraped = await scrapeProductsFromHtml(page, `${config.baseUrl}${path}`);
+      for (const path of catalogPaths) {
+        const scraped = await scrapeProductsFromHtml(page, `${baseUrl}${path}`);
         if (scraped.length > 0) {
           products = scraped;
           log(SCRIPT, `  ✓ HTML scrape found ${scraped.length} products at ${path}`);
@@ -515,25 +509,24 @@ async function handleVendor(browser: Browser, config: GatedVendorConfig): Promis
     }
 
     if (products && products.length > 0) {
-      await saveProducts(vendorId, config.slug, products);
+      await saveProducts(v.id, products);
     } else {
       log(SCRIPT, `  ? No peptide products found after login`);
-      // Print page title and URL to help debug
-      const url = page.url();
-      const title = await page.title();
-      log(SCRIPT, `  Current page: [${title}] ${url}`);
+      log(SCRIPT, `  Current page: [${await page.title()}] ${page.url()}`);
     }
 
-    // Scrape shipping info
-    const shipping = await scrapeShipping(page, config.baseUrl);
+    const shipping = await scrapeShipping(page, baseUrl);
     if (Object.keys(shipping).length > 0) {
-      await db.from("vendors").update(shipping).eq("id", vendorId);
+      await db.from("vendors").update(shipping).eq("id", v.id);
       log(SCRIPT, `  ✓ Shipping: ${JSON.stringify(shipping)}`);
     } else {
       log(SCRIPT, `  — No shipping data found`);
     }
 
-    await db.from("vendors").update({ is_gated: false }).eq("id", vendorId);
+    await db.from("vendors").update({ is_gated: false }).eq("id", v.id);
+
+    // COA check with active login session
+    if (v.coa_url) await checkCoaPage(page, v.id, v.slug, v.coa_url);
 
   } catch (err: any) {
     log(SCRIPT, `  ✗ Unhandled error: ${err.message?.slice(0, 100)}`);
@@ -542,37 +535,62 @@ async function handleVendor(browser: Browser, config: GatedVendorConfig): Promis
   }
 }
 
-// ── Status-only corrections (no scraping needed) ──────────────────────────
+// ── Status-only corrections ───────────────────────────────────────────────
 
 async function applyStatusCorrections(): Promise<void> {
   console.log("\n── Status corrections ────────────────────────────────");
 
-  // Apollo Peptide Sciences: original domain dead, .org is a separate unrelated vendor
   const { error: apolloErr } = await db
     .from("vendors")
     .update({ status: "inactive" })
     .eq("slug", "apollo-peptide-sciences");
   if (apolloErr) log(SCRIPT, `  ✗ Apollo update failed: ${apolloErr.message}`);
-  else log(SCRIPT, `  ✓ Apollo Peptide Sciences → inactive (original domain dead)`);
+  else log(SCRIPT, `  ✓ Apollo Peptide Sciences → inactive`);
 
-  // Alpha BioMed Labs: institutional-only gate, no way in, mark is_gated
   const { error: alphaErr } = await db
     .from("vendors")
     .update({ is_gated: true })
     .eq("slug", "alpha-biomed-labs");
   if (alphaErr) log(SCRIPT, `  ✗ Alpha BioMed update failed: ${alphaErr.message}`);
-  else log(SCRIPT, `  ✓ Alpha BioMed Labs → is_gated=true (institutional access only)`);
+  else log(SCRIPT, `  ✓ Alpha BioMed Labs → is_gated=true`);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────
 
 async function main() {
-  // Optional: pass slug filter as CLI args, e.g. "npm run scrape:gated -- loti-labs ascension-peptides"
   const filter = process.argv.slice(2);
-
   console.log("=== Gated Vendor Scraper ===\n");
 
   if (!filter.length) await applyStatusCorrections();
+
+  // Load vendors that have stored credentials (regardless of current is_gated flag —
+  // some expose public APIs now but may require login in future runs)
+  const query = db
+    .from("vendors")
+    .select("id, slug, name, website, login_username, login_email, login_password, login_path, catalog_paths, login_platform, coa_url")
+    .not("login_email", "is", null)
+    .in("status", ["active", "flagged"]);
+
+  const { data: rows, error } = await query;
+  if (error) { console.error("DB error:", error.message); process.exit(1); }
+
+  let vendors = (rows ?? []) as GatedVendorRow[];
+  if (filter.length) {
+    vendors = vendors.filter((v) => filter.includes(v.slug));
+  }
+
+  if (vendors.length === 0) {
+    console.log("No matching gated vendors found in DB.");
+    process.exit(0);
+  }
+
+  console.log(`Found ${vendors.length} gated vendor(s) to process.\n`);
+
+  // Lazy-import puppeteer here (after DB queries) so the stealth plugin
+  // doesn't patch Node's fetch and corrupt Supabase responses.
+  const { default: puppeteerExtra } = await import("puppeteer-extra");
+  const { default: StealthPlugin } = await import("puppeteer-extra-plugin-stealth");
+  puppeteerExtra.use(StealthPlugin());
 
   const chromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
   const browser = await (puppeteerExtra as any).launch({
@@ -588,12 +606,8 @@ async function main() {
     ],
   }) as Browser;
 
-  const vendors = filter.length
-    ? GATED_VENDORS.filter((v) => filter.includes(v.slug))
-    : GATED_VENDORS;
-
-  for (const config of vendors) {
-    await handleVendor(browser, config);
+  for (const v of vendors) {
+    await handleVendor(browser, v);
     await sleep(1500);
   }
 
