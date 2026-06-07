@@ -54,6 +54,8 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
               <div className="flex flex-col gap-3" style={{ color: "#6E6E73" }}>
                 <Link href="/about" className="hover:text-white transition-colors">About</Link>
                 <Link href="/about" className="hover:text-white transition-colors">Methodology</Link>
+                <Link href="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
+                <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
               </div>
             </div>
           </div>
@@ -75,10 +77,17 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
           </p>
         </div>
 
-        {/* Copyright */}
-        <div className="pt-6">
+        {/* Copyright + disclaimer */}
+        <div className="pt-6 flex flex-col gap-2">
           <p className="text-sm" style={{ color: "#6E6E73" }}>
-            © 2026 Watchtower Peptides — Independent research only. Not medical advice.
+            © 2026 Watchtower Peptides — Independent research only. No affiliates. No paid placements.
+          </p>
+          <p className="text-xs leading-relaxed" style={{ color: "#4E4E53" }}>
+            All peptides referenced on this site are sold by third-party vendors as research chemicals
+            for laboratory use only. Not intended for human consumption. Not medical advice.{" "}
+            <Link href="/disclaimer" className="underline hover:text-white transition-colors">
+              Full disclaimer
+            </Link>.
           </p>
         </div>
       </div>
