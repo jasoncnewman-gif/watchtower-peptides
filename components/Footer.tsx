@@ -56,6 +56,7 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
                 <Link href="/about" className="hover:text-white transition-colors">Methodology</Link>
                 <Link href="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
                 <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
               </div>
             </div>
           </div>
