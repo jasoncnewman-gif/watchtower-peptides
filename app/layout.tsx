@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   },
   description: "Independent research platform tracking, scoring, and monitoring peptide vendors. No affiliate bias. No paid placements.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://watchtowerpeptides.com"),
+  verification: {
+    google: "PiLHIKIwBarL7HYrsOyZX7fJzVDEWPUirrVp3EyemEg",
+  },
 };
 
 export default function RootLayout({
