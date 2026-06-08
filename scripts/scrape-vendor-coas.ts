@@ -208,8 +208,9 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
     }
 
     if (!content) {
-      log(SCRIPT, `  — ${config.slug}: no COA page found`);
-      await db.from("vendors").update({ has_coa: false }).eq("id", vendorId);
+      // Page is inaccessible (gated, 404, or blocked) — do NOT reset has_coa.
+      // We can only confirm absence when we can actually read the page.
+      log(SCRIPT, `  — ${config.slug}: no COA page accessible (gated or 404) — has_coa unchanged`);
       return;
     }
 
@@ -229,13 +230,14 @@ async function checkCoaPage(browser: Browser, config: CoaConfig): Promise<void> 
       }
     }
 
-    await db.from("vendors").update({ has_coa: hasCoa }).eq("id", vendorId);
-
+    // Only set has_coa=false if we confirmed the page is readable and has no COA content.
+    // Never downgrade a vendor that was previously confirmed (logged-in scrape, manual review).
     if (hasCoa) {
+      await db.from("vendors").update({ has_coa: true }).eq("id", vendorId);
       log(SCRIPT, `  ✓ ${config.slug}: COA content detected`);
       await saveCoaLinks(vendorId, config.slug, content.links);
     } else {
-      log(SCRIPT, `  — ${config.slug}: no COA content found`);
+      log(SCRIPT, `  — ${config.slug}: no COA content found on readable page (has_coa unchanged)`);
     }
   } catch (err) {
     log(SCRIPT, `  ✗ ${config.slug}: ${(err as Error).message}`);
