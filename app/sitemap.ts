@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase'
 
 export const revalidate = 86400
 
-const BASE = 'https://watchtowerpeptides.com'
+const BASE = 'https://www.watchtowerpeptides.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [{ data: vendors }, { data: peptides }] = await Promise.all([

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | Watchtower Peptides",
   },
   description: "Independent research platform tracking, scoring, and monitoring peptide vendors. No affiliate bias. No paid placements.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://watchtowerpeptides.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://www.watchtowerpeptides.com"),
   verification: {
     google: "PiLHIKIwBarL7HYrsOyZX7fJzVDEWPUirrVp3EyemEg",
   },
