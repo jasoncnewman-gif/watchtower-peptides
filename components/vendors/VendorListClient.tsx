@@ -2,37 +2,46 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import type { Vendor, VendorStatus } from '@/lib/supabase'
+import type { Vendor } from '@/lib/supabase'
 
-const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: string }> = {
-  recommended:       { label: 'Recommended',      bg: '#DCFCE7', text: '#16A34A' },
-  caution:           { label: 'Use With Caution',  bg: '#FEF3C7', text: '#D97706' },
-  'not-recommended': { label: 'Not Recommended',   bg: '#FEE2E2', text: '#DC2626' },
-  'under-review':    { label: 'Under Review',      bg: '#EDE9FE', text: '#7C3AED' },
+const SCORE_MAXES: Record<string, number> = {
+  lab_testing: 40, purity_accuracy: 25, transparency: 25, pricing_reliability: 10,
 }
 
-const STATUS_FILTER_OPTIONS: { value: VendorStatus | ''; label: string }[] = [
-  { value: '',               label: 'All vendors'      },
-  { value: 'recommended',    label: 'Recommended'      },
-  { value: 'caution',        label: 'Use With Caution' },
-  { value: 'not-recommended',label: 'Not Recommended'  },
-  { value: 'under-review',   label: 'Under Review'     },
+const FILTER_OPTIONS = [
+  { value: '',           label: 'All vendors'        },
+  { value: 'elite',      label: 'Elite (85+)'        },
+  { value: 'trusted',    label: 'Trusted (70–84)'    },
+  { value: 'acceptable', label: 'Acceptable (55–69)' },
+  { value: 'watchlist',  label: 'Watchlist (45–54)'  },
+  { value: 'avoid',      label: 'Avoid (below 45)'   },
 ]
 
+function scoreTier(score: number): string {
+  if (score >= 85) return 'elite'
+  if (score >= 70) return 'trusted'
+  if (score >= 55) return 'acceptable'
+  if (score >= 45) return 'watchlist'
+  return 'avoid'
+}
+
+function ratingBadge(score: number): { label: string; bg: string; text: string } {
+  if (score >= 85) return { label: 'Elite',      bg: '#DCFCE7', text: '#16A34A' }
+  if (score >= 70) return { label: 'Trusted',    bg: '#D1FAE5', text: '#059669' }
+  if (score >= 55) return { label: 'Acceptable', bg: '#FEF3C7', text: '#D97706' }
+  if (score >= 45) return { label: 'Watchlist',  bg: '#FED7AA', text: '#EA580C' }
+  return                   { label: 'Avoid',      bg: '#FEE2E2', text: '#DC2626' }
+}
+
 function scoreColor(score: number) {
-  if (score >= 75) return '#16A34A'
-  if (score >= 50) return '#D97706'
+  if (score >= 70) return '#16A34A'
+  if (score >= 45) return '#D97706'
   return '#DC2626'
 }
 
-const SCORE_MAXES: Record<string, number> = {
-  lab_testing: 30, purity_accuracy: 25, transparency: 20,
-  community_reputation: 15, pricing_reliability: 10,
-}
-
 export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
-  const [query, setQuery]           = useState('')
-  const [statusFilter, setStatus]   = useState<VendorStatus | ''>('')
+  const [query, setQuery]       = useState('')
+  const [tierFilter, setTier]   = useState('')
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase()
@@ -41,10 +50,10 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
         v.name.toLowerCase().includes(q) ||
         v.website.toLowerCase().includes(q) ||
         v.verdict.toLowerCase().includes(q)
-      const matchesStatus = !statusFilter || v.status === statusFilter
-      return matchesQuery && matchesStatus
+      const matchesTier = !tierFilter || scoreTier(v.overall_score) === tierFilter
+      return matchesQuery && matchesTier
     })
-  }, [vendors, query, statusFilter])
+  }, [vendors, query, tierFilter])
 
   return (
     <>
@@ -59,16 +68,16 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
           style={{ backgroundColor: '#FFFFFF', color: '#1D1D1F', border: '1px solid #E5E5E7' }}
         />
         <select
-          value={statusFilter}
-          onChange={e => setStatus(e.target.value as VendorStatus | '')}
+          value={tierFilter}
+          onChange={e => setTier(e.target.value)}
           className="rounded-xl px-4 py-3 text-sm outline-none"
           style={{
             backgroundColor: '#FFFFFF',
-            color: statusFilter ? '#1D1D1F' : '#6E6E73',
+            color: tierFilter ? '#1D1D1F' : '#6E6E73',
             border: '1px solid #E5E5E7',
           }}
         >
-          {STATUS_FILTER_OPTIONS.map(o => (
+          {FILTER_OPTIONS.map(o => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </select>
@@ -78,7 +87,7 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
       {filtered.length > 0 ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map(vendor => {
-            const status = STATUS_CONFIG[vendor.status]
+            const rating = ratingBadge(vendor.overall_score)
             const color  = scoreColor(vendor.overall_score)
             return (
               <Link
@@ -110,9 +119,9 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
                 <div className="flex flex-wrap gap-2">
                   <span
                     className="text-xs font-medium px-2.5 py-1 rounded-full"
-                    style={{ backgroundColor: status.bg, color: status.text }}
+                    style={{ backgroundColor: rating.bg, color: rating.text }}
                   >
-                    {status.label}
+                    {rating.label}
                   </span>
                   {vendor.has_coa && (
                     <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: '#DCFCE7', color: '#16A34A' }}>
@@ -147,16 +156,18 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
                   {vendor.verdict}
                 </p>
 
-                {/* Score mini-bars */}
+                {/* Score mini-bars (4 sub-scores, community_reputation excluded) */}
                 <div className="mt-4 flex gap-1">
-                  {Object.entries(vendor.scores).map(([key, val]) => {
-                    const pct = (val / SCORE_MAXES[key]) * 100
-                    return (
-                      <div key={key} className="flex-1 h-1 rounded-full" style={{ backgroundColor: '#E5E5E7' }}>
-                        <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: color }} />
-                      </div>
-                    )
-                  })}
+                  {Object.entries(vendor.scores)
+                    .filter(([key]) => key in SCORE_MAXES)
+                    .map(([key, val]) => {
+                      const pct = Math.min(100, (val / SCORE_MAXES[key]) * 100)
+                      return (
+                        <div key={key} className="flex-1 h-1 rounded-full" style={{ backgroundColor: '#E5E5E7' }}>
+                          <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: color }} />
+                        </div>
+                      )
+                    })}
                 </div>
                 <p className="text-xs mt-2" style={{ color: '#6E6E73' }}>
                   Last reviewed:{' '}

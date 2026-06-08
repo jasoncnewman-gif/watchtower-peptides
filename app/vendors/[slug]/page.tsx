@@ -23,7 +23,7 @@ export async function generateMetadata({
   const score = data.overall_score != null ? ` — Score: ${data.overall_score}/100` : "";
   const desc = data.verdict
     ? data.verdict.slice(0, 155)
-    : `Independent review of ${data.name}${score}. Lab testing, purity accuracy, transparency, and community reputation.`;
+    : `Independent review of ${data.name}${score}. Lab verification, product quality, transparency, and customer experience scores.`;
 
   return {
     title: `${data.name} Review`,
@@ -40,17 +40,31 @@ const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: str
 };
 
 const SCORE_LABELS: Record<string, { label: string; max: number }> = {
-  lab_testing:          { label: "Lab Testing",           max: 30 },
-  purity_accuracy:      { label: "Purity Accuracy",       max: 25 },
-  transparency:         { label: "Transparency",          max: 20 },
-  community_reputation: { label: "Community Reputation",  max: 15 },
-  pricing_reliability:  { label: "Pricing & Reliability", max: 10 },
+  lab_testing:         { label: "Lab Verification",    max: 40 },
+  purity_accuracy:     { label: "Product Quality",     max: 25 },
+  transparency:        { label: "Transparency",        max: 25 },
+  pricing_reliability: { label: "Customer Experience", max: 10 },
 };
 
 function scoreColor(score: number) {
   if (score >= 75) return "#16A34A";
   if (score >= 50) return "#D97706";
   return "#DC2626";
+}
+
+function ratingLabel(score: number): string {
+  if (score >= 85) return "Elite";
+  if (score >= 70) return "Trusted";
+  if (score >= 55) return "Acceptable";
+  if (score >= 45) return "Watchlist";
+  return "High Risk";
+}
+
+function batchGrade(purity: number): { grade: string; color: string } {
+  if (purity >= 98) return { grade: "A", color: "#16A34A" };
+  if (purity >= 95) return { grade: "B", color: "#16A34A" };
+  if (purity >= 90) return { grade: "C", color: "#D97706" };
+  return { grade: "F", color: "#DC2626" };
 }
 
 export async function generateStaticParams() {
@@ -83,9 +97,23 @@ export default async function VendorDetailPage({
     .eq("vendor_id", vendorRow.id)
     .order("peptide_name");
 
+  const { data: latestTestRow } = await supabase
+    .from("lab_tests")
+    .select("peptide_name, purity_result, test_date")
+    .eq("vendor_id", vendorRow.id)
+    .not("purity_result", "is", null)
+    .not("test_date", "is", null)
+    .neq("test_type", "Endotoxin")
+    .order("test_date", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
   const vendor = dbVendorToVendor(vendorRow as DbVendor, (peptideRows ?? []) as DbVendorPeptide[]);
   const status = STATUS_CONFIG[vendor.status];
   const color = scoreColor(vendor.overall_score);
+
+  const latestPurity = latestTestRow?.purity_result ?? null;
+  const batchInfo = latestPurity != null ? batchGrade(latestPurity) : null;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
@@ -188,6 +216,50 @@ export default async function VendorDetailPage({
             )}
           </div>
 
+          {/* Latest Lab Results */}
+          {latestTestRow && batchInfo && latestPurity != null && (
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>Latest Lab Results</h2>
+              <table className="w-full text-sm mb-4">
+                <tbody>
+                  <tr style={{ borderBottom: "1px solid #E5E5E7" }}>
+                    <td className="py-3 font-medium" style={{ color: "#6E6E73" }}>Vendor Score</td>
+                    <td className="py-3 text-right font-semibold" style={{ color }}>
+                      {vendor.overall_score}/100 ({ratingLabel(vendor.overall_score)})
+                    </td>
+                  </tr>
+                  <tr style={{ borderBottom: "1px solid #E5E5E7" }}>
+                    <td className="py-3 font-medium" style={{ color: "#6E6E73" }}>
+                      Latest Tested Batch
+                      {latestTestRow.test_date && (
+                        <span className="ml-1 font-normal" style={{ color: "#9CA3AF" }}>
+                          ({new Date(latestTestRow.test_date).toLocaleDateString("en-US", { year: "numeric", month: "short" })})
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3 text-right" style={{ color: "#1D1D1F" }}>
+                      {latestTestRow.peptide_name} — {latestPurity.toFixed(1)}% Purity
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 font-medium" style={{ color: "#6E6E73" }}>Batch Grade</td>
+                    <td className="py-3 text-right font-bold text-lg" style={{ color: batchInfo.color }}>
+                      {batchInfo.grade}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {latestPurity < 95 && (
+                <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
+                  This vendor has demonstrated strong historical performance, transparency, and testing
+                  practices. However, the most recently tested batch of {latestTestRow.peptide_name} achieved
+                  only {latestPurity.toFixed(1)}% purity — below the 95% standard expected from top-tier
+                  vendors. The overall score reflects the vendor&apos;s full track record, not any single result.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Shipping & Payment */}
           {(vendor.shipping_flat_fee != null || vendor.shipping_free_threshold != null ||
             vendor.ships_internationally || vendor.credit_card_accepted || vendor.crypto_accepted || vendor.paypal_accepted) && (
@@ -240,7 +312,7 @@ export default async function VendorDetailPage({
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Score Breakdown</h2>
             <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: "#F5F5F7" }}>
-              {Object.entries(vendor.scores).map(([key, val], i, arr) => {
+              {Object.entries(vendor.scores).filter(([key]) => key in SCORE_LABELS).map(([key, val], i, arr) => {
                 const meta = SCORE_LABELS[key];
                 const pct = Math.round((val / meta.max) * 100);
                 const barColor = pct >= 80 ? "#16A34A" : pct >= 60 ? "#D97706" : "#DC2626";

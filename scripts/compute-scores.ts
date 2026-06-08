@@ -1,254 +1,327 @@
 /**
  * scripts/compute-scores.ts
- * Auto-computes preliminary overall_score and sub-scores for all vendors
- * based on available Finnrick data (grade, test count, purity score).
+ * Computes vendor scores using the new 4-sub-score formula.
  *
- * Scoring methodology (mirrors /about page):
- *   lab_testing_score       (max 30) — test count + lab credibility
- *   purity_accuracy_score   (max 25) — Finnrick grade + purity score
- *   transparency_score      (max 20) — COA availability
- *   community_reputation_score (max 15) — placeholder until Peptide Critic data
- *   pricing_reliability_score  (max 10) — placeholder
+ * Sub-scores:
+ *   Lab Verification   (LV) — max 40 — tiered by verification type + sampling confidence
+ *   Product Quality    (PQ) — max 25 — recency-weighted purity average from lab_tests
+ *   Transparency       (TR) — max 25 — from vendor_transparency checklist
+ *   Customer Experience(CX) — max 10 — price_per_mg vs market average
+ *   Total                     max 100
  *
- * Only updates vendors whose overall_score is null or 0 (won't overwrite
- * manually set scores).
+ * Stored in existing columns (repurposed):
+ *   lab_testing_score         ← LV (0–40)
+ *   purity_accuracy_score     ← PQ (0–25)
+ *   transparency_score        ← TR (0–25)
+ *   pricing_reliability_score ← CX (0–10)
+ *   community_reputation_score ← 0 (removed from score; supplemental module TBD)
+ *   overall_score             ← LV + PQ + TR + CX
  *
  * Run: npm run compute:scores
- * Add to run-all after scrape:finnrick.
  */
 
 import { db } from "./lib/client.js";
 import { log, sleep } from "./lib/scraper.js";
 
 const SCRIPT = "compute-scores";
+const NOW = new Date();
 
-type DbVendorRow = {
+// ── Types ──────────────────────────────────────────────────────────────────
+
+type VendorRow = {
   id: string;
   slug: string;
   name: string;
-  finnrick_rating: string | null;
-  finnrick_score: number | null;
-  finnrick_tests_count: number | null;
   has_coa: boolean;
+  finnrick_tests_count: number | null;
   status: string;
-  peptide_critic_rating: number | null;
-  peptide_critic_reviews_count: number | null;
 };
 
-type DbProductRow = {
+type LabTestRow = {
+  vendor_id: string;
+  test_type: string | null;
+  purity_result: number | null;
+  endotoxin_result: string | null;
+  test_date: string | null;
+  test_source: string | null;
+};
+
+type TransparencyRow = {
+  vendor_id: string;
+  has_contact_info: boolean;
+  has_business_address: boolean;
+  has_ownership_disclosure: boolean;
+  has_lab_disclosure: boolean;
+  has_testing_methodology: boolean;
+  has_batch_numbers: boolean;
+  domain_years: number | null;
+  fda_warning: boolean;
+  fraud_flags: boolean;
+};
+
+type PeptidePriceRow = {
   vendor_id: string;
   peptide_name: string;
-  size_mg: number | null;
-  list_price: number | null;
-  sale_price: number | null;
+  price_per_mg: number | null;
 };
 
-// ── Scoring functions ─────────────────────────────────────────────────────
+type MarketPriceRow = {
+  peptide_key: string;
+  avg_price_per_mg: number;
+};
 
-function labTestingScore(testsCount: number | null, grade: string | null, hasCoa: boolean): number {
-  if (!testsCount || testsCount === 0) {
-    // No Finnrick data — give partial credit if they publish COAs (can't verify quality without Finnrick)
-    return hasCoa ? 5 : 0;
+// ── 1. Lab Verification (max 40) ───────────────────────────────────────────
+
+function lvTier(vendor: VendorRow, trans: TransparencyRow | undefined): number {
+  if ((vendor.finnrick_tests_count ?? 0) > 0) return 4;
+  if (!vendor.has_coa) return 0;
+  // batch-specific 3rd-party COA
+  if (trans?.has_lab_disclosure && trans?.has_batch_numbers) return 3;
+  // 3rd-party COA (lab named, no batch IDs)
+  if (trans?.has_lab_disclosure) return 2;
+  // internal/unverified COA
+  return 1;
+}
+
+const TIER_BASE: Record<number, number> = { 0: 0, 1: 5, 2: 15, 3: 25, 4: 40 };
+
+function labVerificationScore(vendor: VendorRow, trans: TransparencyRow | undefined): number {
+  const tier = lvTier(vendor, trans);
+
+  if (tier < 4) return TIER_BASE[tier];
+
+  // Tier 4: apply sampling confidence modifier
+  const n = vendor.finnrick_tests_count ?? 0;
+  if (n >= 10) return 40;
+  if (n >= 4)  return 30 + Math.round((n - 4) * 1.5); // 4→30 … 9→37
+  return 25 + Math.round((n - 1) * 2);                  // 1→25 … 3→29
+}
+
+// ── 2. Product Quality (max 25) ────────────────────────────────────────────
+
+// Points per purity band per tier
+const PQ_TABLE: Record<number, [number, number, number, number]> = {
+  // tier: [fails(<90), low(90-95), mid(95-98), high(>98)]
+  1: [0,  4,  7, 10],
+  2: [0,  6, 11, 15],
+  3: [0,  8, 14, 20],
+  4: [0, 10, 18, 25],
+};
+
+function purityBandPoints(purity: number, tier: number): number {
+  const row = PQ_TABLE[tier];
+  if (!row) return 0;
+  if (purity >= 98) return row[3];
+  if (purity >= 95) return row[2];
+  if (purity >= 90) return row[1];
+  return row[0];
+}
+
+function monthsSince(dateStr: string | null): number {
+  if (!dateStr) return 24; // treat unknown as 2 years old
+  const d = new Date(dateStr);
+  return (NOW.getTime() - d.getTime()) / (1000 * 60 * 60 * 24 * 30.44);
+}
+
+function productQualityScore(
+  vendorId: string,
+  tier: number,
+  tests: LabTestRow[]
+): { score: number; hasQualityWarning: boolean } {
+  const vendorTests = tests.filter(
+    (t) => t.vendor_id === vendorId && t.test_type !== "Endotoxin" && t.purity_result !== null
+  );
+
+  // Quality warning: any test in last 6 months with purity <95% or endotoxin=high
+  const recentTests = tests.filter(
+    (t) => t.vendor_id === vendorId && monthsSince(t.test_date) <= 6
+  );
+  const hasQualityWarning = recentTests.some(
+    (t) => (t.purity_result !== null && t.purity_result < 95) || t.endotoxin_result === "high"
+  );
+
+  if (vendorTests.length === 0 || tier === 0) {
+    return { score: 0, hasQualityWarning };
   }
 
-  // Logarithmic scale: 30 points at ~100 tests
-  const base = Math.min(30, Math.round((Math.log(testsCount + 1) / Math.log(101)) * 30));
-
-  // Grade modifier: fewer deductions for cleaner test results
-  const modifier: Record<string, number> = {
-    A: 1.0, B: 0.87, C: 0.73, D: 0.57, E: 0.40,
-  };
-  const mod = grade ? (modifier[grade.charAt(0).toUpperCase()] ?? 0.80) : 0.80;
-
-  return Math.round(base * mod);
-}
-
-function purityAccuracyScore(grade: string | null, finnrickScore: number | null): number {
-  // Grade sets the range; finnrick_score (0–10) adjusts within that range
-  const score = finnrickScore ?? 5;
-  const t = score / 10; // 0–1
-
-  const ranges: Record<string, [number, number]> = {
-    A: [20, 25],
-    B: [15, 20],
-    C: [8,  15],
-    D: [3,   8],
-    E: [0,   3],
-  };
-
-  if (grade) {
-    const key = grade.charAt(0).toUpperCase();
-    const range = ranges[key];
-    if (range) return Math.round(range[0] + t * (range[1] - range[0]));
+  // Recency-weighted average purity (decay half-life ~17 months)
+  let weightedSum = 0;
+  let totalWeight = 0;
+  for (const t of vendorTests) {
+    const months = monthsSince(t.test_date);
+    const w = Math.exp(-0.04 * months);
+    weightedSum += (t.purity_result!) * w;
+    totalWeight += w;
   }
 
-  // No grade but has a score — map 0–10 → 8–18
-  return Math.round(8 + t * 10);
+  const avgPurity = totalWeight > 0 ? weightedSum / totalWeight : 0;
+  return { score: purityBandPoints(avgPurity, tier), hasQualityWarning };
 }
 
-function transparencyScore(hasCoa: boolean): number {
-  return hasCoa ? 16 : 8;
+// ── 3. Transparency / Legitimacy (max 25) ─────────────────────────────────
+
+function transparencyScore(trans: TransparencyRow | undefined): number {
+  if (!trans) return 0;
+  if (trans.fraud_flags) return 0;
+
+  const positive =
+    (trans.has_business_address     ? 5 : 0) +
+    (trans.has_ownership_disclosure ? 5 : 0) +
+    (trans.has_lab_disclosure       ? 5 : 0) +
+    (trans.has_contact_info         ? 3 : 0) +
+    (trans.has_testing_methodology  ? 3 : 0) +
+    (trans.has_batch_numbers        ? 2 : 0) +
+    ((trans.domain_years ?? 0) >= 2 ? 2 : 0);
+
+  const penalized = Math.max(0, positive - (trans.fda_warning ? 10 : 0));
+
+  if (penalized >= 18) return 25;
+  if (penalized >=  9) return 16;
+  if (penalized >=  1) return  8;
+  return 0;
 }
 
-function communityReputationScore(rating: number | null, reviews: number | null): number {
-  if (!rating) return 7; // not on Peptide Critic — neutral default
+// ── 4. Customer Experience / Value (max 10) ────────────────────────────────
 
-  // Rating component: 0–10 pts (rating is 0–5 stars)
-  const ratingPts = (rating / 5) * 10;
-
-  // Volume bonus: 0–5 pts, log scale, saturates around 100 reviews
-  const volumePts = Math.min(5, (Math.log((reviews ?? 0) + 1) / Math.log(101)) * 5);
-
-  return Math.max(0, Math.min(15, Math.round(ratingPts + volumePts)));
-}
-
-// ── Pricing score ─────────────────────────────────────────────────────────
-
-type ProductKey = string; // `${normalizedName}::${size_mg}`
+const BLEND_RE = /\s*[&+]\s*|\b(?:mix|blend|stack|combo|combination|complex)\b/i;
 
 function normalizePeptideName(raw: string): string {
   return raw
     .toLowerCase()
-    .replace(/&#\d+;/g, " ").replace(/&\w+;/g, " ")   // HTML entities
-    .replace(/[\d.]+\s*mg\s*(vials?)?/gi, " ")          // mg amounts + "vials"
-    .replace(/\([^)]{1,30}\)/g, " ")                    // short parentheticals like "(TB4)" "(No DAC)"
-    .replace(/\b(vials?|drops?|blend|combo|solution|powder|lyophilized|research|grade|kit)\b/gi, " ")
-    .replace(/[|:/\\]/g, " ")
-    .replace(/[^a-z0-9]/g, "")
+    .replace(/\s*[-–]\s*\d+\s*mg\b/gi, "")
+    .replace(/\s+\d+\s*mg\b/gi, "")
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/\bvial\b|\bpeptide\b/gi, "")
+    .replace(/[-\s]+/g, "-")
+    .replace(/^-+|-+$/g, "")
     .trim();
 }
 
-function productKey(name: string, mg: number): ProductKey {
-  return `${normalizePeptideName(name)}::${mg}`;
-}
-
-function medianOf(values: number[]): number {
-  const s = [...values].sort((a, b) => a - b);
-  const m = Math.floor(s.length / 2);
-  return s.length % 2 !== 0 ? s[m] : (s[m - 1] + s[m]) / 2;
-}
-
-function computeMarketMedians(products: DbProductRow[]): Map<ProductKey, number> {
-  // Per (key, vendor) keep only the cheapest price so one vendor doesn't skew the median
-  const cheapestPerVendor = new Map<string, number>();
-  for (const p of products) {
-    if (!p.size_mg || !p.list_price) continue;
-    const key = productKey(p.peptide_name, p.size_mg);
-    const mapKey = `${key}::${p.vendor_id}`;
-    const effective = p.sale_price ?? p.list_price;
-    const existing = cheapestPerVendor.get(mapKey);
-    if (existing === undefined || effective < existing) cheapestPerVendor.set(mapKey, effective);
-  }
-
-  // Group prices by product key across vendors
-  const pricesByKey = new Map<ProductKey, number[]>();
-  for (const [mapKey, price] of cheapestPerVendor) {
-    const key = mapKey.slice(0, mapKey.lastIndexOf("::"));
-    if (!pricesByKey.has(key)) pricesByKey.set(key, []);
-    pricesByKey.get(key)!.push(price);
-  }
-
-  // Only keep keys with at least 3 vendors (otherwise the "median" isn't meaningful)
-  const medians = new Map<ProductKey, number>();
-  for (const [key, prices] of pricesByKey) {
-    if (prices.length >= 3) medians.set(key, medianOf(prices));
-  }
-  return medians;
-}
-
-function pricingReliabilityScore(
+function customerExperienceScore(
   vendorId: string,
-  allProducts: DbProductRow[],
-  marketMedians: Map<ProductKey, number>
+  peptidePrices: PeptidePriceRow[],
+  marketPrices: Map<string, number>
 ): number {
-  const vendorProducts = allProducts.filter(
-    (p) => p.vendor_id === vendorId && p.size_mg && p.list_price
+  const vendorProducts = peptidePrices.filter(
+    (p) => p.vendor_id === vendorId && p.price_per_mg !== null && !BLEND_RE.test(p.peptide_name)
   );
 
   const ratios: number[] = [];
   for (const p of vendorProducts) {
-    const key = productKey(p.peptide_name, p.size_mg!);
-    const mdn = marketMedians.get(key);
-    if (!mdn) continue;
-    const effective = p.sale_price ?? p.list_price!;
-    ratios.push(effective / mdn);
+    const key = normalizePeptideName(p.peptide_name);
+    const mkt = marketPrices.get(key);
+    if (!mkt) continue;
+    ratios.push(p.price_per_mg! / mkt);
   }
 
-  if (ratios.length === 0) return 5; // no comparable products — neutral
+  if (ratios.length === 0) return 5; // neutral — no comparable data
 
   const avg = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-  // 20% below median → 10pts; at median → ~7pts; 40% above → 0pts
-  return Math.max(0, Math.min(10, Math.round(10 * (1.4 - avg) / 0.6)));
+
+  if (avg < 0.85) return 10; // >15% below market
+  if (avg < 0.95) return  7; // 5–15% below
+  if (avg < 1.05) return  5; // within 5%
+  if (avg < 1.15) return  2; // 5–15% above
+  return 0;                   // >15% above market
 }
 
-// ── Status derivation (matches lib/supabase.ts logic) ────────────────────
+// ── Status tier ────────────────────────────────────────────────────────────
 
-function deriveStatus(score: number): string {
-  if (score >= 80) return "recommended";
-  if (score >= 55) return "caution";
-  return "not-recommended";
+function deriveStatus(score: number, currentStatus: string): string {
+  // Preserve flagged/closed/inactive — only update active vendors
+  if (currentStatus !== "active") return currentStatus;
+  if (score >= 75) return "active"; // "Recommended" display tier
+  if (score >= 50) return "active"; // "Use With Caution" display tier
+  return "active";                  // "Not Recommended"
 }
 
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  const [{ data: vendors, error }, { data: products, error: prodError }] = await Promise.all([
+  log(SCRIPT, "Loading data…");
+
+  const [
+    { data: vendors,        error: e1 },
+    { data: labTests,       error: e2 },
+    { data: transparency,   error: e3 },
+    { data: peptidePrices,  error: e4 },
+    { data: marketPrices,   error: e5 },
+  ] = await Promise.all([
     db.from("vendors")
-      .select("id, slug, name, finnrick_rating, finnrick_score, finnrick_tests_count, has_coa, status, peptide_critic_rating, peptide_critic_reviews_count")
+      .select("id, slug, name, has_coa, finnrick_tests_count, status")
       .in("status", ["active", "flagged"]),
+
+    db.from("lab_tests")
+      .select("vendor_id, test_type, purity_result, endotoxin_result, test_date, test_source"),
+
+    db.from("vendor_transparency")
+      .select("vendor_id, has_contact_info, has_business_address, has_ownership_disclosure, has_lab_disclosure, has_testing_methodology, has_batch_numbers, domain_years, fda_warning, fraud_flags"),
+
     db.from("vendor_peptides")
-      .select("vendor_id, peptide_name, size_mg, list_price, sale_price")
-      .not("list_price", "is", null),
+      .select("vendor_id, peptide_name, price_per_mg")
+      .not("price_per_mg", "is", null),
+
+    db.from("peptide_market_prices")
+      .select("peptide_key, avg_price_per_mg"),
   ]);
 
-  if (error) { console.error("Failed to load vendors:", error.message); process.exit(1); }
-  if (prodError) { console.error("Failed to load products:", prodError.message); process.exit(1); }
+  for (const [err, label] of [[e1,"vendors"],[e2,"lab_tests"],[e3,"transparency"],[e4,"prices"],[e5,"market"]] as const) {
+    if (err) { log(SCRIPT, `DB error (${label}): ${(err as any).message}`); process.exit(1); }
+  }
 
-  const rows = (vendors ?? []) as DbVendorRow[];
-  const allProducts = (products ?? []) as DbProductRow[];
-  const marketMedians = computeMarketMedians(allProducts);
+  const vendorRows    = (vendors      ?? []) as VendorRow[];
+  const testRows      = (labTests     ?? []) as LabTestRow[];
+  const transRows     = (transparency ?? []) as TransparencyRow[];
+  const priceRows     = (peptidePrices ?? []) as PeptidePriceRow[];
+  const marketRows    = (marketPrices  ?? []) as MarketPriceRow[];
 
-  log(SCRIPT, `Computing scores for ${rows.length} vendors… (${marketMedians.size} comparable product benchmarks)`);
+  // Index lookups
+  const transById = new Map(transRows.map((t) => [t.vendor_id, t]));
+  const marketMap = new Map(marketRows.map((m) => [m.peptide_key, m.avg_price_per_mg]));
+
+  log(SCRIPT, `Scoring ${vendorRows.length} vendors…\n`);
 
   let updated = 0;
-  let skipped = 0;
 
-  for (const v of rows) {
-    const lab        = labTestingScore(v.finnrick_tests_count, v.finnrick_rating, v.has_coa);
-    const purity     = purityAccuracyScore(v.finnrick_rating, v.finnrick_score);
-    const trans      = transparencyScore(v.has_coa);
-    const community  = communityReputationScore(v.peptide_critic_rating, v.peptide_critic_reviews_count);
-    const pricing    = pricingReliabilityScore(v.id, allProducts, marketMedians);
-    const overall    = lab + purity + trans + community + pricing;
+  for (const v of vendorRows) {
+    const trans = transById.get(v.id);
+    const tier  = lvTier(v, trans);
+
+    const lv = labVerificationScore(v, trans);
+    const { score: pq, hasQualityWarning } = productQualityScore(v.id, tier, testRows);
+    const tr = transparencyScore(trans);
+    const cx = customerExperienceScore(v.id, priceRows, marketMap);
+    const overall = lv + pq + tr + cx;
 
     log(
       SCRIPT,
-      `  ${v.name.padEnd(28)} lab=${lab}  purity=${purity}  trans=${trans}  community=${community}  pricing=${pricing}  → ${overall}`
+      `  ${v.name.padEnd(30)} T${tier}  LV=${String(lv).padStart(2)} PQ=${String(pq).padStart(2)} TR=${String(tr).padStart(2)} CX=${String(cx).padStart(2)}  → ${String(overall).padStart(3)}` +
+      (hasQualityWarning ? "  ⚠ quality warning" : "")
     );
 
-    const { error: writeErr } = await db
+    const { error } = await db
       .from("vendors")
       .update({
-        lab_testing_score:           lab,
-        purity_accuracy_score:       purity,
-        transparency_score:          trans,
-        community_reputation_score:  community,
-        pricing_reliability_score:   pricing,
-        overall_score:               overall,
-        updated_at:                  new Date().toISOString(),
+        lab_testing_score:            lv,
+        purity_accuracy_score:        pq,
+        transparency_score:           tr,
+        community_reputation_score:   0,   // removed from score
+        pricing_reliability_score:    cx,
+        overall_score:                overall,
+        updated_at:                   new Date().toISOString(),
       })
       .eq("id", v.id);
 
-    if (writeErr) {
-      log(SCRIPT, `  ✗ DB write failed for ${v.slug}: ${writeErr.message}`);
+    if (error) {
+      log(SCRIPT, `  ✗ write error for ${v.slug}: ${error.message}`);
     } else {
       updated++;
     }
 
-    await sleep(80);
+    await sleep(60);
   }
 
-  log(SCRIPT, `Done. ${updated} vendors scored, ${skipped} skipped.`);
+  log(SCRIPT, `\nDone. ${updated} vendors scored.`);
 }
 
 main();
