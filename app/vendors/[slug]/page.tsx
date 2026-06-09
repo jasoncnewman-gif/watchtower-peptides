@@ -208,13 +208,15 @@ export default async function VendorDetailPage({
           </div>
 
           {/* Verdict */}
-          <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
-            <h2 className="font-semibold mb-3" style={{ color: "#1D1D1F" }}>Our Verdict</h2>
-            <p className="leading-relaxed" style={{ color: "#6E6E73" }}>{vendor.verdict}</p>
-            {vendor.notes && (
-              <p className="text-sm leading-relaxed mt-3" style={{ color: "#6E6E73" }}>{vendor.notes}</p>
-            )}
-          </div>
+          {vendor.verdict && (
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-3" style={{ color: "#1D1D1F" }}>Our Verdict</h2>
+              <p className="leading-relaxed" style={{ color: "#6E6E73" }}>{vendor.verdict}</p>
+              {vendor.notes && (
+                <p className="text-sm leading-relaxed mt-3" style={{ color: "#6E6E73" }}>{vendor.notes}</p>
+              )}
+            </div>
+          )}
 
           {/* Latest Lab Results */}
           {latestTestRow && batchInfo && latestPurity != null && (
