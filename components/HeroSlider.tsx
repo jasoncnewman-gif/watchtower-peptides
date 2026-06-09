@@ -58,6 +58,9 @@ export default function HeroSlider() {
     }, 400);
   };
 
+  const prev = () => goTo((current - 1 + SLIDES.length) % SLIDES.length);
+  const next = () => goTo((current + 1) % SLIDES.length);
+
   const slide = SLIDES[current];
 
   return (
@@ -157,6 +160,32 @@ export default function HeroSlider() {
           </div>
         </div>
       </div>
+
+      {/* Prev / Next arrows */}
+      <button
+        onClick={prev}
+        aria-label="Previous slide"
+        className="absolute left-5 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+        style={{ backgroundColor: "rgba(255,255,255,0.12)", color: "#FFFFFF" }}
+        onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.22)")}
+        onMouseLeave={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)")}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+      <button
+        onClick={next}
+        aria-label="Next slide"
+        className="absolute right-5 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+        style={{ backgroundColor: "rgba(255,255,255,0.12)", color: "#FFFFFF" }}
+        onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.22)")}
+        onMouseLeave={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)")}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
 
       {/* Dot indicators */}
       <div className="absolute bottom-9 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">

@@ -93,16 +93,23 @@ export default async function PeptideDetailPage({
 
   // Build vendor price rows; size -1 is a sentinel for rows with null size_mg
   const SIZE_UNKNOWN = -1
-  type RawPriceEntry = { size: number; price: number; onSale: boolean; inStock: boolean }
+  type RawPriceEntry = { size: number; price: number; onSale: boolean; inStock: boolean; vialCount: number }
+
+  function parseVialCount(name: string): number {
+    const m = name.match(/\((\d+)\s+vials?\)/i)
+    return m ? parseInt(m[1], 10) : 1
+  }
+
   const pricesByVendor = new Map<string, Map<number, RawPriceEntry>>()
   for (const r of matchingRows) {
     if (!pricesByVendor.has(r.vendor_id)) pricesByVendor.set(r.vendor_id, new Map())
     const sizeMap = pricesByVendor.get(r.vendor_id)!
     const size = r.size_mg != null ? (r.size_mg as number) : SIZE_UNKNOWN
     const effective = r.sale_price ?? r.list_price!
+    const vialCount = parseVialCount(r.peptide_name)
     const existing = sizeMap.get(size)
     if (!existing || effective < existing.price) {
-      sizeMap.set(size, { size, price: effective, onSale: r.sale_price != null, inStock: r.in_stock })
+      sizeMap.set(size, { size, price: effective, onSale: r.sale_price != null, inStock: r.in_stock, vialCount })
     }
   }
 

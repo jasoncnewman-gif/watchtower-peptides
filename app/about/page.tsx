@@ -154,7 +154,7 @@ export default async function AboutPage() {
             </p>
             <h2 className="text-3xl font-bold mb-2 text-center" style={{ color: "#1D1D1F" }}>100 Points Total</h2>
             <p className="text-center mb-12" style={{ color: "#6E6E73" }}>
-              Four independently weighted categories. No category can compensate for a zero in another.
+              Four independently weighted categories. Lab Verification carries the most weight — vendors without independent testing cannot exceed 35 points total.
             </p>
             <div className="flex flex-col gap-4">
               {SCORE_CATEGORIES.map((cat) => (

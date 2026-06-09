@@ -10,7 +10,7 @@ interface MechanismEntry   { title: string; body: string }
 interface ApplicationEntry { area: string; evidence: string; description: string }
 interface DosageRange      { route: string; range: string; frequency: string; notes: string }
 interface StudyEntry       { title: string; authors: string; year: number; journal: string; pmid: string; url: string }
-interface PriceEntry       { size: number; price: number; onSale: boolean; inStock: boolean }
+interface PriceEntry       { size: number; price: number; onSale: boolean; inStock: boolean; vialCount?: number }
 interface BlendComponent   { name: string; slug: string; dose_mg: number | null; contribution: string }
 
 interface VendorPriceRow {
@@ -429,6 +429,7 @@ function VendorsTab({ vendorData }: { vendorData: VendorTabData }) {
                             {entry ? (
                               <span style={{ color: entry.onSale ? '#16A34A' : '#1D1D1F', fontWeight: entry.onSale ? 600 : 400 }}>
                                 ${entry.price.toFixed(2)}
+                                {entry.vialCount && entry.vialCount > 1 && <span className="ml-1 text-xs" style={{ color: '#6E6E73' }}>({entry.vialCount} vials)</span>}
                                 {!entry.inStock && <span className="ml-1 text-xs" style={{ color: '#6E6E73' }}>(OOS)</span>}
                               </span>
                             ) : (
@@ -444,6 +445,7 @@ function VendorsTab({ vendorData }: { vendorData: VendorTabData }) {
                             {entry ? (
                               <span style={{ color: entry.onSale ? '#16A34A' : '#1D1D1F', fontWeight: entry.onSale ? 600 : 400 }}>
                                 ${entry.price.toFixed(2)}
+                                {entry.vialCount && entry.vialCount > 1 && <span className="ml-1 text-xs" style={{ color: '#6E6E73' }}>({entry.vialCount} vials)</span>}
                                 {!entry.inStock && <span className="ml-1 text-xs" style={{ color: '#6E6E73' }}>(OOS)</span>}
                               </span>
                             ) : (

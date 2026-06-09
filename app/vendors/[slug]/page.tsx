@@ -6,6 +6,48 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { supabase, dbVendorToVendor, type DbVendor, type DbVendorPeptide, type VendorStatus } from "@/lib/supabase";
 
+// Photo assigned per vendor based on dominant product category.
+// Replace any value with a vendor-specific image path when available.
+const VENDOR_PHOTOS: Record<string, string> = {
+  "aavant-research":        "/images/category-hormones.png",
+  "alpha-biomed-labs":      "/images/slide-1.png",
+  "ascension-peptides":     "/images/category-healing.png",
+  "astro-peptides":         "/images/slide-2.png",
+  "biotech-peptides":       "/images/category-hormones.png",
+  "bulk-peptide-supply":    "/images/category-healing.png",
+  "cernum-biosciences":     "/images/category-hormones.png",
+  "core-peptides":          "/images/category-hormones.png",
+  "crush-research":         "/images/slide-3.png",
+  "dynamic-peptide":        "/images/category-healing.png",
+  "ez-peptides":            "/images/category-healing.png",
+  "felix-chemical-supply":  "/images/slide-1.png",
+  "glacier-aminos":         "/images/category-metabolic.png",
+  "healthgevity":           "/images/slide-2.png",
+  "ion-peptide":            "/images/category-healing.png",
+  "limitless-biotech":      "/images/slide-3.png",
+  "loti-labs":              "/images/category-healing.png",
+  "lvlup-health":           "/images/slide-1.png",
+  "mile-high-compounds":    "/images/category-healing.png",
+  "nexaph":                 "/images/category-hormones.png",
+  "nextechlabs":            "/images/category-healing.png",
+  "nuscience-peptides":     "/images/category-hormones.png",
+  "omegamino":              "/images/slide-2.png",
+  "orbitrex-peptides":      "/images/slide-3.png",
+  "paramount-peptides":     "/images/category-hormones.png",
+  "penguin-peptides":       "/images/category-hormones.png",
+  "peptide-crafters":       "/images/category-healing.png",
+  "peptide-partners":       "/images/category-healing.png",
+  "peptidology":            "/images/category-healing.png",
+  "polaris-peptides":       "/images/category-metabolic.png",
+  "pure-rawz":              "/images/category-healing.png",
+  "simple-peptide":         "/images/category-hormones.png",
+  "skye-peptides":          "/images/category-hormones.png",
+  "southern-peptides":      "/images/category-metabolic.png",
+  "sports-technology-labs": "/images/category-healing.png",
+  "swiss-chems":            "/images/category-healing.png",
+  "verified-peptides":      "/images/category-healing.png",
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -132,7 +174,7 @@ export default async function VendorDetailPage({
           {/* Photo header */}
           <div className="rounded-2xl overflow-hidden mb-6 relative" style={{ minHeight: '200px' }}>
             <Image
-              src="/images/slide-2.png"
+              src={VENDOR_PHOTOS[vendor.slug] ?? "/images/slide-2.png"}
               alt={vendor.name}
               fill
               priority

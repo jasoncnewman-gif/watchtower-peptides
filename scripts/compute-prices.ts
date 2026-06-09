@@ -19,6 +19,12 @@ const SCRIPT = "compute-prices";
 // Patterns that identify blend/multi-compound products (not single peptides)
 const BLEND_RE = /\s*[&+]\s*|\b(?:mix|blend|stack|combo|combination|complex)\b/i;
 
+// Extract number of vials from names like "BPC-157 5mg (10 vials)" → 10
+function parseVialCount(name: string): number {
+  const m = name.match(/\((\d+)\s+vials?\)/i);
+  return m ? parseInt(m[1], 10) : 1;
+}
+
 // Strip size info embedded in the name (size is already in size_mg column)
 function normalizeName(raw: string): string {
   return raw
@@ -78,7 +84,9 @@ async function main() {
 
     if (!price || !size) continue;
 
-    const ppm = Math.round((price / size) * 10000) / 10000; // 4 decimal places
+    const vials = parseVialCount(row.peptide_name as string);
+    const totalMg = size * vials;
+    const ppm = Math.round((price / totalMg) * 10000) / 10000; // 4 decimal places
     updates.push({ id: row.id, price_per_mg: ppm });
 
     // Skip blends for market aggregation
