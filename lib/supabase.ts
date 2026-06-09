@@ -21,7 +21,6 @@ export type Vendor = {
     lab_testing: number;
     purity_accuracy: number;
     transparency: number;
-    community_reputation: number;
     pricing_reliability: number;
   };
   peptide_inventory: { name: string; price: string; in_stock: boolean }[];
@@ -285,7 +284,6 @@ export function dbVendorToVendor(db: DbVendor, peptideItems: DbVendorPeptide[] =
       lab_testing: db.lab_testing_score ?? 0,
       purity_accuracy: db.purity_accuracy_score ?? 0,
       transparency: db.transparency_score ?? 0,
-      community_reputation: db.community_reputation_score ?? 0,
       pricing_reliability: db.pricing_reliability_score ?? 0,
     },
     peptide_inventory: peptideItems.map((p) => ({

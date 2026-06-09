@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function VendorsPage() {
   const { data, error } = await supabase
     .from("vendors")
-    .select("id, name, slug, website, overall_score, status, location, has_coa, verified_domain, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, community_reputation_score, pricing_reliability_score, notes")
+    .select("id, name, slug, website, overall_score, status, location, has_coa, verified_domain, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, pricing_reliability_score, notes")
     .eq("status", "active")
     .order("overall_score", { ascending: false, nullsFirst: false });
 

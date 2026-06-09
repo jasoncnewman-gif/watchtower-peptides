@@ -36,7 +36,7 @@ export default async function Home() {
     supabase.from("vendors").select("updated_at").order("updated_at", { ascending: false }).limit(1).single(),
     supabase
       .from("vendors")
-      .select("id, name, slug, website, overall_score, status, location, has_coa, verified_domain, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, community_reputation_score, pricing_reliability_score, notes")
+      .select("id, name, slug, website, overall_score, status, location, has_coa, verified_domain, verdict, last_reviewed, lab_testing_score, purity_accuracy_score, transparency_score, pricing_reliability_score, notes")
       .eq("status", "active")
       .order("overall_score", { ascending: false, nullsFirst: false })
       .limit(4),
@@ -99,8 +99,8 @@ export default async function Home() {
               Built for researchers who don't trust marketing.
             </h2>
             <p className="text-lg leading-relaxed mb-8" style={{ color: "#6E6E73" }}>
-              Every vendor is scored across five independently verified categories — lab testing,
-              purity accuracy, transparency, community reputation, and pricing reliability.
+              Every vendor is scored across four independently verified categories — lab testing,
+              purity accuracy, transparency, and pricing reliability.
               No sponsored placements. No affiliate links. Just data.
             </p>
             <Link
@@ -134,8 +134,8 @@ export default async function Home() {
                 </div>
                 {Object.entries(topVendor.scores).map(([key, val]) => {
                   const maxes: Record<string, number> = {
-                    lab_testing: 30, purity_accuracy: 25, transparency: 20,
-                    community_reputation: 15, pricing_reliability: 10,
+                    lab_testing: 40, purity_accuracy: 25, transparency: 25,
+                    pricing_reliability: 10,
                   };
                   const label = key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
                   const pct = Math.round((val / maxes[key]) * 100);
