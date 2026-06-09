@@ -63,7 +63,7 @@ const FALLBACK_CONFIGS: CoaConfig[] = [
   { slug: "aavant-research",         coaUrl: "https://aavantacr.com/test-result-coas/" },
   { slug: "nextechlabs",             coaUrl: "https://nextechlaboratories.com/pages/coa" },
   { slug: "apollo-peptide-sciences", coaUrl: "https://apollopeptidesciences.com/pages/lab-results" },
-  { slug: "cernum-biosciences",      coaUrl: "https://cernumbiosciences.com/pages/certificates" },
+  { slug: "cernum-biosciences",      coaUrl: "https://cernumbiosciences.com/pages/analyses/" },
   { slug: "peptide-crafters",        coaUrl: "https://peptidecrafters.com/lab-test-reports/" },
   { slug: "lvlup-health",            coaUrl: "https://lvluphealth.com/pages/lab-results" },
   { slug: "healthgevity",            coaUrl: "https://healthgev.com/pages/testing" },
