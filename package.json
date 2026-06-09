@@ -29,11 +29,14 @@
     "scrape:peptide-critic": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-peptide-critic.ts",
     "scrape:products": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-vendor-products.ts",
     "scrape:coas": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-vendor-coas.ts",
+    "compute:prices": "tsx --tsconfig scripts/tsconfig.json scripts/compute-prices.ts",
     "compute:scores": "tsx --tsconfig scripts/tsconfig.json scripts/compute-scores.ts",
     "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts",
     "verify:domains": "tsx --tsconfig scripts/tsconfig.json scripts/verify-domains.ts",
     "fix:vendor-urls": "tsx --tsconfig scripts/tsconfig.json scripts/fix-vendor-urls.ts",
     "seed:creds": "tsx --tsconfig scripts/tsconfig.json scripts/seed-vendor-creds.ts",
+    "seed:transparency": "tsx --tsconfig scripts/tsconfig.json scripts/seed-transparency.ts",
+    "scrape:transparency": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-transparency.ts",
     "scrape:gated": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-gated-vendors.ts"
   },
   "dependencies": {
