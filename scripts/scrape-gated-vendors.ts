@@ -109,8 +109,9 @@ async function loginWooCommerce(page: Page, config: GatedVendorRow): Promise<boo
       } catch { /* continue */ }
     }
 
-    // Detect username vs email field — WP uses name="log", others use name="username"
-    const userSel = "input[name='log'], input[name='username'], input[type='email']";
+    // Detect username vs email field — WP uses name="log", others use name="username";
+    // Xoo Extra Logon (Polaris) uses name="xoo-el-username"
+    const userSel = "input[name='log'], input[name='username'], input[name='xoo-el-username'], input[type='email']";
     const hasUsernameField = !!(await page.$(userSel).catch(() => null));
     const loginValue = (hasUsernameField && config.login_username) ? config.login_username : config.login_email!;
 
@@ -124,7 +125,8 @@ async function loginWooCommerce(page: Page, config: GatedVendorRow): Promise<boo
       return false;
     }
 
-    const passSel = "input[name='pwd'], input[name='password'], input[type='password']";
+    // Xoo Extra Logon uses name="xoo-el-password"
+    const passSel = "input[name='pwd'], input[name='password'], input[name='xoo-el-password'], input[type='password']";
     try {
       await page.waitForSelector(passSel, { timeout: 8000 });
       await page.click(passSel);
@@ -134,8 +136,24 @@ async function loginWooCommerce(page: Page, config: GatedVendorRow): Promise<boo
       return false;
     }
 
-    const submitSel = "input[name='wp-submit'], button[name='login'], input[name='login'], button[type='submit'], input[type='submit']";
-    await page.click(submitSel);
+    // Click submit within the same form as the filled username field — handles pages
+    // with multiple forms (e.g. Xoo Extra Logon plugin on Polaris).
+    const clicked = await page.evaluate(() => {
+      const userField = document.querySelector(
+        "input[name='log'], input[name='username'], input[name='xoo-el-username'], input[type='email']"
+      ) as HTMLInputElement | null;
+      const form = userField?.closest("form");
+      const submitBtn = form?.querySelector(
+        "input[type='submit'], button[type='submit'], input[name='wp-submit']"
+      ) as HTMLElement | null;
+      if (submitBtn) { submitBtn.click(); return true; }
+      return false;
+    });
+    if (!clicked) {
+      // Fallback: click any visible submit button
+      const submitSel = "input[name='wp-submit'], button[name='login'], button[type='submit'], input[type='submit']";
+      await page.click(submitSel);
+    }
 
     // Wait for either a navigation or an AJAX-driven DOM change (JetEngine, etc.)
     await Promise.race([
@@ -357,7 +375,10 @@ async function checkCoaPage(page: Page, vendorId: string, slug: string, coaUrl: 
     const linkHit = links.some((h) => h.includes("janoshik") || h.includes(".pdf") || h.includes("coa"));
     const hasCoa = keywordHit || linkHit;
 
-    await db.from("vendors").update({ has_coa: hasCoa }).eq("id", vendorId);
+    // Only upgrade has_coa — never downgrade a vendor whose COA was previously confirmed
+    if (hasCoa) {
+      await db.from("vendors").update({ has_coa: true }).eq("id", vendorId);
+    }
 
     if (hasCoa) {
       log(SCRIPT, `  ✓ COA content detected at ${coaUrl}`);
