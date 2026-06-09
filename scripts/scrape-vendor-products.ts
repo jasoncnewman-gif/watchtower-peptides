@@ -73,6 +73,14 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "peptide-crafters",        catalogUrl: "https://peptidecrafters.com/collections/peptides" },
   { slug: "lvlup-health",            catalogUrl: "https://lvluphealth.com/collections/all" },
   { slug: "healthgevity",            catalogUrl: "https://healthgev.com/shop" },
+
+  // New vendors added 2026-06-09
+  { slug: "ruo-science",             catalogUrl: "https://ruoscience.com/shop" },
+  { slug: "true-research-labs",      catalogUrl: "https://trueresearchlabs.com/shop" },
+  { slug: "licensed-peptides",       catalogUrl: "", isGated: true },   // login required for full catalog
+  { slug: "certified-pep",           catalogUrl: "https://certified-pep.com/shop-peptides/", isGated: true }, // Cloudflare — needs stealth browser
+  { slug: "perfect-peptides",        catalogUrl: "https://perfectpeptides.com/shop", isGated: true },         // Cloudflare — needs stealth browser
+  { slug: "maxx-research-supply",    catalogUrl: "https://maxxresearchsupply.com/shop", isGated: true },      // Cloudflare — no public data accessible
 ];
 
 // ── Peptide keyword filter ────────────────────────────────────────────────

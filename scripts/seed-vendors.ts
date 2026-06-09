@@ -69,12 +69,18 @@ const ACTIVE_VENDORS: SeedVendor[] = [
   { name: "Penguin Peptides",       website: "https://penguinpeptides.com",       slug: slug("Penguin Peptides") },
   { name: "Paramount Peptides",     website: "https://paramountpeptides.com",     slug: slug("Paramount Peptides") },
   { name: "Nuscience Peptides",     website: "https://nusciencepeptides.com",     slug: slug("Nuscience Peptides") },
-  { name: "Southern Peptides",      website: "https://southernpeptides.com",      slug: slug("Southern Peptides") },
+  { name: "Southern Peptides",      website: "https://southernpeptidesllc.com",   slug: slug("Southern Peptides") },
   { name: "Simple Peptide",         website: "https://simplepeptide.com",         slug: slug("Simple Peptide") },
   { name: "Verified Peptides",      website: "https://verifiedpeptides.com",      slug: slug("Verified Peptides") },
   { name: "Aavant Research",        website: "https://aavantresearch.com",        slug: slug("Aavant Research") },
   { name: "NextechLabs",            website: "https://nextechlabs.com",           slug: slug("NextechLabs") },
   { name: "Apollo Peptide Sciences",website: "https://apollopeptidesciences.com", slug: slug("Apollo Peptide Sciences") },
+  { name: "Certified Pep",          website: "https://certified-pep.com",         slug: slug("Certified Pep") },
+  { name: "Perfect Peptides",       website: "https://perfectpeptides.com",        slug: slug("Perfect Peptides") },
+  { name: "Licensed Peptides",      website: "https://licensedpeptides.com",       slug: slug("Licensed Peptides"),     is_gated: true },
+  { name: "Maxx Research Supply",   website: "https://maxxresearchsupply.com",     slug: slug("Maxx Research Supply") },
+  { name: "RUO Science",            website: "https://ruoscience.com",             slug: slug("RUO Science") },
+  { name: "True Research Labs",     website: "https://trueresearchlabs.com",       slug: slug("True Research Labs") },
 ].map((v) => ({ ...v, status: "active" as const }));
 
 const FLAGGED_AND_CLOSED: SeedVendor[] = [

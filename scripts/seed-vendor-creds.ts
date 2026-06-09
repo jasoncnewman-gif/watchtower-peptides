@@ -95,6 +95,23 @@ const VENDOR_DATA: VendorCreds[] = [
     login_platform: "custom",
     coa_url: "https://peptidology.co/certificates/",
   },
+  {
+    slug: "polaris-peptides",
+    login_email: "info@watchtowerpeptides.com",
+    login_password: "jikHip-6dewje-xytgih",
+    login_path: "/my-account/",
+    catalog_paths: ["/shop/", "/products/", "/peptides/"],
+    login_platform: "woocommerce",
+  },
+  {
+    slug: "licensed-peptides",
+    login_username: "watchtower",
+    login_email: "info@watchtowerpeptides.com",
+    login_password: "jikHip-6dewje-xytgih",
+    login_path: "/my-account/",
+    catalog_paths: ["/shop/", "/peptides/", "/all-peptides/"],
+    login_platform: "woocommerce",
+  },
 
   // ── COA URLs for non-gated vendors (no login needed) ─────────────────────
   { slug: "peptide-partners",       coa_url: "https://peptidepartners.com/pages/lab-results" },
@@ -127,6 +144,11 @@ const VENDOR_DATA: VendorCreds[] = [
   { slug: "peptide-crafters",       coa_url: "https://peptidecrafters.com/lab-test-reports/" },
   { slug: "lvlup-health",           coa_url: "https://lvluphealth.com/pages/lab-results" },
   { slug: "healthgevity",           coa_url: "https://healthgev.com/pages/testing" },
+  { slug: "certified-pep",          coa_url: "https://certified-pep.com/lab-testing/" },
+  { slug: "perfect-peptides",       coa_url: "https://perfectpeptides.com/coa" },
+  { slug: "licensed-peptides",      coa_url: "https://licensedpeptides.com/purity-reports/" },
+  { slug: "ruo-science",            coa_url: "https://ruoscience.com/coa-library/" },
+  { slug: "true-research-labs",     coa_url: "https://trueresearchlabs.com/coa/" },
 ];
 
 // ── Main ──────────────────────────────────────────────────────────────────

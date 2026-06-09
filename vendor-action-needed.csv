@@ -1,0 +1,41 @@
+Vendor,Domain,New Domain,Current Status,Issue,Notes,New Notes,Username,Password,email
+Apollo Peptides,apollopeptides.org,,active,Likely defunct,DNS resolution failed during product scrape â€” site unreachable. Recommend marking inactive.,"What I found:
+Operational signals (legit-leaning)
+
+Live Shopify store, functional checkout, 26 products listed
+Ships from California, US/Canada only Ñ that's a concrete operational claim
+Has an About page, FAQ, Privacy Policy, and a Contact page Ñ basic trust infrastructure is there
+Claims third-party COA testing for identity, purity, and endotoxins
+
+Yellow flags
+
+No external reviews anywhere Ñ no Trustpilot page, no Reddit mentions, no forum chatter. For a peptide vendor, total absence of community discussion is unusual and somewhat concerning.
+Testimonials on-site are suspiciously generic Ñ ""Dr. Sarah M., Biomedical Researcher"" and ""Dr. Jason T., Molecular Biologist"" with no verifiable details. Classic placeholder-style copy.
+The domain is .org Ñ not inherently bad, but an unusual choice for a for-profit vendor. The original ""Apollo Peptide Sciences"" used .com, and that domain is now dead. Whether this is a rebrand, a successor, or an unrelated party that picked up a similar name is unclear.
+Affiliate program is live (via UpPromote) Ñ not a scam signal on its own, but worth noting in your editorial context since it means reviews tied to that affiliate code may be incentivized.
+COA links not publicly posted Ñ their About page claims third-party testing but there's no visible COA library accessible without purchasing.
+Scarcity tactics (""Only 2 left __"") throughout the storefront Ñ common in dropship-adjacent low-trust stores.
+""Definitely Just For Research..."" tagline is a winking nod to human use Ñ very common in the space, but it signals a casual compliance posture.
+
+Bottom line for Watchtower:
+This vendor has minimal verifiable track record. It's not obviously a scam (it's a functional Shopify store with real product listings and operational details), but it has zero established community reputation. I'd categorize it as unverified / insufficient data Ñ not recommended until COAs can be verified and independent reviews surface. The connection to the now-dead apollopeptidesciences.com is ambiguous and worth flagging to readers.",,,
+Alpha BioMed Labs,https://alphabiomedlabs.com,,active,Gated,Requires membership/login. Cannot scrape products or shipping. Confirm still operating.,"Need to make a decision on what to do with vendors like these, makbe mark that we are aware but don't have any information? Their site said:- Apply for verified provider access to obtain institutional-level account credentials and authorized pricing for research-grade materials. Complete the form below to initiate your account verification process with Alpha BioMed Labs. ",,,
+Felix Chemical Supply,https://chem-llc.com,https://felixchem.is/felix-chemical-supply/,active,Gated,Requires membership/login. Domain is chem-llc.com not felixchemical.com â€” worth verifying.,,watchtower,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Loti Labs,https://lotilabs.com,,active,Gated,Requires login. Score of 68 from prior data. Confirm still operating.,,watchtower,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Mile High Compounds,https://milehighcompounds.is,,active,Gated,Requires login. .is domain (Iceland) â€” unusual. Confirm still operating and correct domain.,,watchtower,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Omegamino,https://omegamino.net,,active,Gated,Requires login. Score of 58 from prior data. Confirm still operating.,,,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Ascension Peptides,https://ascensionpeptides.com,,active,Age-gated (21+),Blocks all pages without login â€” products scraped via WooCommerce API (26 products). Confirm status.,"Gated - but the website seems to have a bug.  I registered, quick flash that said thanks for registering, then it stayed on the registration page",,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Ion Peptide,https://ionpeptide.com,,inactive,Confirm defunct,Already marked inactive. Verify site is fully down before permanent removal.,Gated,,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Peptidology,https://peptidology.com,https://peptidology.co/login/?redirect_to=https%3A%2F%2Fpeptidology.co%2F,inactive,Confirm defunct,Already marked inactive â€” DNS dead during scrape. Verify before permanent removal.,Gated,,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Polaris,,https://polarispeptides.com/my-account/,,,,,,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+,,,,,,,,,
+,,,,,,,,,
+Certified-pep,https://certified-global.com,,New,,,,,,
+Perfect Labs,https://perfectpeptides.com,,New,,,,,,
+Licensed peptides,https://licensedpeptides.com,,New,,gated,,watchtower,jikHip-6dewje-xytgih,info@watchtowerpeptides.com
+Maxxing,https://maxxresearchsupply.com,,New,,,,,,
+Ruo Science,https://ruoscience.com,,New,,,,,,
+True Research Labs,https://trueresearchlabs.com/,,New,,,,,,
+,,,New,,,,,,
+,,,,,,,,,
+EZ Peptides,,,,URL does not work on vendor page,,,,,
