@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import VendorListClient from "@/components/vendors/VendorListClient";
@@ -25,15 +26,25 @@ export default async function VendorsPage() {
       <Nav />
 
       <div className="pt-20">
-        <section className="px-6 py-20 text-center" style={{ backgroundColor: "#FFFFFF" }}>
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#186784" }}>
-              Supplier Reviews
-            </p>
-            <h1 className="text-5xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Vendor Directory</h1>
-            <p className="text-xl" style={{ color: "#6E6E73" }}>
-              Every vendor independently scored on lab testing, transparency, and reliability. Scores are out of 100.
-            </p>
+        <section className="relative" style={{ minHeight: "320px" }}>
+          <Image
+            src="/images/vendor-directory.png"
+            alt="Vendor Directory"
+            fill
+            priority
+            style={{ objectFit: "cover", objectPosition: "center 40%" }}
+          />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.65) 100%)" }} />
+          <div className="relative z-10 px-6 py-24 text-center">
+            <div className="max-w-3xl mx-auto">
+              <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#5BA4C4" }}>
+                Vendor Reviews
+              </p>
+              <h1 className="text-5xl font-bold mb-4" style={{ color: "#FFFFFF" }}>Vendor Directory</h1>
+              <p className="text-xl" style={{ color: "rgba(255,255,255,0.75)" }}>
+                Every vendor in our database is independently scored across four criteria. No vendor pays to be listed. No vendor pays to be ranked higher.
+              </p>
+            </div>
           </div>
         </section>
 

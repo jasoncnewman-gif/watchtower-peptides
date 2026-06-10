@@ -46,6 +46,12 @@ const VENDOR_PHOTOS: Record<string, string> = {
   "sports-technology-labs": "/images/category-healing.png",
   "swiss-chems":            "/images/category-healing.png",
   "verified-peptides":      "/images/category-healing.png",
+  "certified-pep":          "/images/category-hormones.png",
+  "perfect-peptides":       "/images/category-healing.png",
+  "licensed-peptides":      "/images/category-healing.png",
+  "maxx-research-supply":   "/images/slide-3.png",
+  "ruo-science":            "/images/category-hormones.png",
+  "true-research-labs":     "/images/category-healing.png",
 };
 
 export async function generateMetadata({
@@ -166,7 +172,7 @@ export default async function VendorDetailPage({
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm mb-6" style={{ color: "#6E6E73" }}>
-            <Link href="/vendors" className="hover:text-black transition-colors">Supplier Reviews</Link>
+            <Link href="/vendors" className="hover:text-black transition-colors">Vendor Reviews</Link>
             <span>›</span>
             <span style={{ color: "#1D1D1F" }}>{vendor.name}</span>
           </div>
@@ -435,7 +441,7 @@ export default async function VendorDetailPage({
             className="inline-flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-70"
             style={{ color: "#1D1D1F" }}
           >
-            ← Back to Supplier Reviews
+            ← Back to Vendor Reviews
           </Link>
         </div>
       </div>

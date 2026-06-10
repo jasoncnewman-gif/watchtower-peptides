@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
@@ -35,9 +36,9 @@ const SCORE_CATEGORIES = [
     tiers: null,
   },
   {
-    name: "Customer Experience",
+    name: "Pricing & Value",
     points: 10,
-    description: "Price per mg compared to the market average for the same peptides. Vendors priced 15% or more below market earn full points. Vendors priced 15% or more above market earn zero.",
+    description: "Price per mg benchmarked against the market average across comparable vendors. Vendors priced 15% or more below market earn full points; vendors priced 15% or more above market score zero.",
     tiers: null,
   },
 ];
@@ -46,7 +47,7 @@ const RATING_TIERS = [
   { label: "Elite",      range: "85–100",   bg: "#DCFCE7", text: "#16A34A", description: "Independently verified testing across multiple products, high purity record, strong transparency, and competitive pricing." },
   { label: "Trusted",    range: "70–84",    bg: "#D1FAE5", text: "#059669", description: "Strong third-party verification and good purity record with above-average transparency." },
   { label: "Acceptable", range: "55–69",    bg: "#FEF3C7", text: "#D97706", description: "Some verified testing and transparency, but gaps in sample size, methodology, or value." },
-  { label: "Watchlist",  range: "45–54",    bg: "#FED7AA", text: "#EA580C", description: "Limited or unverified testing data. Proceed with significant caution." },
+  { label: "Watchlist",  range: "45–54",    bg: "#FED7AA", text: "#EA580C", description: "Limited or unverified testing data. Sourcing from these vendors carries meaningful quality risk." },
   { label: "Avoid",      range: "Below 45", bg: "#FEE2E2", text: "#DC2626", description: "No independent verification, material transparency failures, or active FDA warnings or fraud flags." },
 ];
 
@@ -85,19 +86,30 @@ export default async function AboutPage() {
       <div className="pt-20">
 
         {/* Header */}
-        <section className="px-6 py-24 text-center" style={{ backgroundColor: "#FFFFFF" }}>
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm font-semibold tracking-widest uppercase mb-6" style={{ color: "#186784" }}>
-              Our Methodology
-            </p>
-            <h1 className="text-5xl font-bold mb-6" style={{ color: "#1D1D1F" }}>
-              How We Score Vendors
-            </h1>
-            <p className="text-xl leading-relaxed" style={{ color: "#6E6E73" }}>
-              Watchtower Peptides is an independent research platform. We have no affiliate
-              relationships, accept no paid placements, and receive no compensation from any vendor.
-              Every score is derived from publicly verifiable data or independently collected testing records.
-            </p>
+        <section className="relative" style={{ minHeight: "320px" }}>
+          <Image
+            src="/images/about-hero.png"
+            alt="About Watchtower Peptides"
+            fill
+            priority
+            style={{ objectFit: "cover", objectPosition: "center 40%" }}
+          />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.65) 100%)" }} />
+          <div className="relative z-10 px-6 py-24 text-center">
+            <div className="max-w-3xl mx-auto">
+              <p className="text-sm font-semibold tracking-widest uppercase mb-6" style={{ color: "#5BA4C4" }}>
+                Our Methodology
+              </p>
+              <h1 className="text-5xl font-bold mb-6" style={{ color: "#FFFFFF" }}>
+                How We Score Vendors
+              </h1>
+              <p className="text-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+                Watchtower Peptides is an independent research platform built on one operating principle:
+                every score must be derivable from publicly verifiable data. We have no affiliate relationships
+                and accept no compensation from vendors — paid or otherwise. Our independence isn&rsquo;t a
+                marketing claim. It&rsquo;s a structural constraint built into how the platform works.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -222,7 +234,7 @@ export default async function AboutPage() {
         <section className="px-6 py-20" style={{ backgroundColor: "#FFFFFF" }}>
           <div className="max-w-4xl mx-auto">
             <p className="text-sm font-semibold tracking-widest uppercase mb-4 text-center" style={{ color: "#186784" }}>
-              Where We Get Our Data
+              Data Sources &amp; Methodology
             </p>
             <h2 className="text-3xl font-bold mb-12 text-center" style={{ color: "#1D1D1F" }}>Data Sources</h2>
             <div className="grid sm:grid-cols-3 gap-5 text-center">

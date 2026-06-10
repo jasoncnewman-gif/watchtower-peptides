@@ -99,9 +99,9 @@ export default async function Home() {
               Built for researchers who don't trust marketing.
             </h2>
             <p className="text-lg leading-relaxed mb-8" style={{ color: "#6E6E73" }}>
-              Every vendor is scored across four independently verified categories — lab testing,
-              purity accuracy, transparency, and pricing reliability.
-              No sponsored placements. No affiliate links. Just data.
+              We independently score every peptide vendor using a 100-point rubric built on one question:
+              is what you&rsquo;re buying what it claims to be? No affiliate links. No sponsored placements.
+              Every score is derived from lab testing records, transparency disclosures, and independently verifiable data.
             </p>
             <Link
               href="/about"
@@ -137,7 +137,13 @@ export default async function Home() {
                     lab_testing: 40, purity_accuracy: 25, transparency: 25,
                     pricing_reliability: 10,
                   };
-                  const label = key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+                  const LABELS: Record<string, string> = {
+                    lab_testing: "Lab Testing",
+                    purity_accuracy: "Verified Purity",
+                    transparency: "Transparency",
+                    pricing_reliability: "Pricing & Value",
+                  };
+                  const label = LABELS[key] ?? key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
                   const pct = Math.round((val / maxes[key]) * 100);
                   return (
                     <div key={key} className="mb-3">
@@ -170,11 +176,11 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#186784" }}>
-              Supplier Reviews
+              Vendor Reviews
             </p>
-            <h2 className="text-4xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Top Recommended Vendors</h2>
+            <h2 className="text-4xl font-bold mb-4" style={{ color: "#1D1D1F" }}>Top-Scored Vendors</h2>
             <p className="text-lg max-w-xl mx-auto" style={{ color: "#6E6E73" }}>
-              Vendors with verified third-party lab testing and strong community trust.
+              Vendors with independently verified lab results, high purity records, and above-average transparency scores.
             </p>
           </div>
 
@@ -235,11 +241,11 @@ export default async function Home() {
               Peptide Library
             </p>
             <h2 className="text-4xl font-bold leading-tight mb-6" style={{ color: "#1D1D1F" }}>
-              Everything you need to know before you buy.
+              Research profiles on every major peptide.
             </h2>
             <p className="text-lg leading-relaxed mb-8" style={{ color: "#6E6E73" }}>
-              Dosage guides, reconstitution instructions, FDA status, and curated research
-              studies for the most commonly studied peptides — all in one place.
+              Mechanisms, dosage data, safety summaries, and current pricing across independently
+              scored vendors — all in one place.
             </p>
             <div className="flex gap-4">
               <Link
@@ -299,7 +305,7 @@ export default async function Home() {
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4" style={{ color: "#FFFFFF" }}>Don't buy blind.</h2>
           <p className="text-lg mb-8" style={{ color: "#6E6E73" }}>
-            Check any vendor's score, lab history, and active alerts before you order.
+            Every vendor is independently scored on lab testing, purity, and transparency before you spend a dollar.
           </p>
           <Link
             href="/vendors"

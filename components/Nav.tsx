@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/vendors", label: "Supplier Reviews" },
+  { href: "/vendors", label: "Vendor Reviews" },
   { href: "/peptides", label: "Peptide Library" },
-  { href: "/calculator", label: "Calculator" },
+  { href: "/calculator", label: "Tools" },
+  { href: "/about", label: "Methodology" },
 ];
 
 export default function Nav() {

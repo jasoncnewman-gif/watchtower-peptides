@@ -82,10 +82,20 @@ function displayStatus(status: string, score: number | null) {
   return 'not-recommended'
 }
 
-function EmptyState({ message }: { message: string }) {
+function EmptyState({ message, browseLink }: { message: string; browseLink?: boolean }) {
   return (
     <div className="text-center py-16 rounded-2xl" style={{ backgroundColor: '#F5F5F7' }}>
-      <p className="text-sm" style={{ color: '#6E6E73' }}>{message}</p>
+      <p className="text-sm" style={{ color: '#6E6E73' }}>
+        {message}
+        {browseLink && (
+          <>
+            {' '}or{' '}
+            <Link href="/peptides" className="underline transition-opacity hover:opacity-70" style={{ color: '#186784' }}>
+              browse completed profiles →
+            </Link>
+          </>
+        )}
+      </p>
     </div>
   )
 }
@@ -121,7 +131,7 @@ function OverviewTab({ peptide }: { peptide: PeptideDetailData }) {
           <p className="leading-relaxed" style={{ color: '#6E6E73' }}>{text}</p>
         </div>
       ) : (
-        <EmptyState message="Overview content coming soon." />
+        <EmptyState message="We're building this profile now. Check back soon," browseLink />
       )}
 
       {/* Aliases */}
@@ -165,7 +175,7 @@ function OverviewTab({ peptide }: { peptide: PeptideDetailData }) {
 }
 
 function MechanismTab({ entries }: { entries: MechanismEntry[] | null }) {
-  if (!entries?.length) return <EmptyState message="Mechanism details are being researched." />
+  if (!entries?.length) return <EmptyState message="We're building this profile now. Check back soon," browseLink />
 
   return (
     <div className="space-y-4">
@@ -188,7 +198,7 @@ function MechanismTab({ entries }: { entries: MechanismEntry[] | null }) {
 }
 
 function ResearchTab({ entries }: { entries: ApplicationEntry[] | null }) {
-  if (!entries?.length) return <EmptyState message="Research applications are being documented." />
+  if (!entries?.length) return <EmptyState message="We're building this profile now. Check back soon," browseLink />
 
   return (
     <div className="grid sm:grid-cols-2 gap-4">
@@ -246,14 +256,14 @@ function DosageTab({ dosage, typical }: { dosage: PeptideDetailData['dosage']; t
           <p className="text-sm" style={{ color: '#6E6E73' }}>{typical}</p>
         </div>
       ) : (
-        <EmptyState message="Dosage guidelines are being compiled." />
+        <EmptyState message="We're building this profile now. Check back soon," browseLink />
       )}
     </div>
   )
 }
 
 function SafetyTab({ profile }: { profile: PeptideDetailData['safety_profile'] }) {
-  if (!profile) return <EmptyState message="Safety data is being gathered." />
+  if (!profile) return <EmptyState message="We're building this profile now. Check back soon," browseLink />
 
   return (
     <div className="space-y-6">
@@ -352,9 +362,8 @@ function VendorsTab({ vendorData }: { vendorData: VendorTabData }) {
       <div className="rounded-2xl p-4 flex gap-3" style={{ backgroundColor: '#F5F5F7', border: '1px solid #E5E5E7' }}>
         <span className="text-sm shrink-0">⚑</span>
         <p className="text-sm" style={{ color: '#6E6E73' }}>
-          Watchtower Peptides has no affiliate relationships with any vendor. Scores reflect
-          independent evaluation of lab testing, purity, transparency, community reputation,
-          and pricing reliability.
+          Scores are based on independently verified lab data, purity records, and transparency signals.
+          No vendor pays for placement or score improvement.
         </p>
       </div>
 

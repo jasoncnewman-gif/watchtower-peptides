@@ -35,7 +35,7 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
               <span className="font-semibold" style={{ color: "#FFFFFF" }}>Watchtower Peptides</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
-              Independent research platform. No affiliates. No paid placements. Just the truth.
+              Independent research platform. No affiliates. No paid placements. Every score is earned, not bought.
             </p>
           </div>
 
@@ -44,7 +44,7 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
             <div>
               <p className="font-semibold mb-4" style={{ color: "#FFFFFF" }}>Platform</p>
               <div className="flex flex-col gap-3" style={{ color: "#6E6E73" }}>
-                <Link href="/vendors" className="hover:text-white transition-colors">Supplier Reviews</Link>
+                <Link href="/vendors" className="hover:text-white transition-colors">Vendor Reviews</Link>
                 <Link href="/peptides" className="hover:text-white transition-colors">Peptide Library</Link>
                 <Link href="/calculator" className="hover:text-white transition-colors">Reconstitution Calculator</Link>
               </div>
