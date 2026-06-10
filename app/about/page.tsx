@@ -149,7 +149,7 @@ export default async function AboutPage() {
                   <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2" style={{ color: s.text }}>
                     {distribution[s.key as keyof typeof distribution]}
                   </div>
-                  <div className="text-xs font-semibold leading-tight" style={{ color: s.text }}>
+                  <div className="text-[9px] sm:text-xs font-semibold leading-tight" style={{ color: s.text }}>
                     {s.label}
                   </div>
                 </div>
@@ -187,12 +187,12 @@ export default async function AboutPage() {
                   {cat.tiers && (
                     <div className="flex flex-col gap-1.5 mt-2">
                       {cat.tiers.map((t, i) => (
-                        <div key={t.label} className="flex items-center justify-between text-xs rounded-lg px-3 py-2"
+                        <div key={t.label} className="flex items-start justify-between gap-3 text-xs rounded-lg px-3 py-2"
                           style={{ backgroundColor: "#FFFFFF" }}>
                           <span style={{ color: "#6E6E73" }}>
                             <span className="font-medium" style={{ color: "#1D1D1F" }}>Tier {i}</span> — {t.label}
                           </span>
-                          <span className="font-semibold" style={{ color: "#186784" }}>{t.pts} pts</span>
+                          <span className="font-semibold shrink-0 whitespace-nowrap" style={{ color: "#186784" }}>{t.pts}&nbsp;pts</span>
                         </div>
                       ))}
                     </div>

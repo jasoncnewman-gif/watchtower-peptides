@@ -146,8 +146,8 @@ const S = {
   btnOutline: { padding: "9px 18px", backgroundColor: "transparent", color: C.accent, border: `1.5px solid ${C.accent}`, borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" } as React.CSSProperties,
   card:    { backgroundColor: C.bg, border: `1px solid ${C.border}`, borderRadius: 12, padding: 28 } as React.CSSProperties,
   surface: { backgroundColor: C.surface, borderRadius: 10, padding: 20 } as React.CSSProperties,
-  statBox: (color = C.accent, bg = C.accentLight, border = "#BEE3F8"): React.CSSProperties => ({ backgroundColor: bg, border: `1px solid ${border}`, borderRadius: 10, padding: "16px 20px", textAlign: "center" }),
-  statVal:   (color = C.accent): React.CSSProperties => ({ fontSize: 28, fontWeight: 800, color, lineHeight: 1, marginBottom: 4 }),
+  statBox: (color = C.accent, bg = C.accentLight, border = "#BEE3F8"): React.CSSProperties => ({ backgroundColor: bg, border: `1px solid ${border}`, borderRadius: 10, padding: "14px 8px", textAlign: "center" }),
+  statVal:   (color = C.accent): React.CSSProperties => ({ fontSize: 28, fontWeight: 800, color, lineHeight: 1, marginBottom: 4, whiteSpace: "nowrap" }),
   statLabel: (color = C.accent): React.CSSProperties => ({ fontSize: 11, fontWeight: 600, color, textTransform: "uppercase", letterSpacing: "0.08em" }),
 };
 
