@@ -218,15 +218,17 @@ export default async function VendorDetailPage({
                   )}
                 </div>
 
-                <a
-                  href={`https://${vendor.website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm hover:underline"
-                  style={{ color: "#5BA4C4" }}
-                >
-                  {vendor.website} ↗
-                </a>
+                {vendor.website && (
+                  <a
+                    href={vendor.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:underline"
+                    style={{ color: "#5BA4C4" }}
+                  >
+                    {vendor.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
+                  </a>
+                )}
 
                 <div className="flex flex-wrap gap-5 mt-3 text-sm" style={{ color: "rgba(255,255,255,0.60)" }}>
                   <span>📍 {vendor.location}</span>
