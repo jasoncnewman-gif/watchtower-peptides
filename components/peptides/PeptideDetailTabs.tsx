@@ -108,10 +108,9 @@ function OverviewTab({ peptide }: { peptide: PeptideDetailData }) {
 
   return (
     <div className="space-y-6">
-      {/* Plain-English callout */}
+      {/* Plain-English intro */}
       {peptide.plain_english && (
-        <div className="rounded-2xl p-6" style={{ backgroundColor: '#EBF5FA', borderLeft: '4px solid #186784' }}>
-          <p className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: '#186784' }}>In Plain English</p>
+        <div className="pt-4" style={{ borderTop: '2px solid #186784' }}>
           <p className="text-base leading-relaxed" style={{ color: '#1D1D1F' }}>{peptide.plain_english}</p>
         </div>
       )}
