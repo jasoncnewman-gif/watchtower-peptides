@@ -137,7 +137,7 @@ export default async function AboutPage() {
               Current Data
             </p>
             <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: "#1D1D1F" }}>Vendor Distribution</h2>
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-5 gap-2 sm:gap-3">
               {[
                 { key: "elite",      label: "Elite",      bg: "#DCFCE7", text: "#16A34A" },
                 { key: "trusted",    label: "Trusted",    bg: "#D1FAE5", text: "#059669" },
@@ -145,13 +145,13 @@ export default async function AboutPage() {
                 { key: "watchlist",  label: "Watchlist",  bg: "#FED7AA", text: "#EA580C" },
                 { key: "avoid",      label: "Avoid",      bg: "#FEE2E2", text: "#DC2626" },
               ].map((s) => (
-                <div key={s.key} className="rounded-2xl p-4 text-center" style={{ backgroundColor: "#FFFFFF" }}>
-                  <div className="text-3xl font-bold mb-2" style={{ color: s.text }}>
+                <div key={s.key} className="rounded-xl sm:rounded-2xl p-2 sm:p-4 text-center" style={{ backgroundColor: "#FFFFFF" }}>
+                  <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2" style={{ color: s.text }}>
                     {distribution[s.key as keyof typeof distribution]}
                   </div>
-                  <span className="text-xs font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: s.bg, color: s.text }}>
+                  <div className="text-xs font-semibold leading-tight" style={{ color: s.text }}>
                     {s.label}
-                  </span>
+                  </div>
                 </div>
               ))}
             </div>

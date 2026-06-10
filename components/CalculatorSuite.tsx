@@ -263,7 +263,7 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
 
       {result && (
         <div style={{ ...S.surface, display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+          <div className="grid grid-cols-3 gap-3">
             <div style={S.statBox()}>
               <div style={S.statVal()}>{result.doseRange.low}</div>
               <div style={S.statLabel()}>{result.doseRange.unit} · Low</div>
@@ -401,10 +401,10 @@ function OrderCalculator({ peptides, prefill, onUseValues }: {
 
       {result && (
         <div style={{ ...S.surface, display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+          <div className="grid grid-cols-3 gap-3">
             <div style={S.statBox()}>
               <div style={S.statVal()}>{result.totalMg.toFixed(2)}</div>
-              <div style={S.statLabel()}>mg Total Needed</div>
+              <div style={S.statLabel()}>mg Needed</div>
             </div>
             <div style={S.statBox()}>
               <div style={S.statVal()}>{result.vialsNeeded}</div>
@@ -412,7 +412,7 @@ function OrderCalculator({ peptides, prefill, onUseValues }: {
             </div>
             <div style={S.statBox(C.success, C.successLight, "#9AE6B4")}>
               <div style={S.statVal(C.success)}>{result.weeks}</div>
-              <div style={S.statLabel(C.success)}>Week Protocol</div>
+              <div style={S.statLabel(C.success)}>Weeks</div>
             </div>
           </div>
 
@@ -631,7 +631,7 @@ export default function CalculatorSuite({ peptides = PLACEHOLDER_PEPTIDES }: { p
 
   return (
     <div style={{ fontFamily: "'DM Sans', 'Inter', system-ui, sans-serif", color: C.text }}>
-      <div style={{ padding: "48px 24px 0", maxWidth: 820, margin: "0 auto", textAlign: "center" }}>
+      <div style={{ padding: "32px 16px 0", maxWidth: 820, margin: "0 auto", textAlign: "center" }}>
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: C.accent, textTransform: "uppercase", marginBottom: 12 }}>Dosage Tools</div>
         <h1 style={{ fontSize: 34, fontWeight: 800, color: C.text, margin: "0 0 12px", lineHeight: 1.1 }}>Peptide Calculator Suite</h1>
         <p style={{ fontSize: 15, color: C.textMuted, margin: "0 0 36px", lineHeight: 1.5 }}>
@@ -639,7 +639,7 @@ export default function CalculatorSuite({ peptides = PLACEHOLDER_PEPTIDES }: { p
         </p>
       </div>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 16px" }}>
         {/* Tab bar */}
         <div style={{ display: "flex", gap: 0, borderBottom: `2px solid ${C.border}`, marginBottom: 32 }}>
           {TABS.map(tab => (
@@ -649,7 +649,7 @@ export default function CalculatorSuite({ peptides = PLACEHOLDER_PEPTIDES }: { p
                 {tab.id === "order"          && orderPrefill && <span style={{ marginLeft: 5, fontSize: 9, color: C.success }}>●</span>}
                 {tab.id === "reconstitution" && reconPrefill  && <span style={{ marginLeft: 5, fontSize: 9, color: C.success }}>●</span>}
               </div>
-              <div style={{ fontSize: 11, color: activeTab === tab.id ? C.accent : C.textMuted, opacity: 0.8 }}>{tab.desc}</div>
+              <div className="hidden sm:block" style={{ fontSize: 11, color: activeTab === tab.id ? C.accent : C.textMuted, opacity: 0.8 }}>{tab.desc}</div>
             </button>
           ))}
         </div>
