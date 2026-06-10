@@ -33,6 +33,7 @@ export interface PeptideDetailData {
   half_life: string | null
   molecular_weight: string | null
   sequence: string | null
+  plain_english: string | null
   overview: string | null
   description: string | null
   aliases: string[] | null
@@ -107,6 +108,14 @@ function OverviewTab({ peptide }: { peptide: PeptideDetailData }) {
 
   return (
     <div className="space-y-6">
+      {/* Plain-English callout */}
+      {peptide.plain_english && (
+        <div className="rounded-2xl p-6" style={{ backgroundColor: '#EBF5FA', borderLeft: '4px solid #186784' }}>
+          <p className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: '#186784' }}>In Plain English</p>
+          <p className="text-base leading-relaxed" style={{ color: '#1D1D1F' }}>{peptide.plain_english}</p>
+        </div>
+      )}
+
       {/* Stats row */}
       {(peptide.half_life || peptide.molecular_weight) && (
         <div className="grid sm:grid-cols-2 gap-4">

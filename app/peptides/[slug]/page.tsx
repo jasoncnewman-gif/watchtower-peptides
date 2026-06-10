@@ -142,6 +142,7 @@ export default async function PeptideDetailPage({
     half_life:                peptideRow.half_life ?? null,
     molecular_weight:         peptideRow.molecular_weight ?? null,
     sequence:                 peptideRow.sequence ?? null,
+    plain_english:            peptideRow.plain_english ?? null,
     overview:                 peptideRow.overview ?? null,
     description:              peptideRow.description ?? null,
     aliases:                  peptideRow.aliases ?? null,
