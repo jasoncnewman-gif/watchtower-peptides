@@ -410,9 +410,15 @@ function VendorsTab({ vendorData }: { vendorData: VendorTabData }) {
                           {vendor.name}
                         </Link>
                         {vendor.website && (
-                          <p className="text-xs mt-0.5" style={{ color: '#6E6E73' }}>
-                            {vendor.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                          </p>
+                          <a
+                            href={vendor.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs mt-0.5 hover:underline block"
+                            style={{ color: '#6E6E73' }}
+                          >
+                            {vendor.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
+                          </a>
                         )}
                       </td>
                       <td className="px-4 py-4 text-center">
