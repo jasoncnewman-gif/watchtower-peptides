@@ -69,7 +69,7 @@ async function main() {
 
   const { data: vendor, error } = await db
     .from("vendors")
-    .select("id, name, lab_testing_score, has_coa, finnrick_tests_count, vendor_transparency(vendor_id, has_lab_disclosure, has_batch_numbers)")
+    .select("id, name, lab_testing_score, has_coa, finnrick_tests_count")
     .eq("slug", slug)
     .single();
 
@@ -78,7 +78,16 @@ async function main() {
     process.exit(1);
   }
 
-  const v = vendor as unknown as VendorRow;
+  const { data: transData } = await db
+    .from("vendor_transparency")
+    .select("vendor_id, has_lab_disclosure, has_batch_numbers")
+    .eq("vendor_id", vendor.id)
+    .single();
+
+  const v: VendorRow = {
+    ...(vendor as unknown as VendorRow),
+    vendor_transparency: transData ? [transData as TransparencyRow] : [],
+  };
   const existingTier = currentTier(v);
   const tierChanged  = tierNum !== existingTier;
 

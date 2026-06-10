@@ -18,6 +18,7 @@
 import { db } from "./lib/client.js";
 
 type VendorRow = {
+  id: string;
   slug: string;
   name: string;
   website: string | null;
@@ -29,15 +30,15 @@ type VendorRow = {
   coa_audit_status: string | null;
   coa_audit_tier: number | null;
   coa_audited_at: string | null;
-  vendor_transparency: { has_lab_disclosure: boolean; has_batch_numbers: boolean }[];
+  has_lab_disclosure?: boolean;
+  has_batch_numbers?: boolean;
 };
 
 function lvTier(v: VendorRow): number {
   if ((v.finnrick_tests_count ?? 0) > 0) return 4;
   if (!v.has_coa) return 0;
-  const t = v.vendor_transparency?.[0] ?? null;
-  if (t?.has_lab_disclosure && t?.has_batch_numbers) return 3;
-  if (t?.has_lab_disclosure) return 2;
+  if (v.has_lab_disclosure && v.has_batch_numbers) return 3;
+  if (v.has_lab_disclosure) return 2;
   return 1;
 }
 
@@ -48,12 +49,7 @@ async function main() {
 
   const { data: vendors } = await db
     .from("vendors")
-    .select(`
-      slug, name, website, coa_url, has_coa,
-      lab_testing_score, overall_score, finnrick_tests_count,
-      coa_audit_status, coa_audit_tier, coa_audited_at,
-      vendor_transparency (has_lab_disclosure, has_batch_numbers)
-    `)
+    .select("id, slug, name, website, coa_url, has_coa, lab_testing_score, overall_score, finnrick_tests_count, coa_audit_status, coa_audit_tier, coa_audited_at")
     .in("status", ["active", "flagged"])
     .eq("coa_audit_status", "pending")
     .order("overall_score", { ascending: false });
@@ -63,7 +59,19 @@ async function main() {
     return;
   }
 
-  const rows = vendors as unknown as VendorRow[];
+  const { data: transRows } = await db
+    .from("vendor_transparency")
+    .select("vendor_id, has_lab_disclosure, has_batch_numbers");
+
+  const transMap = new Map<string, { has_lab_disclosure: boolean; has_batch_numbers: boolean }>();
+  for (const t of transRows ?? []) {
+    transMap.set(t.vendor_id, { has_lab_disclosure: t.has_lab_disclosure, has_batch_numbers: t.has_batch_numbers });
+  }
+
+  const rows: VendorRow[] = (vendors as VendorRow[]).map(v => ({
+    ...v,
+    ...transMap.get(v.id),
+  }));
 
   const prioritized = rows
     .map(v => ({ ...v, tier: lvTier(v) }))
