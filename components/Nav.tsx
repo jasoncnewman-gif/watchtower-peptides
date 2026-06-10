@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -32,11 +33,14 @@ export default function Nav() {
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-            <span style={{ color: "#186784" }} className="text-xl">⚑</span>
-            <span className="font-semibold text-base tracking-tight" style={{ color: "#1D1D1F" }}>
-              Watchtower Peptides
-            </span>
+          <Link href="/" onClick={() => setOpen(false)}>
+            <Image
+              src="/images/logo-nav.png"
+              alt="Watchtower Peptides"
+              width={200}
+              height={40}
+              priority
+            />
           </Link>
 
           {/* Desktop links */}

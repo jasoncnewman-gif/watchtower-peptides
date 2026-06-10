@@ -30,9 +30,8 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
         <div className="flex flex-col md:flex-row justify-between gap-10 mb-10">
           {/* Brand */}
           <div className="max-w-xs">
-            <div className="flex items-center gap-2 mb-3">
-              <span style={{ color: "#186784" }}>⚑</span>
-              <span className="font-semibold" style={{ color: "#FFFFFF" }}>Watchtower Peptides</span>
+            <div className="mb-3">
+              <span className="font-semibold text-base" style={{ color: "#FFFFFF" }}>Watchtower Peptides</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
               Independent research platform. No affiliates. No paid placements. Every score is earned, not bought.
