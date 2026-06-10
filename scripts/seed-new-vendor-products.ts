@@ -61,7 +61,7 @@ async function fetchWooCommerceProducts(baseUrl: string, slug: string): Promise<
     const rawSale    = p.prices?.sale_price     ? parseInt(p.prices.sale_price)    / 100 : null;
     const isOnSale   = rawSale !== null && rawRegular !== null && rawSale < rawRegular;
     results.push({
-      peptide_name: clean(p.name),
+      peptide_name: clean(p.name) ?? p.name,
       size_mg:      parseMg(p.name),
       list_price:   isOnSale ? rawRegular : rawPrice,
       sale_price:   isOnSale ? rawSale : null,
