@@ -37,8 +37,8 @@ export default function Nav() {
             <Image
               src="/images/logo-nav.png"
               alt="Watchtower Peptides"
-              width={200}
-              height={40}
+              width={260}
+              height={52}
               priority
             />
           </Link>

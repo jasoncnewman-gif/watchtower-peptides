@@ -115,6 +115,8 @@ function batchGrade(purity: number): { grade: string; color: string } {
   return { grade: "F", color: "#DC2626" };
 }
 
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const { data } = await supabase
     .from("vendors")

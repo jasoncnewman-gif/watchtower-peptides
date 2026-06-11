@@ -19,6 +19,7 @@ import type { Browser, Page } from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";
 import { log, sleep } from "./lib/scraper.js";
+import { db } from "./lib/client.js";
 
 const SCRIPT = "coa-forensics";
 const CHROME  = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -455,17 +456,111 @@ async function handleVendor(browser: Browser, target: VendorTarget): Promise<voi
   }
 }
 
+// ── Tier determination from forensics output ──────────────────────────────
+
+const KNOWN_LAB_SIGNALS: { name: string; signals: string[] }[] = [
+  { name: "Janoshik",            signals: ["janoshik"] },
+  { name: "Vanguard",            signals: ["vanguard scientific", "vanguard lab", "vanguard"] },
+  { name: "Freedom Diagnostics", signals: ["freedom diagnostics"] },
+  { name: "Colmaric",            signals: ["colmaric"] },
+  { name: "Horizon Analytical",  signals: ["horizon analytical"] },
+  { name: "Chromate",            signals: ["chromate analytical", "chromate.org"] },
+  { name: "ACS Lab",             signals: ["acslabtest", "acs lab"] },
+  { name: "MZ Biolabs",          signals: ["mz biolabs"] },
+];
+
+const BATCH_RE = [
+  /\blot\s*(?:no\.?|number|#)?\s*[:\-]?\s*[A-Z0-9]{4,}/i,
+  /\bbatch\s*(?:no\.?|number|#)?\s*[:\-]?\s*[A-Z0-9]{4,}/i,
+];
+
+function scanText(text: string): { lab: string | null; hasBatch: boolean; hasCoa: boolean } {
+  const lower = text.toLowerCase();
+  const lab = KNOWN_LAB_SIGNALS.find(l => l.signals.some(s => lower.includes(s)))?.name ?? null;
+  const hasBatch = BATCH_RE.some(re => re.test(text));
+  const hasCoa = lower.includes("certificate of analysis") || lower.includes("hplc") ||
+                 lower.includes("purity") || lower.includes("coa") || lower.includes("chromatogram");
+  return { lab, hasBatch, hasCoa };
+}
+
+function tierFromScans(scans: ReturnType<typeof scanText>[]): { tier: number; lab: string | null; hasBatch: boolean; hasCoa: boolean } {
+  const lab     = scans.find(s => s.lab)?.lab ?? null;
+  const hasBatch = scans.some(s => s.hasBatch);
+  const hasCoa   = scans.some(s => s.hasCoa);
+  const tier = !hasCoa ? 0 : !lab ? 1 : !hasBatch ? 2 : 3;
+  return { tier, lab, hasBatch, hasCoa };
+}
+
+async function recordAuditResult(
+  slug: string,
+  name: string,
+  outDir: string,
+  scans: ReturnType<typeof scanText>[]
+): Promise<void> {
+  const { tier, lab, hasBatch, hasCoa } = tierFromScans(scans);
+
+  const parts: string[] = [];
+  if (lab)       parts.push(`Lab: ${lab}`);
+  if (hasBatch)  parts.push("batch numbers present");
+  if (!hasCoa)   parts.push("no COA content detected on page or in PDFs");
+  if (!lab && hasCoa) parts.push("no known lab name found in page text or PDFs — may be vendor-branded");
+  const notes = parts.join("; ") || "audited via forensics";
+
+  const status: "complete" | "flagged" = tier >= 2 ? "complete" : "flagged";
+
+  await db.from("vendors").update({
+    coa_audit_status: status,
+    coa_audit_tier:   tier,
+    coa_audit_notes:  notes,
+    coa_audited_at:   new Date().toISOString(),
+  }).eq("slug", slug);
+
+  // Append tier verdict to RESULT.txt
+  fs.appendFileSync(path.join(outDir, "RESULT.txt"), `\n\nAUDIT TIER: T${tier}\nSTATUS: ${status}\nNOTES: ${notes}`);
+
+  log(SCRIPT, `  → DB recorded: T${tier} / ${status} — ${notes}`);
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────
+
 async function main() {
-  const slugFilter = process.argv.slice(2);
+  const slugFilter = process.argv.slice(2).filter(a => !a.startsWith("--"));
+  const dryRun     = process.argv.includes("--dry-run");
 
-  const targets = slugFilter.length > 0
-    ? TARGETS.filter(t => slugFilter.includes(t.slug))
-    : TARGETS;
+  // Build target list: TARGETS config overrides DB values for special login paths
+  const targetOverrides = new Map(TARGETS.map(t => [t.slug, t]));
 
-  if (targets.length === 0) {
-    console.error(`No matching targets. Available: ${TARGETS.map(t => t.slug).join(", ")}`);
-    process.exit(1);
+  // Pull pending vendors from DB queue
+  const { data: queueRows } = await db
+    .from("vendors")
+    .select("slug, name, website, coa_url")
+    .in("status", ["active", "flagged"])
+    .eq("coa_audit_status", "pending")
+    .not("coa_url", "is", null);
+
+  const dbTargets: VendorTarget[] = (queueRows ?? []).map((v: any) => {
+    if (targetOverrides.has(v.slug)) return targetOverrides.get(v.slug)!;
+    const origin = v.website ? new URL(v.website).origin : "";
+    const coaPath = v.coa_url ? new URL(v.coa_url).pathname : "/coas/";
+    return {
+      slug:      v.slug,
+      baseUrl:   origin,
+      loginPath: "/my-account/",
+      coaPaths:  [coaPath, "/coas/", "/coa/", "/lab-results/", "/certificates-of-analysis/"],
+    };
+  });
+
+  // Also include any hardcoded TARGETS not already in DB queue (e.g. re-run specific slugs)
+  const allTargets = slugFilter.length > 0
+    ? [...dbTargets, ...TARGETS].filter((t, i, arr) => slugFilter.includes(t.slug) && arr.findIndex(x => x.slug === t.slug) === i)
+    : dbTargets;
+
+  if (allTargets.length === 0) {
+    log(SCRIPT, "No pending vendors in queue. Run `npm run coa:queue` to check status.");
+    return;
   }
+
+  log(SCRIPT, `Processing ${allTargets.length} vendor(s)${dryRun ? " [DRY RUN — no DB writes]" : ""}…`);
 
   const { default: puppeteerExtra } = await import("puppeteer-extra");
   const { default: StealthPlugin }  = await import("puppeteer-extra-plugin-stealth");
@@ -481,13 +576,31 @@ async function main() {
     ],
   }) as Browser;
 
-  for (const target of targets) {
+  for (const target of allTargets) {
+    const outDir = `/tmp/coa-forensics/${target.slug}`;
     await handleVendor(browser, target);
+
+    if (!dryRun) {
+      // Build text corpus from everything downloaded: page text + PDF/image raw bytes
+      const scans: ReturnType<typeof scanText>[] = [];
+      const pageTextPath = path.join(outDir, "page-text.txt");
+      if (fs.existsSync(pageTextPath)) {
+        scans.push(scanText(fs.readFileSync(pageTextPath, "utf8")));
+      }
+      const files = fs.existsSync(outDir) ? fs.readdirSync(outDir) : [];
+      for (const file of files.filter(f => f.endsWith(".pdf") || f.endsWith(".png") || f.endsWith(".webp"))) {
+        const raw = fs.readFileSync(path.join(outDir, file), "latin1");
+        scans.push(scanText(raw));
+      }
+      const vendorName = (queueRows ?? []).find((v: any) => v.slug === target.slug)?.name ?? target.slug;
+      await recordAuditResult(target.slug, vendorName, outDir, scans);
+    }
+
     await sleep(2000);
   }
 
   await browser.close();
-  log(SCRIPT, "\n=== Done ===");
+  log(SCRIPT, "\n=== Done. Run `npm run coa:queue` to see remaining. ===");
 }
 
 main().catch(err => { console.error("Fatal:", err); process.exit(1); });

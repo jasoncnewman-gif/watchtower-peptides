@@ -33,6 +33,7 @@
     "compute:scores": "tsx --tsconfig scripts/tsconfig.json scripts/compute-scores.ts",
     "coa:queue":      "tsx --tsconfig scripts/tsconfig.json scripts/coa-audit-queue.ts",
     "coa:update":     "tsx --tsconfig scripts/tsconfig.json scripts/coa-audit-update.ts",
+    "coa:audit":      "tsx --tsconfig scripts/tsconfig.json scripts/fetch-coa-forensics.ts",
     "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts",
     "verify:domains": "tsx --tsconfig scripts/tsconfig.json scripts/verify-domains.ts",
     "fix:vendor-urls": "tsx --tsconfig scripts/tsconfig.json scripts/fix-vendor-urls.ts",

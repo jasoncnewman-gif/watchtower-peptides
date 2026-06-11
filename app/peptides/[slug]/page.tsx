@@ -48,6 +48,8 @@ const FDA_CONFIG: Record<string, { label: string; bg: string; text: string }> = 
   'research-only': { label: 'Research Only', bg: '#DBEAFE', text: '#2563EB' },
 }
 
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const { data } = await supabase.from('peptides').select('slug').not('slug', 'is', null)
   return (data ?? []).map(p => ({ slug: p.slug as string }))

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const VERSES = [
   {
@@ -31,7 +32,14 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
           {/* Brand */}
           <div className="max-w-xs">
             <div className="mb-3">
-              <span className="font-semibold text-base" style={{ color: "#FFFFFF" }}>Watchtower Peptides</span>
+              <Link href="/">
+                <Image
+                  src="/images/logo-footer.png"
+                  alt="Watchtower Peptides"
+                  width={200}
+                  height={40}
+                />
+              </Link>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
               Independent research platform. No affiliates. No paid placements. Every score is earned, not bought.
