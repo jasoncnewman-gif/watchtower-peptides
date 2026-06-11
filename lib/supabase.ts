@@ -257,8 +257,7 @@ export interface DbAlert {
 // DB status values ('active','inactive','closed','flagged') don't map 1:1 to
 // the display VendorStatus type. Active vendors are scored; others are flagged.
 function dbStatusToDisplayStatus(dbStatus: DbVendor['status'], score: number | null): VendorStatus {
-  if (dbStatus === 'flagged' || dbStatus === 'closed') return 'not-recommended'
-  if (dbStatus === 'inactive') return 'caution'
+  if (dbStatus === 'flagged' || dbStatus === 'closed' || dbStatus === 'inactive') return 'not-recommended'
   if (score === null) return 'under-review'
   if (score >= 80) return 'recommended'
   if (score >= 55) return 'caution'
