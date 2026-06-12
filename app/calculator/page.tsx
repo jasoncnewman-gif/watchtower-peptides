@@ -26,8 +26,12 @@ function parseRange(str: string): { low: number; high: number; unit: string } | 
 }
 
 function dbToCalcPeptide(db: DbPeptide): CalcPeptide {
-  const range  = db.dosage?.ranges?.[0];
-  const parsed = range?.range ? parseRange(range.range) : null;
+  const range      = db.dosage?.ranges?.[0];
+  const rawRange   = range?.range ?? "";
+  const notes      = range?.notes ?? "";
+  const parsed     = rawRange ? parseRange(rawRange) : null;
+  const perKgDosing = rawRange.includes("/kg");
+  const escalation  = notes.includes("Fixed weekly escalation");
 
   return {
     name:     db.name,
@@ -38,11 +42,13 @@ function dbToCalcPeptide(db: DbPeptide): CalcPeptide {
     timing: [{
       label:     range?.route ?? "Any time of day",
       preferred: true,
-      note:      range?.notes ?? "",
+      note:      notes,
     }],
     durationWeeks: { min: 4, max: 12 },
-    protocolNote:  db.dosage?.disclaimer ?? range?.notes ?? "",
+    protocolNote:  db.dosage?.disclaimer ?? notes ?? "",
     commonVials:   [5, 10],
+    perKgDosing,
+    escalation,
   };
 }
 

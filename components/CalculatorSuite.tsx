@@ -165,6 +165,8 @@ export type CalcPeptide = {
   durationWeeks: { min: number; max: number };
   protocolNote: string;
   commonVials: number[];
+  perKgDosing?: boolean;  // true when DB range was mcg/kg or mg/kg
+  escalation?: boolean;   // true for GLP drugs — fixed ramp, not weight-scaled
 };
 
 type Peptide = CalcPeptide;
@@ -250,23 +252,85 @@ function PeptideSelector({ peptides, value, onChange }: { peptides: Peptide[]; v
 // TOOL 1: DOSAGE PLANNER
 // ─────────────────────────────────────────────────────────────────
 
+function fmtDose(v: number, unit: string): string {
+  if (unit === "mg") {
+    if (v < 1)  return v.toFixed(2);
+    if (v < 10) return Number(v.toFixed(1)).toString();
+    return Math.round(v).toString();
+  }
+  return Math.round(v).toString();
+}
+
+function calcAdj(base: number, wKg: number | null, perKg: boolean | undefined): number {
+  if (!wKg) return base;
+  return perKg ? base * wKg : base * (wKg / 75);
+}
+
 function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseValues: (v: { peptide: string; doseAmount: number; doseUnit: string; durationWeeks: number }) => void }) {
   const [selectedName, setSelectedName] = useState(peptides[0]?.name || "");
-  const [result, setResult] = useState<Peptide | null>(null);
+  const [result, setResult]             = useState<Peptide | null>(null);
+  const [weightInput, setWeightInput]   = useState("");
+  const [useKg, setUseKg]               = useState(false);
 
   const peptide = peptides.find(p => p.name === selectedName);
 
   useEffect(() => { setResult(null); }, [selectedName]);
 
+  const weightKg = useMemo(() => {
+    const v = parseFloat(weightInput);
+    if (!weightInput || isNaN(v) || v <= 0) return null;
+    return useKg ? v : v / 2.2046;
+  }, [weightInput, useKg]);
+
+  const adjLow  = result ? calcAdj(result.doseRange.low,  weightKg, result.perKgDosing) : 0;
+  const adjHigh = result ? calcAdj(result.doseRange.high, weightKg, result.perKgDosing) : 0;
+  const showAdj = weightKg !== null && result !== null && !result.escalation;
+  const dispLow  = showAdj ? adjLow  : (result?.doseRange.low  ?? 0);
+  const dispHigh = showAdj ? adjHigh : (result?.doseRange.high ?? 0);
+  const weightLabel = weightKg
+    ? (useKg ? `${Math.round(weightKg)} kg` : `${Math.round(weightKg * 2.2046)} lbs`)
+    : null;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
       <p style={{ fontSize: 13, color: C.textMuted, margin: 0, lineHeight: 1.6 }}>
-        Research-backed dose ranges drawn from published studies. Timing and protocol notes are for reference only — not medical advice.
+        Research-backed dose ranges drawn from published studies. Enter your body weight for a personalized dose estimate.
       </p>
 
       <div>
         <label style={S.label}>Peptide</label>
         <PeptideSelector peptides={peptides} value={selectedName} onChange={setSelectedName} />
+      </div>
+
+      <div>
+        <label style={S.label}>
+          Body Weight <span style={{ fontWeight: 400, color: C.textMuted }}>(optional)</span>
+        </label>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            type="number"
+            value={weightInput}
+            onChange={e => setWeightInput(e.target.value)}
+            placeholder={useKg ? "e.g. 68" : "e.g. 150"}
+            style={{ ...S.input, flex: 1 }}
+          />
+          <div style={{ display: "flex", borderRadius: 8, border: `1.5px solid ${C.border}`, overflow: "hidden", flexShrink: 0 }}>
+            {([{ label: "lbs", kg: false }, { label: "kg", kg: true }] as const).map(opt => (
+              <button
+                key={opt.label}
+                onClick={() => setUseKg(opt.kg)}
+                style={{ padding: "10px 16px", backgroundColor: useKg === opt.kg ? C.accent : C.bg, color: useKg === opt.kg ? "#fff" : C.textMuted, border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {weightKg && (
+          <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4 }}>
+            {useKg ? `${Math.round(weightKg * 2.2046)} lbs` : `${weightKg.toFixed(1)} kg`}
+          </div>
+        )}
       </div>
 
       <button onClick={() => peptide && setResult(peptide)} disabled={!peptide} style={{ ...S.btn, opacity: peptide ? 1 : 0.5 }}>
@@ -275,19 +339,39 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
 
       {result && (
         <div style={{ ...S.surface, display: "flex", flexDirection: "column", gap: 20 }}>
-          <div className="grid grid-cols-3 gap-3">
-            <div style={S.statBox()}>
-              <div style={S.statVal()}>{result.doseRange.low}</div>
-              <div style={S.statLabel()}>{result.doseRange.unit} · Low</div>
+
+          {/* Dose stat boxes */}
+          <div>
+            {showAdj && (
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
+                Estimated dose for {weightLabel}
+              </div>
+            )}
+            {!showAdj && weightKg && result.escalation && (
+              <div style={{ backgroundColor: C.accentLight, border: `1px solid #BEE3F8`, borderRadius: 8, padding: "10px 14px", marginBottom: 10, fontSize: 12, color: C.accent, lineHeight: 1.5 }}>
+                <strong>Fixed escalation protocol</strong> — the weekly ramp schedule is the same regardless of body weight. Your starting dose is always {fmtDose(result.doseRange.low, result.doseRange.unit)} {result.doseRange.unit}. Body weight may influence your final maintenance dose tolerance.
+              </div>
+            )}
+            <div className="grid grid-cols-3 gap-3">
+              <div style={S.statBox()}>
+                <div style={S.statVal()}>{fmtDose(dispLow, result.doseRange.unit)}</div>
+                <div style={S.statLabel()}>{result.doseRange.unit} · {showAdj ? "Low" : "Low"}</div>
+              </div>
+              <div style={S.statBox()}>
+                <div style={S.statVal()}>{fmtDose(dispHigh, result.doseRange.unit)}</div>
+                <div style={S.statLabel()}>{result.doseRange.unit} · High</div>
+              </div>
+              <div style={S.statBox(C.success, C.successLight, "#9AE6B4")}>
+                <div style={S.statVal(C.success)}>{result.durationWeeks.min}–{result.durationWeeks.max}</div>
+                <div style={S.statLabel(C.success)}>Weeks</div>
+              </div>
             </div>
-            <div style={S.statBox()}>
-              <div style={S.statVal()}>{result.doseRange.high}</div>
-              <div style={S.statLabel()}>{result.doseRange.unit} · High</div>
-            </div>
-            <div style={S.statBox(C.success, C.successLight, "#9AE6B4")}>
-              <div style={S.statVal(C.success)}>{result.durationWeeks.min}–{result.durationWeeks.max}</div>
-              <div style={S.statLabel(C.success)}>Weeks</div>
-            </div>
+            {showAdj && (
+              <div style={{ fontSize: 11, color: C.textMuted, marginTop: 6 }}>
+                Reference range (75 kg / 165 lbs): {result.doseRange.low}–{result.doseRange.high} {result.doseRange.unit}
+                {result.perKgDosing && " · weight-based dosing"}
+              </div>
+            )}
           </div>
 
           <div>
@@ -320,10 +404,10 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
           </div>
 
           <button
-            onClick={() => onUseValues({ peptide: result.name, doseAmount: result.doseRange.low, doseUnit: result.doseRange.unit, durationWeeks: result.durationWeeks.min })}
+            onClick={() => onUseValues({ peptide: result.name, doseAmount: showAdj ? adjLow : result.doseRange.low, doseUnit: result.doseRange.unit, durationWeeks: result.durationWeeks.min })}
             style={S.btn}
           >
-            Use {result.doseRange.low} {result.doseRange.unit} in Order Calculator →
+            Use {fmtDose(showAdj ? adjLow : result.doseRange.low, result.doseRange.unit)} {result.doseRange.unit} in Order Calculator →
           </button>
         </div>
       )}
