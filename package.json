@@ -31,9 +31,9 @@
     "scrape:coas": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-vendor-coas.ts",
     "compute:prices": "tsx --tsconfig scripts/tsconfig.json scripts/compute-prices.ts",
     "compute:scores": "tsx --tsconfig scripts/tsconfig.json scripts/compute-scores.ts",
-    "coa:queue":      "tsx --tsconfig scripts/tsconfig.json scripts/coa-audit-queue.ts",
-    "coa:update":     "tsx --tsconfig scripts/tsconfig.json scripts/coa-audit-update.ts",
-    "coa:audit":      "tsx --tsconfig scripts/tsconfig.json scripts/fetch-coa-forensics.ts",
+    "coa:queue": "tsx --tsconfig scripts/tsconfig.json scripts/coa-audit-queue.ts",
+    "coa:update": "tsx --tsconfig scripts/tsconfig.json scripts/coa-audit-update.ts",
+    "coa:audit": "tsx --tsconfig scripts/tsconfig.json scripts/fetch-coa-forensics.ts",
     "scrape:all": "tsx --tsconfig scripts/tsconfig.json scripts/run-all.ts",
     "verify:domains": "tsx --tsconfig scripts/tsconfig.json scripts/verify-domains.ts",
     "check:urls": "tsx --tsconfig scripts/tsconfig.json scripts/check-vendor-urls.ts",
@@ -47,7 +47,8 @@
     "@supabase/supabase-js": "^2.106.2",
     "next": "16.2.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "resend": "^6.12.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
