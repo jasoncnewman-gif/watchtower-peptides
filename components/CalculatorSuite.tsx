@@ -155,7 +155,19 @@ const S = {
 // SHARED: PEPTIDE SELECTOR
 // ─────────────────────────────────────────────────────────────────
 
-type Peptide = typeof PLACEHOLDER_PEPTIDES[0];
+export type CalcPeptide = {
+  name: string;
+  slug: string;
+  category: string;
+  doseRange: { low: number; high: number; unit: string };
+  frequency: string;
+  timing: { label: string; preferred: boolean; note: string }[];
+  durationWeeks: { min: number; max: number };
+  protocolNote: string;
+  commonVials: number[];
+};
+
+type Peptide = CalcPeptide;
 
 function PeptideSelector({ peptides, value, onChange }: { peptides: Peptide[]; value: string; onChange: (name: string) => void }) {
   const [search, setSearch] = useState("");
