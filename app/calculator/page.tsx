@@ -25,13 +25,51 @@ function parseRange(str: string): { low: number; high: number; unit: string } | 
   return { low: parseFloat(m[1]), high: parseFloat(m[2]), unit: m[3].toLowerCase() };
 }
 
+function pickRange(ranges: any[]): any {
+  // prefer subcutaneous/intramuscular injection over implant routes
+  const injectable = ranges.find((r: any) =>
+    /injection|subcutaneous|intramuscular|subq/i.test(r.route ?? "") &&
+    !/implant/i.test(r.route ?? "")
+  );
+  return injectable ?? ranges[0];
+}
+
 function dbToCalcPeptide(db: DbPeptide): CalcPeptide {
-  const range      = db.dosage?.ranges?.[0];
-  const rawRange   = range?.range ?? "";
-  const notes      = range?.notes ?? "";
-  const parsed     = rawRange ? parseRange(rawRange) : null;
+  const ranges   = db.dosage?.ranges ?? [];
+  const range    = pickRange(ranges);
+  const rawRange = range?.range ?? "";
+  const notes    = range?.notes ?? "";
+  const parsed   = rawRange ? parseRange(rawRange) : null;
   const perKgDosing = rawRange.includes("/kg");
-  const escalation  = notes.includes("Fixed weekly escalation");
+  const escalation  = notes.includes("Fixed weekly escalation")
+    || (db.dosage as any)?.escalation_protocol === true;
+
+  // structured loading/maintenance phases (e.g. TB-500)
+  let loadingPhase: CalcPeptide["loadingPhase"] | undefined;
+  let maintenancePhase: CalcPeptide["maintenancePhase"] | undefined;
+
+  const lp = (db.dosage as any)?.loading_phase;
+  const mp = (db.dosage as any)?.maintenance_phase;
+
+  if (lp?.range) {
+    const lpParsed = parseRange(lp.range);
+    if (lpParsed) {
+      loadingPhase = {
+        range: lpParsed,
+        frequency: lp.frequency ?? "",
+        durationWeeks: lp.duration_weeks ?? { min: 4, max: 6 },
+      };
+    }
+  }
+  if (mp?.range) {
+    const mpParsed = parseRange(mp.range);
+    if (mpParsed) {
+      maintenancePhase = {
+        range: mpParsed,
+        frequency: mp.frequency ?? "",
+      };
+    }
+  }
 
   return {
     name:     db.name,
@@ -49,6 +87,8 @@ function dbToCalcPeptide(db: DbPeptide): CalcPeptide {
     commonVials:   [5, 10],
     perKgDosing,
     escalation,
+    loadingPhase,
+    maintenancePhase,
   };
 }
 

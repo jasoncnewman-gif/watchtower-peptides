@@ -167,6 +167,15 @@ export type CalcPeptide = {
   commonVials: number[];
   perKgDosing?: boolean;  // true when DB range was mcg/kg or mg/kg
   escalation?: boolean;   // true for GLP drugs — fixed ramp, not weight-scaled
+  loadingPhase?: {
+    range: { low: number; high: number; unit: string };
+    frequency: string;
+    durationWeeks: { min: number; max: number };
+  };
+  maintenancePhase?: {
+    range: { low: number; high: number; unit: string };
+    frequency: string;
+  };
 };
 
 type Peptide = CalcPeptide;
@@ -271,10 +280,11 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
   const [result, setResult]             = useState<Peptide | null>(null);
   const [weightInput, setWeightInput]   = useState("");
   const [useKg, setUseKg]               = useState(false);
+  const [phase, setPhase]               = useState<"loading" | "maintenance">("loading");
 
   const peptide = peptides.find(p => p.name === selectedName);
 
-  useEffect(() => { setResult(null); }, [selectedName]);
+  useEffect(() => { setResult(null); setPhase("loading"); }, [selectedName]);
 
   const weightKg = useMemo(() => {
     const v = parseFloat(weightInput);
@@ -282,11 +292,34 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
     return useKg ? v : v / 2.2046;
   }, [weightInput, useKg]);
 
-  const adjLow  = result ? calcAdj(result.doseRange.low,  weightKg, result.perKgDosing) : 0;
-  const adjHigh = result ? calcAdj(result.doseRange.high, weightKg, result.perKgDosing) : 0;
+  const hasPhases = result?.loadingPhase != null && result?.maintenancePhase != null;
+
+  const activeRange = useMemo(() => {
+    if (!result) return { low: 0, high: 0, unit: "mcg" as string };
+    if (hasPhases && phase === "loading")      return result.loadingPhase!.range;
+    if (hasPhases && phase === "maintenance")  return result.maintenancePhase!.range;
+    return result.doseRange;
+  }, [result, hasPhases, phase]);
+
+  const activeFreq = useMemo(() => {
+    if (!result) return "";
+    if (hasPhases && phase === "loading")     return result.loadingPhase!.frequency;
+    if (hasPhases && phase === "maintenance") return result.maintenancePhase!.frequency;
+    return result.frequency;
+  }, [result, hasPhases, phase]);
+
+  const activeDurationWeeks = useMemo(() => {
+    if (!result) return null;
+    if (hasPhases && phase === "loading")     return result.loadingPhase!.durationWeeks;
+    if (hasPhases && phase === "maintenance") return null; // maintenance is ongoing
+    return result.durationWeeks;
+  }, [result, hasPhases, phase]);
+
+  const adjLow  = calcAdj(activeRange.low,  weightKg, result?.perKgDosing);
+  const adjHigh = calcAdj(activeRange.high, weightKg, result?.perKgDosing);
   const showAdj = weightKg !== null && result !== null && !result.escalation;
-  const dispLow  = showAdj ? adjLow  : (result?.doseRange.low  ?? 0);
-  const dispHigh = showAdj ? adjHigh : (result?.doseRange.high ?? 0);
+  const dispLow  = showAdj ? adjLow  : activeRange.low;
+  const dispHigh = showAdj ? adjHigh : activeRange.high;
   const weightLabel = weightKg
     ? (useKg ? `${Math.round(weightKg)} kg` : `${Math.round(weightKg * 2.2046)} lbs`)
     : null;
@@ -340,6 +373,24 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
       {result && (
         <div style={{ ...S.surface, display: "flex", flexDirection: "column", gap: 20 }}>
 
+          {/* Phase toggle — only shown when peptide has loading + maintenance phases */}
+          {hasPhases && (
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>Protocol Phase</div>
+              <div style={{ display: "flex", borderRadius: 8, border: `1.5px solid ${C.border}`, overflow: "hidden" }}>
+                {(["loading", "maintenance"] as const).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => setPhase(p)}
+                    style={{ flex: 1, padding: "10px 16px", backgroundColor: phase === p ? C.accent : C.bg, color: phase === p ? "#fff" : C.textMuted, border: "none", fontSize: 13, fontWeight: phase === p ? 700 : 500, cursor: "pointer", fontFamily: "inherit", textAlign: "center" }}
+                  >
+                    {p === "loading" ? `Loading (${result.loadingPhase!.durationWeeks.min}–${result.loadingPhase!.durationWeeks.max} wks)` : "Maintenance (ongoing)"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Dose stat boxes */}
           <div>
             {showAdj && (
@@ -354,21 +405,23 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
             )}
             <div className="grid grid-cols-3 gap-3">
               <div style={S.statBox()}>
-                <div style={S.statVal()}>{fmtDose(dispLow, result.doseRange.unit)}</div>
-                <div style={S.statLabel()}>{result.doseRange.unit} · {showAdj ? "Low" : "Low"}</div>
+                <div style={S.statVal()}>{fmtDose(dispLow, activeRange.unit)}</div>
+                <div style={S.statLabel()}>{activeRange.unit} · Low</div>
               </div>
               <div style={S.statBox()}>
-                <div style={S.statVal()}>{fmtDose(dispHigh, result.doseRange.unit)}</div>
-                <div style={S.statLabel()}>{result.doseRange.unit} · High</div>
+                <div style={S.statVal()}>{fmtDose(dispHigh, activeRange.unit)}</div>
+                <div style={S.statLabel()}>{activeRange.unit} · High</div>
               </div>
               <div style={S.statBox(C.success, C.successLight, "#9AE6B4")}>
-                <div style={S.statVal(C.success)}>{result.durationWeeks.min}–{result.durationWeeks.max}</div>
-                <div style={S.statLabel(C.success)}>Weeks</div>
+                {activeDurationWeeks
+                  ? <><div style={S.statVal(C.success)}>{activeDurationWeeks.min}–{activeDurationWeeks.max}</div><div style={S.statLabel(C.success)}>Weeks</div></>
+                  : <><div style={S.statVal(C.success)}>∞</div><div style={S.statLabel(C.success)}>Ongoing</div></>
+                }
               </div>
             </div>
             {showAdj && (
               <div style={{ fontSize: 11, color: C.textMuted, marginTop: 6 }}>
-                Reference range (75 kg / 165 lbs): {result.doseRange.low}–{result.doseRange.high} {result.doseRange.unit}
+                Reference range (75 kg / 165 lbs): {activeRange.low}–{activeRange.high} {activeRange.unit}
                 {result.perKgDosing && " · weight-based dosing"}
               </div>
             )}
@@ -376,7 +429,7 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
 
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Frequency</div>
-            <div style={{ fontSize: 14, color: C.textMid }}>{result.frequency}</div>
+            <div style={{ fontSize: 14, color: C.textMid }}>{activeFreq}</div>
           </div>
 
           <div>
@@ -404,10 +457,10 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
           </div>
 
           <button
-            onClick={() => onUseValues({ peptide: result.name, doseAmount: showAdj ? adjLow : result.doseRange.low, doseUnit: result.doseRange.unit, durationWeeks: result.durationWeeks.min })}
+            onClick={() => onUseValues({ peptide: result.name, doseAmount: showAdj ? adjLow : activeRange.low, doseUnit: activeRange.unit, durationWeeks: activeDurationWeeks?.min ?? result.durationWeeks.min })}
             style={S.btn}
           >
-            Use {fmtDose(showAdj ? adjLow : result.doseRange.low, result.doseRange.unit)} {result.doseRange.unit} in Order Calculator →
+            Use {fmtDose(showAdj ? adjLow : activeRange.low, activeRange.unit)} {activeRange.unit} in Order Calculator →
           </button>
         </div>
       )}
