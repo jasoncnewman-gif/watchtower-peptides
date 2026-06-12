@@ -18,6 +18,9 @@ async function main() {
     { slug: "nextechlabs",     patch: { website: "https://nextechlaboratories.com" } },
     { slug: "healthgevity",    patch: { website: "https://healthgev.com" } },
     { slug: "aavant-research", patch: { website: "https://aavantacr.com" } },
+    { slug: "peptidology",           patch: { website: "https://peptidology.co" } },
+    { slug: "prime-peptides",        patch: { website: "https://primepeptides.co" } },
+    { slug: "felix-chemical-supply", patch: { website: "https://felixchemical.com" } },
   ];
 
   for (const { slug, patch } of updates) {
