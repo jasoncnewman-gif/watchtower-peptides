@@ -5,18 +5,18 @@ import { getPeptides } from "@/lib/supabase";
 import { DbPeptide } from "@/lib/supabase";
 
 const DB_CATEGORY_MAP: Record<string, string> = {
-  healing:        "Healing & Recovery",
-  performance:    "Hormones & Performance",
-  "weight-loss":  "Weight & Metabolic",
-  cognitive:      "Brain & Longevity",
-  immune:         "Immune & Protective",
-  blend:          "Blends",
+  healing:           "Healing & Recovery",
+  hormones:          "Hormones & Performance",
+  metabolic:         "Weight & Metabolic",
+  "brain-longevity": "Brain & Longevity",
+  immune:            "Immune & Protective",
+  blend:             "Blends",
 };
 
 function parseRange(str: string): { low: number; high: number; unit: string } | null {
-  const m = str.match(/(\d+\.?\d*)\s*[-–]\s*(\d+\.?\d*)\s*(mcg|mg)/i);
+  // handles "200–400 mcg", "0.25 mg → 2.4 mg", "500 mcg – 1 mg", "250 mcg"
+  const m = str.match(/(\d+\.?\d*)\s*(?:[-–]|→)\s*(\d+\.?\d*)\s*(mcg|mg)/i);
   if (!m) {
-    // single value like "250 mcg"
     const s = str.match(/(\d+\.?\d*)\s*(mcg|mg)/i);
     if (!s) return null;
     const v = parseFloat(s[1]);
@@ -51,7 +51,7 @@ export default async function CalculatorPage() {
   try {
     const rows = await getPeptides();
     peptides = rows
-      .filter(p => !p.blend_components)   // exclude blends from dosage planner
+      .filter(p => !p.blend_components || p.blend_components.length === 0)
       .map(dbToCalcPeptide)
       .filter(p => p.doseRange.high > 0); // only peptides with actual dosage data
   } catch {
