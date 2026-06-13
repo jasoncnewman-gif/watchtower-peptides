@@ -33,7 +33,7 @@ function tldVariants(website: string): string[] {
 export async function GET(request: Request) {
   // Vercel cron auth — reject calls that aren't from Vercel scheduler
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${process.env.WATCHTOWER_CRON_TOKEN}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
