@@ -281,10 +281,11 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
   const [weightInput, setWeightInput]   = useState("");
   const [useKg, setUseKg]               = useState(false);
   const [phase, setPhase]               = useState<"loading" | "maintenance">("loading");
+  const [customDose, setCustomDose]     = useState("");
 
   const peptide = peptides.find(p => p.name === selectedName);
 
-  useEffect(() => { setResult(null); setPhase("loading"); }, [selectedName]);
+  useEffect(() => { setResult(null); setPhase("loading"); setCustomDose(""); }, [selectedName]);
 
   const weightKg = useMemo(() => {
     const v = parseFloat(weightInput);
@@ -323,6 +324,16 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
   const weightLabel = weightKg
     ? (useKg ? `${Math.round(weightKg)} kg` : `${Math.round(weightKg * 2.2046)} lbs`)
     : null;
+
+  const midpoint    = Math.round((dispLow + dispHigh) / 2);
+  const rawDoseVal  = customDose !== "" ? parseFloat(customDose) : NaN;
+  const doseNum     = !isNaN(rawDoseVal) && rawDoseVal > 0 ? rawDoseVal : midpoint;
+  const doseWarnLow  = !isNaN(rawDoseVal) && rawDoseVal > 0 && rawDoseVal < dispLow;
+  const doseWarnHigh = !isNaN(rawDoseVal) && rawDoseVal > dispHigh;
+  const doseBlocked  = !isNaN(rawDoseVal) && (rawDoseVal <= 0 || rawDoseVal > 10000);
+
+  // Sync editable dose to new midpoint when weight-adjusted range or result changes
+  useEffect(() => { if (result) setCustomDose(String(midpoint)); }, [midpoint, result]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
@@ -366,7 +377,11 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
         )}
       </div>
 
-      <button onClick={() => peptide && setResult(peptide)} disabled={!peptide} style={{ ...S.btn, opacity: peptide ? 1 : 0.5 }}>
+      <button
+        onClick={() => { if (peptide) { setResult(peptide); setCustomDose(String(Math.round((peptide.doseRange.low + peptide.doseRange.high) / 2))); } }}
+        disabled={!peptide}
+        style={{ ...S.btn, opacity: peptide ? 1 : 0.5 }}
+      >
         View Protocol Reference →
       </button>
 
@@ -428,6 +443,28 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
           </div>
 
           <div>
+            <label style={S.label}>Dose to use for calculations</label>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <input
+                type="number"
+                value={customDose}
+                onChange={e => setCustomDose(e.target.value)}
+                placeholder={String(midpoint)}
+                style={{ ...S.input, flex: 1, borderColor: doseBlocked ? "#F87171" : (doseWarnLow || doseWarnHigh) ? "#F59E0B" : C.border }}
+              />
+              <span style={{ fontSize: 13, color: C.textMuted, flexShrink: 0 }}>{activeRange.unit}</span>
+            </div>
+            {doseBlocked && !isNaN(rawDoseVal) && rawDoseVal <= 0 && (
+              <div style={{ fontSize: 11, color: "#DC2626", marginTop: 4 }}>Dose must be greater than 0</div>
+            )}
+            {doseBlocked && rawDoseVal > 10000 && (
+              <div style={{ fontSize: 11, color: "#DC2626", marginTop: 4 }}>Dose exceeds 10,000 {activeRange.unit} — above safe research range</div>
+            )}
+            {doseWarnLow  && <div style={{ fontSize: 11, color: C.warn, marginTop: 4 }}>Below studied range ({fmtDose(dispLow, activeRange.unit)}–{fmtDose(dispHigh, activeRange.unit)} {activeRange.unit})</div>}
+            {doseWarnHigh && <div style={{ fontSize: 11, color: C.warn, marginTop: 4 }}>Above studied range ({fmtDose(dispLow, activeRange.unit)}–{fmtDose(dispHigh, activeRange.unit)} {activeRange.unit})</div>}
+          </div>
+
+          <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Frequency</div>
             <div style={{ fontSize: 14, color: C.textMid }}>{activeFreq}</div>
           </div>
@@ -457,10 +494,11 @@ function DosagePlanner({ peptides, onUseValues }: { peptides: Peptide[]; onUseVa
           </div>
 
           <button
-            onClick={() => onUseValues({ peptide: result.name, doseAmount: showAdj ? adjLow : activeRange.low, doseUnit: activeRange.unit, durationWeeks: activeDurationWeeks?.min ?? result.durationWeeks.min })}
-            style={S.btn}
+            onClick={() => onUseValues({ peptide: result.name, doseAmount: doseNum, doseUnit: activeRange.unit, durationWeeks: activeDurationWeeks?.min ?? result.durationWeeks.min })}
+            disabled={doseBlocked}
+            style={{ ...S.btn, opacity: doseBlocked ? 0.5 : 1 }}
           >
-            Use {fmtDose(showAdj ? adjLow : activeRange.low, activeRange.unit)} {activeRange.unit} in Order Calculator →
+            Use {fmtDose(doseNum, activeRange.unit)} {activeRange.unit} in Order Calculator →
           </button>
         </div>
       )}
@@ -695,14 +733,22 @@ function ReconstitutionCalculator({ prefill }: { prefill: ReconPrefill | null })
               <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 12 }}>
                 Draw Volume for {result.dose} {result.targetUnit} — {syringe.label} Syringe
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                <div style={S.statBox(C.success, C.successLight, "#9AE6B4")}>
-                  <div style={S.statVal(C.success)}>{result.mlToDraw.toFixed(3)}</div>
-                  <div style={S.statLabel(C.success)}>mL to draw</div>
+              <div style={{ backgroundColor: C.accentLight, border: `1px solid #BEE3F8`, borderRadius: 10, padding: "16px 20px", marginBottom: 12 }}>
+                <div style={{ fontSize: 15, fontWeight: 600, color: C.textMid, lineHeight: 1.4 }}>
+                  Draw to the{" "}
+                  <span style={{ fontSize: 28, fontWeight: 800, color: C.accent }}>{displayUnits.toFixed(1)}</span>
+                  {" "}unit mark on a {syringe.label} insulin syringe
                 </div>
+                <div style={{ fontSize: 13, color: C.textMuted, marginTop: 4 }}>({result.mlToDraw.toFixed(3)} mL)</div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                 <div style={S.statBox()}>
                   <div style={S.statVal()}>{displayUnits.toFixed(1)}</div>
                   <div style={S.statLabel()}>{syringe.label} units</div>
+                </div>
+                <div style={S.statBox(C.success, C.successLight, "#9AE6B4")}>
+                  <div style={S.statVal(C.success)}>{result.mlToDraw.toFixed(3)}</div>
+                  <div style={S.statLabel(C.success)}>mL to draw</div>
                 </div>
               </div>
               <div style={{ backgroundColor: C.surface, borderRadius: 8, padding: "12px 16px", fontSize: 12, color: C.textMuted }}>
