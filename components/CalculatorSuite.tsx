@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 // ─────────────────────────────────────────────────────────────────
 // PLACEHOLDER DATA
@@ -820,9 +820,16 @@ export default function CalculatorSuite({ peptides = PLACEHOLDER_PEPTIDES }: { p
   const [activeTab,    setActiveTab]    = useState("dosage");
   const [orderPrefill, setOrderPrefill] = useState<OrderPrefill | null>(null);
   const [reconPrefill, setReconPrefill] = useState<ReconPrefill | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleDosageUseValues = (vals: OrderPrefill) => { setOrderPrefill(vals); setActiveTab("order"); };
-  const handleOrderUseValues  = (vals: ReconPrefill & { peptide: string }) => { setReconPrefill(vals); setActiveTab("reconstitution"); };
+  const scrollToCard = () => {
+    if (!cardRef.current) return;
+    const top = cardRef.current.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
+  const handleDosageUseValues = (vals: OrderPrefill) => { setOrderPrefill(vals); setActiveTab("order"); setTimeout(scrollToCard, 0); };
+  const handleOrderUseValues  = (vals: ReconPrefill & { peptide: string }) => { setReconPrefill(vals); setActiveTab("reconstitution"); setTimeout(scrollToCard, 0); };
 
   return (
     <div style={{ fontFamily: "'DM Sans', 'Inter', system-ui, sans-serif", color: C.text }}>
@@ -849,7 +856,7 @@ export default function CalculatorSuite({ peptides = PLACEHOLDER_PEPTIDES }: { p
           ))}
         </div>
 
-        <div style={S.card}>
+        <div ref={cardRef} style={S.card}>
           {activeTab === "order" && orderPrefill && (
             <div style={{ backgroundColor: C.successLight, border: `1px solid #9AE6B4`, borderRadius: 8, padding: "10px 14px", marginBottom: 20, fontSize: 12, color: C.success, fontWeight: 500 }}>
               ✓ Pre-filled from Dosage Planner — {orderPrefill.peptide}, {orderPrefill.doseAmount} {orderPrefill.doseUnit}
