@@ -49,6 +49,8 @@ export default async function PeptidesPage() {
     category: (p.category as string | null) ?? null,
   }))
 
+  const visiblePeptides = peptides.filter(p => p.vendorCount > 0)
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FFFFFF', color: '#1D1D1F' }}>
       <Nav />
@@ -78,7 +80,7 @@ export default async function PeptidesPage() {
 
         <section className="px-6 pb-24" style={{ backgroundColor: '#F5F5F7' }}>
           <div className="max-w-6xl mx-auto pt-8">
-            <PeptideLibraryClient peptides={peptides} />
+            <PeptideLibraryClient peptides={visiblePeptides} />
           </div>
         </section>
       </div>

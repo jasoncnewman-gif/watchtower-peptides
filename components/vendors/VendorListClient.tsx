@@ -39,6 +39,13 @@ function scoreColor(score: number) {
   return '#DC2626'
 }
 
+function firstTwoSentences(text: string | null | undefined): string {
+  if (!text) return ''
+  const sentences = text.match(/[^.!?]*[.!?]+/g)
+  if (!sentences || sentences.length <= 2) return text
+  return sentences.slice(0, 2).join('').trim()
+}
+
 export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
   const [query, setQuery]       = useState('')
   const [tierFilter, setTier]   = useState('')
@@ -152,8 +159,11 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
                 </div>
 
                 {/* Verdict */}
-                <p className="text-sm mt-3 line-clamp-2 leading-relaxed" style={{ color: '#6E6E73' }}>
-                  {vendor.verdict}
+                <p className="text-sm mt-3 leading-relaxed" style={{ color: '#6E6E73' }}>
+                  {firstTwoSentences(vendor.verdict)}
+                  {vendor.verdict && vendor.verdict.length > firstTwoSentences(vendor.verdict).length && (
+                    <>{' '}<span style={{ color: '#186784', fontWeight: 600 }}>Read full review →</span></>
+                  )}
                 </p>
 
                 {/* Score mini-bars (4 sub-scores, community_reputation excluded) */}
