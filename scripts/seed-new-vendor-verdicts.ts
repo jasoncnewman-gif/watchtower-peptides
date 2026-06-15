@@ -82,7 +82,7 @@ const VERDICTS: Record<string, string> = {
     "Perfect Peptides advertises third-party lab testing and COAs but no testing lab is publicly named in any accessible source. The site is Cloudflare-protected and could not be directly scraped. Score of 5 reflects near-zero verifiable data — not a verdict on actual product quality. Once site access is possible, this will be updated. Do not treat the low score as confirmation of poor quality; it reflects a research gap, not a documented failure.",
 
   "maxx-research-supply":
-    "Maxx Research Supply (maxxresearchsupply.com) could not be accessed due to Cloudflare protection, is not indexed in public search, and has no presence in third-party review databases. No products, no prices, and no documentation of any kind are verifiable. Score of 5 reflects no data, not confirmed problems. We recommend waiting for more information before using this vendor.",
+    "Maxx Research Supply has no publicly verifiable information — no product catalog, pricing, lab testing, or company documentation is accessible through any source. The score of 5 reflects a data gap, not confirmed problems. We recommend waiting for more information before considering this vendor.",
 };
 
 async function main() {
