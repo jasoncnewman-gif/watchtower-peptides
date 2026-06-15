@@ -52,8 +52,9 @@ async function main() {
   await db.from("vendors").update({
     coa_url: "https://www.corepeptides.com/peptides/",
     has_coa: true,
+    last_reviewed: new Date().toISOString().slice(0, 10),
   }).eq("slug", "core-peptides");
-  console.log("Updated coa_url");
+  console.log("Updated coa_url, has_coa, last_reviewed");
 }
 
 main().catch(console.error);

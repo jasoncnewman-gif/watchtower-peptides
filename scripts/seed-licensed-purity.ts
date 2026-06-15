@@ -48,8 +48,7 @@ async function main() {
   const avg = (ROWS.reduce((s, r) => s + r.purity, 0) / ROWS.length).toFixed(2);
   console.log(`Inserted ${inserts.length} rows. Avg purity: ${avg}%`);
 
-  // Also update transparency: Dihexa COA confirms Ethos Analytics as a second lab
-  // has_lab_disclosure already true — no change needed to tier
+  await db.from("vendors").update({ last_reviewed: new Date().toISOString().slice(0, 10) }).eq("slug", "licensed-peptides");
   console.log("Done.");
 }
 

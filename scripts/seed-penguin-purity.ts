@@ -57,8 +57,8 @@ async function main() {
   console.log("Updated has_lab_disclosure = true");
 
   // Fix coa_url (old one 404s)
-  await db.from("vendors").update({ coa_url: "https://penguinpeptides.com/lab-results/", has_coa: true }).eq("slug", "penguin-peptides");
-  console.log("Updated coa_url and has_coa");
+  await db.from("vendors").update({ coa_url: "https://penguinpeptides.com/lab-results/", has_coa: true, last_reviewed: new Date().toISOString().slice(0, 10) }).eq("slug", "penguin-peptides");
+  console.log("Updated coa_url, has_coa, last_reviewed");
 }
 
 main().catch(console.error);

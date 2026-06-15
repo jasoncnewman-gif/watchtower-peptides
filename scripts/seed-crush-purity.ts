@@ -82,6 +82,8 @@ async function main() {
   const { error } = await db.from("lab_tests").insert(inserts);
   if (error) { console.error("Insert error:", error.message); return; }
   console.log(`Inserted ${inserts.length} rows.`);
+
+  await db.from("vendors").update({ last_reviewed: new Date().toISOString().slice(0, 10) }).eq("slug", "crush-research");
 }
 
 main().catch(console.error);

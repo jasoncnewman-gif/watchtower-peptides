@@ -43,8 +43,8 @@ async function main() {
   if (error) { console.error(error); process.exit(1); }
   console.log(`Inserted ${rows.length} rows.`);
 
-  // Also update has_coa and batch_number flag
-  await db.from("vendors").update({ has_coa: true }).eq("slug", "biotech-peptides");
+  // Also update has_coa, batch_number flag, and last_reviewed
+  await db.from("vendors").update({ has_coa: true, last_reviewed: new Date().toISOString().slice(0, 10) }).eq("slug", "biotech-peptides");
   const { data: vt } = await db.from("vendor_transparency").select("has_batch_numbers").eq("vendor_id", vendor.id).maybeSingle();
   if (vt && !vt.has_batch_numbers) {
     await db.from("vendor_transparency").update({ has_batch_numbers: true }).eq("vendor_id", vendor.id);
