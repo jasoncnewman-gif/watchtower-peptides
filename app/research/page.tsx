@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/research' },
 }
 
-export const revalidate = 3600
+export const revalidate = 0
 
 const PEPTIDE_COLORS: Record<string, string> = {
   'BPC-157':          '#186784',
