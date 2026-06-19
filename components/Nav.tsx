@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/vendors", label: "Vendor Reviews" },
   { href: "/peptides", label: "Peptide Library" },
+  { href: "/research", label: "Research" },
   { href: "/calculator", label: "Tools" },
   { href: "/about", label: "Methodology" },
 ];

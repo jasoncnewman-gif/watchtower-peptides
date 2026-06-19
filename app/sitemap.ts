@@ -6,16 +6,18 @@ export const revalidate = 86400
 const BASE = 'https://www.watchtowerpeptides.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [{ data: vendors }, { data: peptides }] = await Promise.all([
+  const [{ data: vendors }, { data: peptides }, { data: articles }] = await Promise.all([
     supabase.from('vendors').select('slug, updated_at').in('status', ['active', 'flagged']),
     supabase.from('peptides').select('slug, updated_at'),
+    supabase.from('research_articles').select('slug, updated_at').eq('status', 'published'),
   ])
 
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE,              lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
-    { url: `${BASE}/vendors`, lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE}/peptides`,lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE}/about`,   lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: BASE,               lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${BASE}/vendors`,  lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE}/peptides`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/research`, lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE}/about`,    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE}/calculator`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.5 },
     { url: `${BASE}/disclaimer`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE}/privacy`,    lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
@@ -36,5 +38,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...vendorPages, ...peptidePages]
+  const articlePages: MetadataRoute.Sitemap = (articles ?? []).map(a => ({
+    url: `${BASE}/research/${a.slug}`,
+    lastModified: a.updated_at ? new Date(a.updated_at) : new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...vendorPages, ...peptidePages, ...articlePages]
 }
