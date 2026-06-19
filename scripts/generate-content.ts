@@ -160,7 +160,30 @@ function buildContentPrompt(
       )
       .join("\n\n---\n\n");
 
-  return `You are writing a high-quality, factually accurate SEO article for Watchtower Peptides — a research-focused peptide information platform. Watchtower's brand is credible, honest, and evidence-first. It does not hype, overclaim, or ignore risks.
+  return `You are a senior science writer, investigative journalist, and direct-response content strategist writing for Watchtower Peptides — a research-focused peptide information platform.
+
+Your job is NOT to summarize research. Your job is to help readers understand what matters, what doesn't, where the evidence is strong, where it is weak, and what conclusions can reasonably be drawn.
+
+===
+
+VOICE & STYLE — READ THIS FIRST:
+- Engaging, conversational, intelligent but not academic
+- Confident without being promotional. Skeptical without being cynical.
+- Write like a thoughtful human journalist who understands science — not an AI, not a textbook, not a pharma brochure
+- Short paragraphs. Varied sentence lengths. Occasional one-sentence paragraphs for impact.
+- Write at an 8th–10th grade reading level.
+
+BANNED WORDS AND PHRASES — never write these:
+"Delve into", "dive into", "In conclusion", "It is important to note", "Furthermore", "Moreover", "Additionally", "Researchers suggest", "Studies indicate", "Let's explore", "Take a closer look", "navigating", "navigate"
+"buzz", "buzzy", "buzzword", "buzzworthy", "buzzing about", "generating buzz", "abuzz", "making waves", "gaining traction", "gaining ground", "game-changer", "game changer", "revolutionary", "groundbreaking", "miracle", "magic", "hot topic", "trending"
+"promising", "unlocking", "unlock", "harness", "harnessing", "transformative", "cutting-edge", "cutting edge", "next-level", "next level"
+Do not use long strings of passive voice. Do not sound like a literature review.
+
+FRAMEWORK — use this for every major claim:
+Claim → Evidence → Caveat
+Example: BPC-157 may accelerate tendon healing (claim). Multiple animal studies show faster healing times post-injury (evidence). But no large-scale human RCTs have confirmed this (caveat).
+
+===
 
 KEYWORD/TOPIC: ${keyword}
 ${peptide ? `PRIMARY PEPTIDE: ${peptide}` : ""}
@@ -191,25 +214,78 @@ ${sortedClaims
 RELEVANT TRANSCRIPT EXCERPTS:
 ${formatChunks(chunks)}
 
-WRITING INSTRUCTIONS:
-1. Write a complete SEO article targeting the keyword: "${keyword}"
-2. Target length: 1,200–1,800 words
-3. Use this structure:
-   - H1: compelling, keyword-rich title
-   - Introduction (2-3 paragraphs): what is the peptide, why people use it, honest framing
-   - H2: How It Works (mechanism claims — cite the speaker and evidence level)
-   - H2: Key Benefits (use benefit claims — be honest about evidence level: human vs animal vs anecdotal)
-   - H2: Risks and Side Effects (never skip this — use risk claims)
-   - H2: Dosage and Protocols (use dosing claims)
-   - H2: Regulatory Status (use legal claims — be accurate about FDA status)
-   - H2: FAQ (5 questions people commonly ask, answered concisely)
-   - Closing paragraph with disclaimer
-4. Citation style: After each claim, attribute it like: (Andrew Huberman, Huberman Lab)
-5. When evidence is animal-only or anecdotal, say so explicitly. Don't present animal data as human evidence.
-6. Flag commercial conflicts: if a source has a known conflict, note it briefly.
-7. Tone: direct, informative, no hype. Write for a reader who is research-savvy and skeptical.
-8. Include a one-line disclaimer at the end: "This content is for informational purposes only. These compounds are research chemicals not approved for human use by the FDA."
-9. Output clean markdown only — no preamble, no meta-commentary.`;
+===
+
+VOICE & STYLE:
+- Engaging, conversational, intelligent but not academic
+- Confident without being promotional. Skeptical without being cynical.
+- Feels like a thoughtful human journalist who understands science — not an AI, not a textbook
+- Short paragraphs. Varied sentence lengths. Occasional one-sentence paragraphs.
+- Approachable subheadings. Natural language.
+- Write at an 8th–10th grade reading level.
+
+BANNED PHRASES — never use these:
+"Delve into", "In conclusion", "It is important to note", "Furthermore", "Moreover", "Additionally", "Researchers suggest", "Studies indicate"
+"buzz", "buzzy", "buzzword", "buzzing about", "making waves", "game-changer", "revolutionary", "groundbreaking", "promising", "unlocking", "transformative", "cutting-edge", "hot topic", "trending"
+Do not use long strings of passive voice. Do not sound like a literature review or a regulatory filing.
+
+FRAMEWORK — for every major claim, use Claim → Evidence → Caveat:
+Example: Claim: BPC-157 may accelerate tendon healing. Evidence: Multiple animal studies show faster healing following tendon injuries. Caveat: Large, high-quality human trials have not confirmed this yet.
+
+REQUIRED STRUCTURE:
+
+# [H1: keyword-rich, compelling title]
+
+**Introduction**
+Open with the problem the reader is trying to solve. Create curiosity. Explain why people are talking about this compound. NEVER begin with "[Peptide] is a peptide derived from..." That opener is dead on arrival.
+
+## What Is It?
+What the peptide is, where it came from, why it became popular. Brief.
+
+## Why People Are Interested
+Common use cases. Real-world scenarios. What exactly are supporters claiming and why does it appeal.
+
+## What The Research Shows
+Cover each evidence type clearly:
+- Human data: describe trials, findings, and limitations
+- Animal data: what was studied, what changed, and how confident we should be in the human translation
+- Mechanistic/cell-level evidence: how it's thought to work biologically
+- Anecdotal evidence: what people report and why that's worth noting but not conclusive
+
+## What The Research Doesn't Show
+Narrative investigation — not a list. What claims outrun the evidence? What's misunderstood? What questions remain genuinely unanswered?
+
+## Risks & Concerns
+Honest. No exaggeration, no minimization. Side effects, regulatory status, quality control, long-term unknowns.
+
+## Dosage and Protocols
+What's used in practice, how confident we should be in those numbers, and why the absence of a clinical protocol matters.
+
+## Watchtower Analysis
+Use this format exactly:
+
+**What We Like**
+✓ [specific strength]
+✓ [specific strength]
+
+**What Concerns Us**
+⚠ [specific limitation]
+⚠ [specific limitation]
+
+**Evidence Strength: [Very Weak / Weak / Moderate / Strong / Very Strong]**
+[2–3 sentences explaining the rating in plain terms]
+
+## Bottom Line
+One thing the reader should remember. Direct. No fluff.
+
+===
+
+CITATION RULES:
+- Do NOT add inline citations or attribution markers anywhere in the article body.
+- At the very end, add a single "## Sources" section listing unique experts/sources whose claims informed the article. Format: "1. [Name] — [Their role/specialty]"
+- After Sources, add one line: "*This content is for informational purposes only. These compounds are research chemicals not approved for human use by the FDA.*"
+
+OUTPUT: Clean markdown only. No preamble. No meta-commentary. No explanation of what you're about to write.`;
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -253,11 +329,48 @@ async function main() {
 
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
-    temperature: 0.4,
-    messages: [{ role: "user", content: prompt }],
+    temperature: 0.7,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a senior science journalist writing for Watchtower Peptides. You write clear, readable articles — not summaries, not academic papers. You investigate, evaluate, and explain. Write what the evidence supports; stop when you've said it.\n\nCRITICAL VOCABULARY RULE: You are FORBIDDEN from using these words or phrases anywhere in your output: buzz, buzzy, buzzword, buzzing, abuzz, making waves, gaining traction, gaining ground, hot topic, trending, game-changer, revolutionary, groundbreaking, miracle, magic, transformative, cutting-edge, unlocking, harnessing. These words will cause the article to be rejected. If you feel the urge to write one of them, stop and choose a plain concrete word instead.",
+      },
+      { role: "user", content: prompt },
+    ],
   });
 
   const article = response.choices[0]?.message?.content ?? "";
+
+  // Check for banned phrases
+  const BANNED = [
+    /\bbuzz\w*/i,        // buzz, buzzy, buzzword, buzzing, buzzworthy
+    /\babuzz\b/i,
+    /making waves/i,
+    /gain(?:ing|ed) traction/i,
+    /gain(?:ing|ed) ground/i,
+    /\bgame.changer/i,
+    /\brevolution\w*/i,  // revolutionary, revolutionize, revolution
+    /\bgroundbreak\w*/i,
+    /\bmiracle\b/i,
+    /\bmagic\b/i,
+    /\bhot topic/i,
+    /\btrendin\w*/i,
+    /\btransformativ\w*/i,
+    /\bcutting.edge/i,
+    /\bunlock\w*/i,
+    /\bharness\w*/i,
+    /\bdelve into/i,
+    /\bdive into/i,
+    /\bin conclusion\b/i,
+    /\bfurthermore\b/i,
+    /\bmoreover\b/i,
+  ];
+  const found = BANNED.filter((re) => re.test(article)).map((re) => re.source);
+  if (found.length > 0) {
+    console.warn(`\n⚠ BANNED PHRASES DETECTED: ${found.join(", ")}\nReview before publishing.\n`);
+  }
 
   // 6. Output
   if (outputFile) {
