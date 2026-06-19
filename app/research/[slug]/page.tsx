@@ -6,7 +6,7 @@ import Footer from '@/components/Footer'
 import ArticleBody from '@/components/research/ArticleBody'
 import { supabase } from '@/lib/supabase'
 
-export const revalidate = 3600
+export const revalidate = 0
 
 interface Props {
   params: Promise<{ slug: string }>
