@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { Resend } from "resend";
 
 const TIMEOUT_MS   = 10_000;
 const TLD_VARIANTS = [".com", ".co", ".net", ".org", ".io", ".is", ".us", ".shop"];
@@ -70,7 +69,6 @@ export async function GET(request: Request) {
   }
 
   // Send alert email
-  const resend = new Resend(process.env.RESEND_API_KEY);
   const rows = dead.map(d => `
     <tr>
       <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-weight:600">${d.name}</td>
@@ -78,11 +76,17 @@ export async function GET(request: Request) {
       <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:${d.suggestion ? "#276749" : "#92400e"};font-size:13px">${d.suggestion ? `Try: ${d.suggestion}` : "No variant found"}</td>
     </tr>`).join("");
 
-  await resend.emails.send({
-    from: FROM_EMAIL,
-    to:   ALERT_EMAIL,
-    subject: `[Watchtower] ${dead.length} dead vendor URL${dead.length > 1 ? "s" : ""} detected`,
-    html: `
+  await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": process.env.BREVO_API_KEY!,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "Watchtower Alerts", email: FROM_EMAIL },
+      to: [{ email: ALERT_EMAIL }],
+      subject: `[Watchtower] ${dead.length} dead vendor URL${dead.length > 1 ? "s" : ""} detected`,
+      htmlContent: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
         <h2 style="color:#1a1a1a;margin-bottom:4px">Vendor URL Alert</h2>
         <p style="color:#6b7280;margin-top:0">${dead.length} vendor site${dead.length > 1 ? "s" : ""} failed health check on ${new Date().toUTCString()}</p>
@@ -100,6 +104,7 @@ export async function GET(request: Request) {
           Fix: update the vendor's website field in Supabase, then run <code>npm run check:urls</code> to verify.
         </p>
       </div>`,
+    }),
   });
 
   return NextResponse.json({ ok: false, checked: vendors.length, dead: dead.length, alerted: true });
