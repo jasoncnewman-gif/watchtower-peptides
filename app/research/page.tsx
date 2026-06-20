@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { supabase } from '@/lib/supabase'
@@ -25,17 +26,27 @@ export default async function ResearchPage() {
 
       <div className="pt-20">
         {/* Hero */}
-        <section style={{ backgroundColor: '#1D1D1F', minHeight: '280px' }}>
-          <div className="max-w-4xl mx-auto px-6 py-24 text-center">
-            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: '#5BA4C4' }}>
-              Research
-            </p>
-            <h1 className="text-5xl font-bold mb-4" style={{ color: '#FFFFFF' }}>
-              Peptide Research
-            </h1>
-            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
-              Evidence-based analysis sourced from expert transcripts, clinical literature, and primary research. Every claim attributed and evidence-graded.
-            </p>
+        <section className="relative" style={{ minHeight: '320px' }}>
+          <Image
+            src="/images/research-hero.png"
+            alt="Peptide Research"
+            fill
+            priority
+            style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.65) 100%)' }} />
+          <div className="relative z-10 px-6 py-24 text-center">
+            <div className="max-w-3xl mx-auto">
+              <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: '#5BA4C4' }}>
+                Research
+              </p>
+              <h1 className="text-5xl font-bold mb-4" style={{ color: '#FFFFFF' }}>
+                Peptide Research
+              </h1>
+              <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Evidence-based analysis sourced from expert transcripts, clinical literature, and primary research. Every claim attributed and evidence-graded.
+              </p>
+            </div>
           </div>
         </section>
 
