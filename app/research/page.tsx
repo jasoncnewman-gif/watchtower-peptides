@@ -26,17 +26,18 @@ export default async function ResearchPage() {
 
       <div className="pt-20">
         {/* Hero */}
-        <section className="relative" style={{ minHeight: '320px' }}>
+        <section className="relative">
           <Image
             src="/images/research-hero.png"
             alt="Peptide Research"
-            fill
+            width={1774}
+            height={887}
             priority
-            style={{ objectFit: 'cover', objectPosition: 'center 40%' }}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.65) 100%)' }} />
-          <div className="relative z-10 px-6 py-24 text-center">
-            <div className="max-w-3xl mx-auto">
+          <div className="absolute inset-0 flex items-center justify-center px-6">
+            <div className="text-center max-w-3xl">
               <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: '#5BA4C4' }}>
                 Research
               </p>
