@@ -50,7 +50,7 @@ export type Vendor = {
   fda_warning?: boolean;
   fda_warning_date?: string;
   fda_notes?: string;
-  reddit_sentiment?: "positive" | "mixed" | "negative";
+  reddit_sentiment?: "positive" | "neutral" | "mixed" | "negative";
   positive_review_summary?: string;
   negative_review_summary?: string;
   review_1?: string;

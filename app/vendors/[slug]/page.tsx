@@ -158,6 +158,14 @@ export default async function VendorDetailPage({
     .limit(1)
     .maybeSingle();
 
+  const { data: sentimentLogs } = await supabase
+    .from("vendor_sentiment_log")
+    .select("sentiment, summary, scraped_at")
+    .eq("vendor_id", vendorRow.id)
+    .eq("status", "approved")
+    .order("scraped_at", { ascending: false })
+    .limit(5);
+
   const vendor = dbVendorToVendor(vendorRow as DbVendor, (peptideRows ?? []) as DbVendorPeptide[]);
   const status = STATUS_CONFIG[vendor.status];
   const color = scoreColor(vendor.overall_score);
@@ -358,6 +366,31 @@ export default async function VendorDetailPage({
                     <span className="font-medium">PayPal accepted</span>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Community Sentiment */}
+          {sentimentLogs && sentimentLogs.length > 0 && (
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>Community Sentiment</h2>
+              <div className="flex flex-col gap-4">
+                {sentimentLogs.map((log, i) => {
+                  const sentColor = log.sentiment === "positive" ? "#16A34A" : log.sentiment === "negative" ? "#DC2626" : "#D97706";
+                  const sentBg   = log.sentiment === "positive" ? "#DCFCE7"  : log.sentiment === "negative" ? "#FEE2E2"  : "#FEF3C7";
+                  const dateStr  = new Date(log.scraped_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                  return (
+                    <div key={i} style={{ borderTop: i > 0 ? "1px solid #E5E5E7" : "none", paddingTop: i > 0 ? "1rem" : 0 }}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: sentBg, color: sentColor }}>
+                          {log.sentiment === "insufficient_data" ? "Insufficient Data" : log.sentiment!.charAt(0).toUpperCase() + log.sentiment!.slice(1)}
+                        </span>
+                        <span className="text-xs" style={{ color: "#6E6E73" }}>{dateStr}</span>
+                      </div>
+                      <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>{log.summary}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

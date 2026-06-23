@@ -35,6 +35,8 @@ type VendorRow = {
   has_coa: boolean;
   finnrick_tests_count: number | null;
   status: string;
+  shipping_free_threshold: number | null;
+  shipping_flat_fee: number | null;
 };
 
 type LabTestRow = {
@@ -181,7 +183,7 @@ function transparencyScore(trans: TransparencyRow | undefined): number {
   return 0;
 }
 
-// ── 4. Customer Experience / Value (max 10) ────────────────────────────────
+// ── 4. Customer Experience / Value (max 10 = pricing 6 + shipping 4) ─────────
 
 const BLEND_RE = /\s*[&+]\s*|\b(?:mix|blend|stack|combo|combination|complex)\b/i;
 
@@ -197,7 +199,8 @@ function normalizePeptideName(raw: string): string {
     .trim();
 }
 
-function customerExperienceScore(
+// Pricing sub-score (max 6): price_per_mg vs market average
+function pricingScore(
   vendorId: string,
   peptidePrices: PeptidePriceRow[],
   marketPrices: Map<string, number>
@@ -214,15 +217,46 @@ function customerExperienceScore(
     ratios.push(p.price_per_mg! / mkt);
   }
 
-  if (ratios.length === 0) return 5; // neutral — no comparable data
+  if (ratios.length === 0) return 3; // neutral — no comparable data
 
   const avg = ratios.reduce((a, b) => a + b, 0) / ratios.length;
 
-  if (avg < 0.85) return 10; // >15% below market
-  if (avg < 0.95) return  7; // 5–15% below
-  if (avg < 1.05) return  5; // within 5%
-  if (avg < 1.15) return  2; // 5–15% above
-  return 0;                   // >15% above market
+  if (avg < 0.85) return 6; // >15% below market
+  if (avg < 0.95) return 5; // 5–15% below
+  if (avg < 1.05) return 3; // within 5%
+  if (avg < 1.15) return 1; // 5–15% above
+  return 0;                  // >15% above market
+}
+
+// Shipping sub-score (max 4): free shipping threshold and flat fee
+// Vendors with no data get 2 (neutral) — they aren't penalized for missing data.
+function shippingScore(vendor: VendorRow): number {
+  const { shipping_free_threshold: threshold, shipping_flat_fee: flat } = vendor;
+
+  if (threshold == null && flat == null) return 2; // no data — neutral
+
+  // Always free shipping (threshold = 0 means all orders, flat = 0 also means free)
+  if (threshold === 0 || flat === 0) return 4;
+
+  // Free threshold: the lower the better
+  if (threshold != null) {
+    if (threshold <= 100) return 4; // e.g. free shipping on $100+
+    if (threshold <= 200) return 3; // e.g. free shipping on $150–200+
+    return 2;                       // high threshold (>$200) — neutral
+  }
+
+  // Flat fee only (no free shipping option)
+  if (flat != null && flat > 0) return 1;
+
+  return 2; // fallback
+}
+
+function customerExperienceScore(
+  vendor: VendorRow,
+  peptidePrices: PeptidePriceRow[],
+  marketPrices: Map<string, number>
+): number {
+  return pricingScore(vendor.id, peptidePrices, marketPrices) + shippingScore(vendor);
 }
 
 // ── Status tier ────────────────────────────────────────────────────────────
@@ -248,7 +282,7 @@ async function main() {
     { data: marketPrices,   error: e5 },
   ] = await Promise.all([
     db.from("vendors")
-      .select("id, slug, name, has_coa, finnrick_tests_count, status")
+      .select("id, slug, name, has_coa, finnrick_tests_count, status, shipping_free_threshold, shipping_flat_fee")
       .in("status", ["active", "flagged"]),
 
     db.from("lab_tests")
@@ -290,7 +324,7 @@ async function main() {
     const lv = labVerificationScore(v, trans);
     const { score: pq, hasQualityWarning } = productQualityScore(v.id, tier, testRows);
     const tr = transparencyScore(trans);
-    const cx = customerExperienceScore(v.id, priceRows, marketMap);
+    const cx = customerExperienceScore(v, priceRows, marketMap);
     const overall = lv + pq + tr + cx;
 
     log(
