@@ -61,8 +61,7 @@ Before writing any new script, run `ls scripts/ | grep <keyword>` — many tools
 
 **API routes:**
 - `app/api/cron/url-check/route.ts` — Vercel cron, daily at 12:00 UTC; probes all vendor URLs, emails alerts@watchtowerpeptides.com via Brevo on dead URLs. Auth: `WATCHTOWER_CRON_TOKEN` header.
-- `app/api/admin/audit-action/route.ts` — POST; approves or denies audit/sentiment log entries; uses service-role key to bypass RLS. On approve: updates `vendors.last_reviewed` and syncs score/sentiment.
-- `app/api/admin/recompute-scores/route.ts` — POST; triggers `compute-scores.ts` on demand.
+- `app/api/admin/audit-action/route.ts` — POST; approves or denies audit/sentiment log entries; uses service-role key to bypass RLS. On approve: updates `vendors.last_reviewed`, syncs score (all sub-scores + overall) or sentiment. Protected by `middleware.ts` basic auth.
 
 **Type boundary:** `lib/supabase.ts` defines `DbVendor` / `DbPeptide` (flat DB row shapes) and `Vendor` / `Peptide` (display types). `dbVendorToVendor()` and `dbPeptideToAppPeptide()` are the only translation functions — don't map inline.
 
@@ -137,6 +136,8 @@ WATCHTOWER_CRON_TOKEN=       # cron auth header (in Vercel Production env)
 Supabase project ID: `kirlzgiwyzwwkfxtpygg`
 
 **Vercel env vars set (Production):** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `BREVO_API_KEY`, `WATCHTOWER_CRON_TOKEN`
+
+**Admin auth:** `/admin` and `/api/admin` routes are protected by HTTP Basic Auth via `middleware.ts`. Username: `admin`, password: `WATCHTOWER_CRON_TOKEN` value. In dev without the token set, auth is bypassed.
 
 ## Known Constraints
 

@@ -163,6 +163,7 @@ export default async function VendorDetailPage({
     .select("sentiment, summary, scraped_at")
     .eq("vendor_id", vendorRow.id)
     .eq("status", "approved")
+    .neq("sentiment", "insufficient_data")
     .order("scraped_at", { ascending: false })
     .limit(5);
 
@@ -376,8 +377,8 @@ export default async function VendorDetailPage({
               <h2 className="font-semibold mb-4" style={{ color: "#1D1D1F" }}>Community Sentiment</h2>
               <div className="flex flex-col gap-4">
                 {sentimentLogs.map((log, i) => {
-                  const sentColor = log.sentiment === "positive" ? "#16A34A" : log.sentiment === "negative" ? "#DC2626" : "#D97706";
-                  const sentBg   = log.sentiment === "positive" ? "#DCFCE7"  : log.sentiment === "negative" ? "#FEE2E2"  : "#FEF3C7";
+                  const sentColor = log.sentiment === "positive" ? "#16A34A" : log.sentiment === "negative" ? "#DC2626" : log.sentiment === "neutral" ? "#6E6E73" : "#D97706";
+                  const sentBg   = log.sentiment === "positive" ? "#DCFCE7"  : log.sentiment === "negative" ? "#FEE2E2"  : log.sentiment === "neutral" ? "#F5F5F7"  : "#FEF3C7";
                   const dateStr  = new Date(log.scraped_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
                   return (
                     <div key={i} style={{ borderTop: i > 0 ? "1px solid #E5E5E7" : "none", paddingTop: i > 0 ? "1rem" : 0 }}>

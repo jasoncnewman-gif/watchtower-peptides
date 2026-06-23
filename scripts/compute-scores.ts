@@ -259,16 +259,6 @@ function customerExperienceScore(
   return pricingScore(vendor.id, peptidePrices, marketPrices) + shippingScore(vendor);
 }
 
-// ── Status tier ────────────────────────────────────────────────────────────
-
-function deriveStatus(score: number, currentStatus: string): string {
-  // Preserve flagged/closed/inactive — only update active vendors
-  if (currentStatus !== "active") return currentStatus;
-  if (score >= 75) return "active"; // "Recommended" display tier
-  if (score >= 50) return "active"; // "Use With Caution" display tier
-  return "active";                  // "Not Recommended"
-}
-
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {

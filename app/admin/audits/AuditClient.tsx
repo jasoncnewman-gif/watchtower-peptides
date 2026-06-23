@@ -34,11 +34,13 @@ function sentimentMeta(s: SentimentValue) {
 function AuditCard({ entry }: { entry: AuditEntry }) {
   const [status, setStatus]     = useState<"pending" | "approved" | "denied">("pending");
   const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
   const [summary, setSummary]   = useState(entry.summary);
   const [sentiment, setSentiment] = useState<SentimentValue>(entry.sentiment ?? "insufficient_data");
 
   async function act(action: "approved" | "denied") {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/admin/audit-action", {
         method: "POST",
@@ -51,7 +53,14 @@ function AuditCard({ entry }: { entry: AuditEntry }) {
           sentiment: entry.type === "sentiment" ? sentiment : undefined,
         }),
       });
-      if (res.ok) setStatus(action);
+      if (res.ok) {
+        setStatus(action);
+      } else {
+        const body = await res.json().catch(() => ({})) as { error?: string };
+        setError(body.error ?? "Request failed");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Network error");
     } finally {
       setLoading(false);
     }
@@ -174,7 +183,7 @@ function AuditCard({ entry }: { entry: AuditEntry }) {
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-2 mt-4">
+      <div className="flex items-center gap-2 mt-4 flex-wrap">
         {status === "pending" ? (
           <>
             <button
@@ -193,6 +202,9 @@ function AuditCard({ entry }: { entry: AuditEntry }) {
             >
               Deny
             </button>
+            {error && (
+              <span className="text-xs" style={{ color: "#DC2626" }}>{error}</span>
+            )}
           </>
         ) : (
           <span
@@ -210,49 +222,6 @@ function AuditCard({ entry }: { entry: AuditEntry }) {
   );
 }
 
-function RunButton({ label, endpoint, onDone }: { label: string; endpoint: string; onDone?: (output: string) => void }) {
-  const [state, setState] = useState<"idle" | "running" | "done" | "error">("idle");
-  const [output, setOutput] = useState("");
-
-  async function run() {
-    setState("running");
-    try {
-      const res = await fetch(endpoint, { method: "POST" });
-      const json = await res.json() as { ok: boolean; output: string };
-      setOutput(json.output);
-      setState(json.ok ? "done" : "error");
-      onDone?.(json.output);
-      if (json.ok) setTimeout(() => window.location.reload(), 1500);
-    } catch (e) {
-      setState("error");
-    }
-  }
-
-  return (
-    <div>
-      <button
-        onClick={run}
-        disabled={state === "running"}
-        className="px-5 py-2 rounded-full text-sm font-semibold transition-opacity"
-        style={{
-          backgroundColor: state === "done" ? "#DCFCE7" : state === "error" ? "#FEE2E2" : "#1D1D1F",
-          color: state === "done" ? "#15803D" : state === "error" ? "#B91C1C" : "#FFFFFF",
-          opacity: state === "running" ? 0.5 : 1,
-        }}
-      >
-        {state === "running" ? "Running…" : state === "done" ? "Done ✓" : state === "error" ? "Failed ✗" : label}
-      </button>
-      {output && (
-        <pre
-          className="mt-3 text-xs rounded-xl p-3 overflow-auto max-h-48"
-          style={{ backgroundColor: "#1D1D1F", color: "#E5E5E7" }}
-        >
-          {output}
-        </pre>
-      )}
-    </div>
-  );
-}
 
 export default function AuditClient({ entries }: { entries: AuditEntry[] }) {
   const audits    = entries.filter((e) => e.type === "audit");
@@ -280,7 +249,7 @@ export default function AuditClient({ entries }: { entries: AuditEntry[] }) {
       </div>
 
       {entries.length === 0 && (
-        <p style={{ color: "#6E6E73" }}>No pending items. Click "Run Audit" above to queue new audits.</p>
+        <p style={{ color: "#6E6E73" }}>No pending items. Run <code>npm run audit:vendors</code> in the terminal to queue new audits.</p>
       )}
 
       {audits.length > 0 && (
