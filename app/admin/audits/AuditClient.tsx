@@ -260,12 +260,22 @@ export default function AuditClient({ entries }: { entries: AuditEntry[] }) {
 
   return (
     <div>
-      {/* Action buttons */}
+      {/* Run instructions */}
       <div className="rounded-2xl p-5 mb-8" style={{ backgroundColor: "#F5F5F7", border: "1px solid #E5E5E7" }}>
-        <h2 className="text-sm font-semibold mb-4" style={{ color: "#6E6E73" }}>ACTIONS</h2>
-        <div>
-          <p className="text-xs mb-2" style={{ color: "#6E6E73" }}>Auto-updates shipping, transparency &amp; products. Queues score + sentiment for your approval.</p>
-          <RunButton label="Run Audit" endpoint="/api/admin/run-audit" />
+        <h2 className="text-sm font-semibold mb-3" style={{ color: "#6E6E73" }}>RUN FROM TERMINAL</h2>
+        <div className="flex flex-col gap-2">
+          <div>
+            <p className="text-xs mb-1" style={{ color: "#6E6E73" }}>Queue next 5 vendors (shipping, transparency, score, sentiment):</p>
+            <code className="text-xs px-3 py-2 rounded-xl block" style={{ backgroundColor: "#1D1D1F", color: "#E5E5E7" }}>
+              cd ~/Documents/Watchtower\ Peptides/platform && npm run audit:vendors
+            </code>
+          </div>
+          <div>
+            <p className="text-xs mb-1 mt-2" style={{ color: "#6E6E73" }}>Full product + price sweep (run before audit:vendors when prices need refreshing):</p>
+            <code className="text-xs px-3 py-2 rounded-xl block" style={{ backgroundColor: "#1D1D1F", color: "#E5E5E7" }}>
+              cd ~/Documents/Watchtower\ Peptides/platform && npm run audit:pricing
+            </code>
+          </div>
         </div>
       </div>
 
