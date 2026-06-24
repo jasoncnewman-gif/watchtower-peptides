@@ -45,7 +45,9 @@
     "kb:import": "tsx --tsconfig scripts/tsconfig.json scripts/import-transcript.ts",
     "kb:extract": "tsx --tsconfig scripts/tsconfig.json scripts/extract-claims.ts",
     "kb:generate": "tsx --tsconfig scripts/tsconfig.json scripts/generate-content.ts",
-    "kb:publish": "tsx --tsconfig scripts/tsconfig.json scripts/publish-article.ts"
+    "kb:publish": "tsx --tsconfig scripts/tsconfig.json scripts/publish-article.ts",
+    "audit:pricing": "tsx --tsconfig scripts/tsconfig.json scripts/audit-pricing.ts",
+    "audit:vendors": "tsx --tsconfig scripts/tsconfig.json scripts/audit-vendors.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",

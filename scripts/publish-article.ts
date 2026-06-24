@@ -42,13 +42,15 @@ function extractTitle(markdown: string): string {
 }
 
 function extractDescription(markdown: string): string {
-  // First non-heading paragraph
   const lines = markdown.split("\n");
   for (const line of lines) {
     const trimmed = line.trim();
-    if (trimmed && !trimmed.startsWith("#") && !trimmed.startsWith("!")) {
-      return trimmed.slice(0, 160);
-    }
+    if (!trimmed) continue;
+    if (trimmed.startsWith("#")) continue;
+    if (trimmed.startsWith("!")) continue;
+    // Skip lines that are purely a bold label like **Introduction**
+    if (/^\*\*[^*]+\*\*$/.test(trimmed)) continue;
+    return trimmed.replace(/\*\*/g, "").slice(0, 160);
   }
   return "";
 }
