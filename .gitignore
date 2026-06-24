@@ -40,3 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.local
+
+# local assets & drafts
+node_modules.nosync/
+Wordmark & Logos/
+docs/
+*.docx
+humanin-draft.md
+mk677-draft.md
