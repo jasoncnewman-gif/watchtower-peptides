@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/vendors" },
 };
 
+export const revalidate = 0
+
 export default async function VendorsPage() {
   const { data, error } = await supabase
     .from("vendors")

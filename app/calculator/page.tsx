@@ -1,4 +1,6 @@
 import Nav from "@/components/Nav";
+
+export const revalidate = 0
 import Footer from "@/components/Footer";
 import CalculatorSuite, { CalcPeptide } from "@/components/CalculatorSuite";
 import { getPeptides } from "@/lib/supabase";

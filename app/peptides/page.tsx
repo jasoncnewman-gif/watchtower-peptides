@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Nav from '@/components/Nav'
 
+export const revalidate = 0
+
 export const metadata: Metadata = {
   title: "Peptide Library — Research Profiles & Price Comparison",
   description: "Independent research profiles for BPC-157, TB-500, Ipamorelin, and more — mechanisms, dosage, safety, clinical studies, and live vendor price comparison.",

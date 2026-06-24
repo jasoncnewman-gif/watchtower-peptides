@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
+
+export const revalidate = 0
 import Footer from "@/components/Footer";
 import HeroSlider from "@/components/HeroSlider";
 import { supabase, dbVendorToVendor, type DbVendor, type VendorStatus } from "@/lib/supabase";
