@@ -6,8 +6,8 @@ import VendorListClient from "@/components/vendors/VendorListClient";
 import { supabase, dbVendorToVendor, type DbVendor } from "@/lib/supabase";
 
 export const metadata: Metadata = {
-  title: "Peptide Vendor Reviews",
-  description: "Independent scores for every major peptide supplier — ranked by lab testing, purity accuracy, transparency, and community reputation. Updated regularly.",
+  title: "Peptide Vendor Reviews & Rankings — Independent Lab-Verified Scores",
+  description: "Independent scores for 50+ peptide vendors — ranked by lab testing, purity, transparency, and price. See which suppliers pass third-party COA verification and which to avoid.",
   alternates: { canonical: "/vendors" },
 };
 
