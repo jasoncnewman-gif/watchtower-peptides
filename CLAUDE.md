@@ -15,9 +15,13 @@ npm run build            # production build (runs type-check)
 npm run compute:scores   # recompute all vendor scores → writes to Supabase
 npm run compute:prices   # recompute price_per_mg + peptide_market_prices
 
+# Vendor management
+npm run add:vendor -- --name "Name" --website "https://..."  # onboard new vendor (checks for duplicates)
+
 # Vendor audit pipeline (run in order when doing a full refresh)
 npm run audit:pricing    # scrape ALL vendor products → rebuild market prices (run first)
 npm run audit:vendors    # audit 5 vendors: shipping, transparency, score, sentiment → queue for approval
+npm run audit:sentiment -- <slug>  # re-run Reddit sentiment for a single vendor (replaces pending record)
 
 # COA integrity audit
 npm run coa:queue        # show pending audit queue (T3→T2→T1 priority)
@@ -96,6 +100,8 @@ Two separate jobs:
 The audit skips vendors with existing pending records. Approve/deny before running the next batch. On approve: `last_reviewed` is updated (vendor moves to back of queue) and score/sentiment is applied.
 
 **Reddit sentiment search** uses two queries: `"<name>" peptide site:reddit.com` and `"<name>" peptides vendor site:reddit.com`. If results are about an unrelated business with the same name, deny the entry.
+
+**Adding new vendors:** Use `npm run add:vendor` — creates the DB record with `status: active`, null scores, and no `last_reviewed`, so it's picked up first in the next `audit:vendors` batch.
 
 ## Database Tables
 

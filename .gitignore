@@ -44,7 +44,7 @@ next-env.d.ts
 # local assets & drafts
 node_modules.nosync/
 Wordmark & Logos/
-docs/
+docs/peptide_drafts/
 *.docx
 humanin-draft.md
 mk677-draft.md

@@ -50,7 +50,7 @@ Buyers have no reliable way to evaluate vendor quality, purity claims, or legiti
 ## 5. Current Feature Set (Live)
 
 ### 5.1 Vendor Directory (`/vendors`)
-- ~46 active/flagged vendors scored
+- 50 active/flagged vendors scored
 - Search + tier filter (Elite / Trusted / Acceptable / Watchlist / Avoid)
 - Verdict excerpt with "Read full review" expansion
 - Status badges (active / flagged / inactive)
@@ -85,8 +85,10 @@ Buyers have no reliable way to evaluate vendor quality, purity claims, or legiti
 - IU-first reconstitution output for insulin syringe users
 
 ### 5.6 Research Articles (`/research`)
-- 12 articles published (backdated to ~1–2/week cadence)
+- 14 articles published (backdated to ~1–2/week cadence)
 - KB pipeline: YouTube transcripts → vector embeddings → claim extraction → GPT-4o drafts → human review → publish
+- Direct publish path for topic-driven articles (written from primary sources, no KB pipeline required)
+- SEO-driven topic selection: articles target high-impression/low-rank queries identified via Google Search Console
 - Banned phrase checker prevents AI-sounding vocabulary
 - Client-side search on article index
 
@@ -157,7 +159,17 @@ Two jobs, separate cadence:
 - All proposals written as `pending` to `vendor_audit_log` / `vendor_sentiment_log`
 - Human reviews at `/admin/audits` — approve applies changes, deny discards
 
-Full vendor pool cycles through in ~9 runs (~9 days at 5/day).
+Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
+
+**`audit:sentiment <slug>` (on-demand)**
+- Re-runs Reddit sentiment for a single vendor
+- Replaces any existing pending sentiment record
+- Use when a summary is inaccurate or sourced from off-topic posts
+
+**Vendor discovery and onboarding**
+- New vendors are found via Reddit (r/Peptides, r/Peptidesource), Google searches, and Finnrick's testing data
+- `npm run add:vendor -- --name "Name" --website "https://..."` creates the DB record and queues for next audit batch
+- Duplicate check runs on slug and website origin before insert
 
 ---
 
