@@ -45,11 +45,19 @@ async function gatherHtml(website: string, coaUrl: string | null): Promise<strin
 
   // Fetch sequentially to avoid CDN rate-limiting across 42 vendors.
   // WordPress/Shopify redirect /contact → /contact/ automatically.
-  const paths = ["/", "/contact/", "/about/", "/pages/contact", "/pages/about-us"];
+  const paths = [
+    "/", "/contact/", "/about/", "/about-us/",
+    "/pages/contact", "/pages/about-us", "/pages/about",
+    "/lab-results/", "/coa/", "/coas/", "/coa-library/",
+    "/testing/", "/third-party-testing/", "/purity-reports/",
+    "/pages/lab-results", "/pages/certificates-of-analysis",
+    "/pages/testing", "/pages/third-party-testing",
+    "/certificates-of-analysis/", "/faq/", "/pages/faq",
+  ];
   const pages: string[] = [];
   for (const path of paths) {
     pages.push(await tryFetch(origin + path));
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 150));
   }
   if (coaUrl) pages.push(await tryFetch(coaUrl));
 
@@ -158,6 +166,28 @@ async function detectFromDb(vendorId: string) {
   return { has_lab_disclosure, has_batch_numbers, has_testing_methodology };
 }
 
+// ── Domain age ─────────────────────────────────────────────────────────────
+
+async function getDomainAge(domain: string): Promise<number | null> {
+  try {
+    // Use rdap (free, no API key, machine-readable WHOIS successor)
+    const res = await fetch(`https://rdap.org/domain/${domain}`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return null;
+    const data = await res.json() as Record<string, unknown>;
+    const events = (data.events ?? []) as Array<{ eventAction: string; eventDate: string }>;
+    const reg = events.find(e => e.eventAction === "registration");
+    if (!reg?.eventDate) return null;
+    const year = new Date(reg.eventDate).getFullYear();
+    const age = new Date().getFullYear() - year;
+    return age >= 0 && age < 30 ? age : null;
+  } catch {
+    return null;
+  }
+}
+
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -238,6 +268,10 @@ async function main() {
         dbFields.has_batch_numbers || BATCH_RE.test(html),
     };
 
+    // Domain age
+    const domain = new URL(v.website).hostname.replace(/^www\./, "");
+    const domainAge = await getDomainAge(domain);
+
     log(
       SCRIPT,
       `  ${v.slug}: ` +
@@ -246,7 +280,8 @@ async function main() {
         `ownership=${fields.has_ownership_disclosure ? "✓" : "✗"} ` +
         `lab=${fields.has_lab_disclosure ? "✓" : "✗"} ` +
         `method=${fields.has_testing_methodology ? "✓" : "✗"} ` +
-        `batch=${fields.has_batch_numbers ? "✓" : "✗"}`
+        `batch=${fields.has_batch_numbers ? "✓" : "✗"} ` +
+        `domain_years=${domainAge ?? "?"}`
     );
 
     const { error: upsertErr } = await db
@@ -255,6 +290,7 @@ async function main() {
         {
           vendor_id: v.id,
           ...fields,
+          domain_years: domainAge,
           last_reviewed: new Date().toISOString().slice(0, 10),
           updated_at: new Date().toISOString(),
         },
