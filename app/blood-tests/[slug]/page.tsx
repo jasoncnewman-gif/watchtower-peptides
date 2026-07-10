@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -14,11 +15,17 @@ const COLLECTION_METHOD_LABEL: Record<string, string> = {
   "at-home-kit": "At-Home Kit", "mobile-phlebotomist": "Mobile Draw",
   "clinic-draw": "Clinic Draw", multiple: "Multiple Options",
 };
-const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
-  included: { label: "✓", bg: "#DCFCE7", text: "#16A34A" },
-  addon: { label: "+", bg: "#FEF3C7", text: "#D97706" },
-  unavailable: { label: "✗", bg: "#FEE2E2", text: "#DC2626" },
-  unconfirmed: { label: "?", bg: "#F5F5F7", text: "#6E6E73" },
+const STATUS_CONFIG: Record<string, { label: string; legend: string; bg: string; text: string }> = {
+  included: { label: "✓", legend: "Included", bg: "#DCFCE7", text: "#16A34A" },
+  addon: { label: "+", legend: "Available as add-on", bg: "#FEF3C7", text: "#D97706" },
+  unavailable: { label: "✗", legend: "Not available", bg: "#FEE2E2", text: "#DC2626" },
+  unconfirmed: { label: "?", legend: "Unconfirmed", bg: "#F5F5F7", text: "#6E6E73" },
+};
+
+const TIER_LABELS: Record<number, string> = {
+  1: "Safety Markers",
+  2: "Efficacy Markers",
+  3: "Advanced / Nice-to-Have",
 };
 
 function formatPrice(cents: number | null): string {
@@ -179,11 +186,22 @@ export default async function LabVendorDetailPage({
             <p className="text-sm mb-4" style={{ color: "#6E6E73" }}>
               Covers {coveredCount} of {coverageRows.length} peptide-critical markers
             </p>
-            <div className="h-2 rounded-full overflow-hidden mb-8" style={{ backgroundColor: "#F5F5F7" }}>
+            <div className="h-2 rounded-full overflow-hidden mb-4" style={{ backgroundColor: "#F5F5F7" }}>
               <div
                 className="h-full rounded-full"
                 style={{ backgroundColor: "#186784", width: `${(coveredCount / coverageRows.length) * 100}%` }}
               />
+            </div>
+
+            <div className="flex flex-wrap gap-x-5 gap-y-1.5 mb-8">
+              {Object.values(STATUS_CONFIG).map((cfg) => (
+                <div key={cfg.legend} className="flex items-center gap-1.5">
+                  <span className="text-xs font-semibold w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: cfg.bg, color: cfg.text }}>
+                    {cfg.label}
+                  </span>
+                  <span className="text-xs" style={{ color: "#6E6E73" }}>{cfg.legend}</span>
+                </div>
+              ))}
             </div>
 
             <div className="overflow-x-auto rounded-2xl" style={{ border: "1px solid #E5E5E7" }}>
@@ -196,40 +214,54 @@ export default async function LabVendorDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {coverageRows.map((row) => {
-                    const b = row.biomarkers!;
-                    const cfg = STATUS_CONFIG[row.status] ?? STATUS_CONFIG.unconfirmed;
-                    const price = row.tier_price_cents ?? row.addon_cost_cents;
-                    return (
-                      <tr key={b.slug} style={{ borderTop: "1px solid #E5E5E7" }}>
-                        <td className="px-4 py-3" style={{ color: "#1D1D1F" }}>
-                          {b.name}
-                          {row.specimen_type !== "blood" && (
-                            <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: "#FEF3C7", color: "#D97706" }}>
-                              {row.specimen_type}
-                            </span>
+                  {(() => {
+                    let lastTier: number | null = null;
+                    return coverageRows.map((row) => {
+                      const b = row.biomarkers!;
+                      const cfg = STATUS_CONFIG[row.status] ?? STATUS_CONFIG.unconfirmed;
+                      const price = row.tier_price_cents ?? row.addon_cost_cents;
+                      const showTierHeader = b.tier !== lastTier;
+                      lastTier = b.tier;
+                      return (
+                        <Fragment key={b.slug}>
+                          {showTierHeader && (
+                            <tr key={`tier-${b.tier}`} style={{ borderTop: "1px solid #E5E5E7" }}>
+                              <td colSpan={3} className="px-4 py-2 text-xs font-semibold tracking-widest uppercase" style={{ backgroundColor: "#F5F5F7", color: "#6E6E73" }}>
+                                {TIER_LABELS[b.tier] ?? `Tier ${b.tier}`}
+                              </td>
+                            </tr>
                           )}
-                          {row.accuracy_flag === "CAP" && (
-                            <span
-                              className="ml-2 text-xs"
-                              style={{ color: "#D97706" }}
-                              title="Capillary/fingerstick collection — accuracy vs. venous draw may vary for this marker"
-                            >
-                              ⚠
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: cfg.bg, color: cfg.text }}>
-                            {cfg.label}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3" style={{ color: "#6E6E73" }}>
-                          {price !== null && price !== undefined ? formatPrice(price) : "—"}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          <tr key={b.slug} style={{ borderTop: "1px solid #E5E5E7" }}>
+                            <td className="px-4 py-3" style={{ color: "#1D1D1F" }}>
+                              {b.name}
+                              {row.specimen_type !== "blood" && (
+                                <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: "#FEF3C7", color: "#D97706" }}>
+                                  {row.specimen_type}
+                                </span>
+                              )}
+                              {row.accuracy_flag === "CAP" && (
+                                <span
+                                  className="ml-2 text-xs"
+                                  style={{ color: "#D97706" }}
+                                  title="Capillary/fingerstick collection — accuracy vs. venous draw may vary for this marker"
+                                >
+                                  ⚠
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: cfg.bg, color: cfg.text }}>
+                                {cfg.label}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3" style={{ color: "#6E6E73" }}>
+                              {price !== null && price !== undefined ? formatPrice(price) : "—"}
+                            </td>
+                          </tr>
+                        </Fragment>
+                      );
+                    });
+                  })()}
                 </tbody>
               </table>
             </div>
