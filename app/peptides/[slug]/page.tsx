@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
-import PeptideDetailTabs, { type PeptideDetailData, type VendorTabData } from '@/components/peptides/PeptideDetailTabs'
+import PeptideDetailTabs, { type PeptideDetailData, type VendorTabData, type BloodworkTabData } from '@/components/peptides/PeptideDetailTabs'
 import { supabase } from '@/lib/supabase'
 import { generateSlug, stripSizeSuffix } from '@/lib/utils'
 
@@ -72,6 +72,43 @@ export default async function PeptideDetailPage({
   ])
 
   if (!peptideRow) notFound()
+
+  // Bloodwork tab: what to monitor for this peptide + who covers it best.
+  // Reuses the same RPCs the /blood-tests Protocol Builder calls, scoped to this one peptide.
+  const { data: bmData } = await supabase.rpc('get_protocol_biomarkers', { peptide_slugs: [slug] })
+  const biomarkerRows = (bmData ?? []) as {
+    biomarker_id: string
+    name: string
+    category: string
+    monitoring_tier: 'safety' | 'efficacy' | 'advanced'
+  }[]
+
+  let bloodwork: BloodworkTabData = { biomarkers: [], topVendors: [] }
+  if (biomarkerRows.length > 0) {
+    const [{ data: vendorCoverage }, { data: entryTiers }] = await Promise.all([
+      supabase.rpc('get_vendor_coverage', { biomarker_ids: biomarkerRows.map(b => b.biomarker_id), budget_tier: 'any' }),
+      supabase.from('vendor_tiers').select('vendor_id, price_cents').eq('is_entry_tier', true),
+    ])
+    const entryTierPriceByVendorId = new Map((entryTiers ?? []).map(t => [t.vendor_id, t.price_cents]))
+    type VendorCoverageRow = {
+      vendor_id: string
+      name: string
+      slug: string
+      entry_price_cents: number | null
+      clia_certified: boolean
+      coverage_pct: number
+    }
+    bloodwork = {
+      biomarkers: biomarkerRows.map(b => ({ name: b.name, category: b.category, monitoring_tier: b.monitoring_tier })),
+      topVendors: ((vendorCoverage ?? []) as VendorCoverageRow[]).slice(0, 3).map(v => ({
+        name: v.name,
+        slug: v.slug,
+        entryPriceCents: entryTierPriceByVendorId.get(v.vendor_id) ?? v.entry_price_cents,
+        cliaCertified: v.clia_certified,
+        coveragePct: v.coverage_pct,
+      })),
+    }
+  }
 
   const isBlend = peptideRow.category === 'blend'
 
@@ -214,7 +251,7 @@ export default async function PeptideDetailPage({
           </div>
 
           {/* Tabs */}
-          <PeptideDetailTabs peptide={peptide} vendorData={vendorData} />
+          <PeptideDetailTabs peptide={peptide} vendorData={vendorData} bloodworkData={bloodwork} />
 
           <Link
             href="/peptides"

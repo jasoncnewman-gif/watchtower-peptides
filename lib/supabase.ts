@@ -252,6 +252,91 @@ export interface DbAlert {
   resolved_date: string | null
 }
 
+export interface DbLabVendor {
+  id: string
+  name: string
+  slug: string
+  url: string
+  business_model: 'subscription' | 'panel' | 'ala-carte' | 'hybrid' | 'clinic' | null
+  section: 'membership' | 'panel-package' | 'build-your-own' | 'special' | 'excluded'
+  entry_price_cents: number | null
+  true_annual_cost_cents: number | null
+  billing_cycle: string | null
+  collection_method: 'venous-draw' | 'fingerstick' | 'arm-device' | 'at-home-kit' | 'mobile-phlebotomist' | 'clinic-draw' | 'multiple' | null
+  lab_partner: string | null
+  clia_certified: boolean | null
+  peptide_rx_offered: boolean
+  affiliate_program: boolean | null
+  affiliate_url: string | null
+  affiliate_commission: string | null
+  affiliate_network: string | null
+  audience_fit_score: number | null
+  eligibility: 'INCLUDE' | 'INCLUDE-NICHE' | 'EXCLUDE'
+  exclusion_reason: string | null
+  ny_nj_surcharge: boolean | null
+  ny_nj_surcharge_amount_cents: number | null
+  state_restrictions: string | null
+  hsa_fsa_eligible: boolean | null
+  accuracy_flags: string | null
+  audience_overlap_notes: string | null
+  is_gated: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface DbVendorTier {
+  id: string
+  vendor_id: string
+  tier_name: string
+  price_cents: number | null
+  billing_cycle: string | null
+  biomarker_count: string | null
+  tests_included: string | null
+  hsa_fsa_eligible: string | null
+  state_restrictions: string | null
+  ny_nj_surcharge: string | null
+  is_entry_tier: boolean
+  created_at: string
+}
+
+// ── Display type ──────────────────────────────────────────────────────────
+
+export type LabVendor = {
+  id: string
+  slug: string
+  name: string
+  url: string
+  section: DbLabVendor['section']
+  businessModel: DbLabVendor['business_model']
+  entryPriceCents: number | null
+  trueAnnualCostCents: number | null
+  collectionMethod: DbLabVendor['collection_method']
+  cliaCertified: boolean
+  peptideRxOffered: boolean
+  audienceFitScore: number | null
+  affiliateProgram: boolean
+  affiliateUrl: string | null
+}
+
+export function dbLabVendorToLabVendor(db: DbLabVendor): LabVendor {
+  return {
+    id: db.id,
+    slug: db.slug,
+    name: db.name,
+    url: db.url,
+    section: db.section,
+    businessModel: db.business_model,
+    entryPriceCents: db.entry_price_cents,
+    trueAnnualCostCents: db.true_annual_cost_cents,
+    collectionMethod: db.collection_method,
+    cliaCertified: db.clia_certified ?? false,
+    peptideRxOffered: db.peptide_rx_offered,
+    audienceFitScore: db.audience_fit_score,
+    affiliateProgram: db.affiliate_program ?? false,
+    affiliateUrl: db.affiliate_url,
+  }
+}
+
 // ── DB → display mapping ─────────────────────────────────────────────────
 
 // DB status values ('active','inactive','closed','flagged') don't map 1:1 to
@@ -419,6 +504,36 @@ export async function getAlerts(vendorId?: string): Promise<DbAlert[]> {
     query = query.eq('vendor_id', vendorId)
   }
   const { data, error } = await query
+  if (error) throw error
+  return data ?? []
+}
+
+export async function getLabVendors(): Promise<DbLabVendor[]> {
+  const { data, error } = await supabase
+    .from('lab_vendors')
+    .select('*')
+    .neq('eligibility', 'EXCLUDE')
+    .order('audience_fit_score', { ascending: false, nullsFirst: false })
+  if (error) throw error
+  return data ?? []
+}
+
+export async function getLabVendorBySlug(slug: string): Promise<DbLabVendor | null> {
+  const { data, error } = await supabase
+    .from('lab_vendors')
+    .select('*')
+    .eq('slug', slug)
+    .single()
+  if (error) return null
+  return data
+}
+
+export async function getVendorTiers(vendorId: string): Promise<DbVendorTier[]> {
+  const { data, error } = await supabase
+    .from('vendor_tiers')
+    .select('*')
+    .eq('vendor_id', vendorId)
+    .order('price_cents', { ascending: true, nullsFirst: false })
   if (error) throw error
   return data ?? []
 }

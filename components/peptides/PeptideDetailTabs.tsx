@@ -53,6 +53,11 @@ export interface VendorTabData {
   sizeUnknown: number
 }
 
+export interface BloodworkTabData {
+  biomarkers: { name: string; category: string; monitoring_tier: 'safety' | 'efficacy' | 'advanced' }[]
+  topVendors: { name: string; slug: string; entryPriceCents: number | null; cliaCertified: boolean; coveragePct: number }[]
+}
+
 // ── helpers ───────────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
@@ -492,6 +497,94 @@ function VendorsTab({ vendorData }: { vendorData: VendorTabData }) {
   )
 }
 
+const BLOODWORK_TIER_LABELS: Record<string, string> = {
+  safety: 'Safety Markers',
+  efficacy: 'Efficacy Markers',
+  advanced: 'Advanced / Nice-to-Have',
+}
+
+function formatVendorPrice(cents: number | null): string {
+  if (cents === null) return 'Price varies'
+  const dollars = cents / 100
+  return dollars % 1 === 0 ? `$${dollars.toFixed(0)}` : `$${dollars.toFixed(2)}`
+}
+
+function categoryLabel(category: string): string {
+  return category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
+function BloodworkTab({ data }: { data: BloodworkTabData }) {
+  if (data.biomarkers.length === 0) return <EmptyState message="We're building this profile now. Check back soon," browseLink />
+
+  const grouped: Record<string, BloodworkTabData['biomarkers']> = { safety: [], efficacy: [], advanced: [] }
+  for (const b of data.biomarkers) grouped[b.monitoring_tier]?.push(b)
+
+  return (
+    <div className="space-y-8">
+      <div className="rounded-2xl p-4 flex gap-3" style={{ backgroundColor: '#F5F5F7', border: '1px solid #E5E5E7' }}>
+        <span className="text-sm shrink-0">🩸</span>
+        <p className="text-sm" style={{ color: '#6E6E73' }}>
+          These are the biomarkers most relevant to monitor with this peptide, ranked by clinical priority.
+          Want a panel across multiple peptides?{' '}
+          <Link href="/blood-tests" className="underline transition-opacity hover:opacity-70" style={{ color: '#186784' }}>
+            Use the Protocol Builder →
+          </Link>
+        </p>
+      </div>
+
+      <div className="grid sm:grid-cols-3 gap-5">
+        {(['safety', 'efficacy', 'advanced'] as const).map(tier => (
+          <div key={tier}>
+            <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: '#6E6E73' }}>
+              {BLOODWORK_TIER_LABELS[tier]} ({grouped[tier].length})
+            </p>
+            <div className="space-y-2">
+              {grouped[tier].map((b, i) => (
+                <div key={i} className="rounded-xl px-3 py-2" style={{ backgroundColor: '#F5F5F7' }}>
+                  <p className="text-sm font-medium" style={{ color: '#1D1D1F' }}>{b.name}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#6E6E73' }}>{categoryLabel(b.category)}</p>
+                </div>
+              ))}
+              {grouped[tier].length === 0 && (
+                <p className="text-xs" style={{ color: '#C7C7CC' }}>None for this peptide.</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {data.topVendors.length > 0 && (
+        <div>
+          <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: '#6E6E73' }}>
+            Best Blood Test Coverage
+          </p>
+          <div className="space-y-3">
+            {data.topVendors.map(v => (
+              <Link
+                key={v.slug}
+                href={`/blood-tests/${v.slug}`}
+                className="flex items-center justify-between gap-4 rounded-xl px-4 py-3 transition-opacity hover:opacity-80"
+                style={{ backgroundColor: '#F5F5F7' }}
+              >
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: '#1D1D1F' }}>{v.name}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#6E6E73' }}>
+                    {formatVendorPrice(v.entryPriceCents)}
+                    {v.cliaCertified && ' · CLIA Certified'}
+                  </p>
+                </div>
+                <span className="text-sm font-semibold shrink-0" style={{ color: '#186784' }}>
+                  {v.coveragePct}% coverage
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function ComponentsTab({ components }: { components: BlendComponent[] }) {
   return (
     <div className="space-y-4">
@@ -541,6 +634,7 @@ const BASE_TABS = [
   { id: 'research',   label: 'Research'   },
   { id: 'dosage',     label: 'Dosage'     },
   { id: 'safety',     label: 'Safety'     },
+  { id: 'bloodwork',  label: 'Bloodwork'  },
   { id: 'studies',    label: 'Studies'    },
   { id: 'vendors',    label: 'Vendors'    },
 ]
@@ -548,9 +642,11 @@ const BASE_TABS = [
 export default function PeptideDetailTabs({
   peptide,
   vendorData,
+  bloodworkData,
 }: {
   peptide: PeptideDetailData
   vendorData: VendorTabData
+  bloodworkData: BloodworkTabData
 }) {
   const hasComponents = (peptide.blend_components?.length ?? 0) > 0
 
@@ -592,6 +688,7 @@ export default function PeptideDetailTabs({
       {activeTab === 'research'  && <ResearchTab  entries={peptide.research_applications} />}
       {activeTab === 'dosage'    && <DosageTab    dosage={peptide.dosage} typical={peptide.typical_dosage} />}
       {activeTab === 'safety'    && <SafetyTab    profile={peptide.safety_profile} />}
+      {activeTab === 'bloodwork' && <BloodworkTab data={bloodworkData} />}
       {activeTab === 'studies'   && <StudiesTab   studies={peptide.studies} />}
       {activeTab === 'vendors'   && <VendorsTab   vendorData={vendorData} />}
     </>
