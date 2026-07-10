@@ -2,13 +2,18 @@
 
 import { useState, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
-import { greedySetCover, type CoverProduct } from '@/lib/set-cover'
+import { greedySetCover, type CoverProduct, type SetCoverMode } from '@/lib/set-cover'
 
 interface PeptideOption {
   name: string
   slug: string
   category: string | null
 }
+
+const MODE_OPTIONS: { value: SetCoverMode; label: string; description: string }[] = [
+  { value: 'targeted', label: 'Cheapest for what I need', description: 'Optimizes purely for hitting your exact marker list at the lowest cost — treats everything else a product includes as irrelevant.' },
+  { value: 'value', label: 'Best overall value', description: 'Also credits panels for the extra markers they include beyond your list — better if you want the bloodwork to double as general health monitoring.' },
+]
 
 function formatPrice(cents: number): string {
   const dollars = cents / 100
@@ -28,6 +33,7 @@ export default function VendorCartBuilder({
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mode, setMode] = useState<SetCoverMode>('targeted')
   const [targetNames, setTargetNames] = useState<{ id: string; name: string }[] | null>(null)
   const [result, setResult] = useState<ReturnType<typeof greedySetCover> | null>(null)
 
@@ -56,11 +62,18 @@ export default function VendorCartBuilder({
       if (rpcError) throw rpcError
       const rows = (data ?? []) as { biomarker_id: string; name: string }[]
       setTargetNames(rows.map((r) => ({ id: r.biomarker_id, name: r.name })))
-      setResult(greedySetCover(rows.map((r) => r.biomarker_id), products))
+      setResult(greedySetCover(rows.map((r) => r.biomarker_id), products, mode))
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong building your cart.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  function changeMode(newMode: SetCoverMode) {
+    setMode(newMode)
+    if (targetNames) {
+      setResult(greedySetCover(targetNames.map((t) => t.id), products, newMode))
     }
   }
 
@@ -108,6 +121,29 @@ export default function VendorCartBuilder({
         })}
       </div>
 
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2 mb-1.5">
+          {MODE_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => changeMode(opt.value)}
+              className="text-sm font-medium px-3.5 py-1.5 rounded-full transition-colors"
+              style={
+                mode === opt.value
+                  ? { backgroundColor: '#1D1D1F', color: '#FFFFFF' }
+                  : { backgroundColor: '#F5F5F7', color: '#6E6E73' }
+              }
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs" style={{ color: '#6E6E73' }}>
+          {MODE_OPTIONS.find((o) => o.value === mode)?.description}
+        </p>
+      </div>
+
       <div className="flex items-center gap-4 mb-2">
         <button
           type="button"
@@ -149,6 +185,9 @@ export default function VendorCartBuilder({
                     Covers {result.selected[i].newMarkersCovered.length} of your markers
                     {result.selected[i].newMarkersCovered.length <= 6 && (
                       <>: {result.selected[i].newMarkersCovered.map((id) => nameById.get(id) ?? id).join(', ')}</>
+                    )}
+                    {product.rawMarkerNames.length > result.selected[i].newMarkersCovered.length && (
+                      <span> · {product.rawMarkerNames.length} total markers on this product</span>
                     )}
                   </p>
                 </div>

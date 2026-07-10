@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { supabase, type DbLabVendor, type DbVendorTier } from "@/lib/supabase";
 import type { CoverProduct } from "@/lib/set-cover";
 import VendorCartBuilder from "@/components/blood-tests/VendorCartBuilder";
+import VendorCatalogView from "@/components/blood-tests/VendorCatalogView";
 
 const BUSINESS_MODEL_LABEL: Record<string, string> = {
   subscription: "Subscription", panel: "One-Time", "ala-carte": "À La Carte",
@@ -103,7 +104,7 @@ export default async function LabVendorDetailPage({
       .eq("vendor_id", vendor.id),
     supabase
       .from("vendor_test_products")
-      .select("id, name, product_type, price_cents, vendor_test_product_markers(biomarker_id)")
+      .select("id, name, product_type, price_cents, raw_marker_count, vendor_test_product_markers(raw_marker_name, biomarker_id)")
       .eq("vendor_id", vendor.id),
     supabase.from("peptides").select("name, slug, category").order("name"),
   ]);
@@ -120,15 +121,26 @@ export default async function LabVendorDetailPage({
   const businessLabel = vendor.business_model ? BUSINESS_MODEL_LABEL[vendor.business_model] : null;
   const collectionLabel = vendor.collection_method ? COLLECTION_METHOD_LABEL[vendor.collection_method] : null;
 
-  // Cart Builder: only vendors migrated to the products model (Goodlabs first) have this data.
-  // Dedupe biomarker_ids per product -- multiple raw vendor marker names can map to the same
-  // canonical biomarker (e.g. all 17 CBC components collapse to one "CBC with Differential" id).
+  // Cart Builder + Catalog View: only vendors migrated to the products model (Goodlabs first)
+  // have this data. Dedupe biomarker_ids per product -- multiple raw vendor marker names can
+  // map to the same canonical biomarker (e.g. all 17 CBC components collapse to one
+  // "CBC with Differential" id).
   const cartProducts: CoverProduct[] = (products ?? []).map((p) => ({
     id: p.id,
     name: p.name,
     priceCents: p.price_cents,
     productType: p.product_type as "panel" | "ala-carte",
     biomarkerIds: [...new Set((p.vendor_test_product_markers ?? []).map((m) => m.biomarker_id).filter((id): id is string => id !== null))],
+    rawMarkerNames: (p.vendor_test_product_markers ?? []).map((m) => m.raw_marker_name),
+  }));
+
+  const catalogProducts = (products ?? []).map((p) => ({
+    id: p.id,
+    name: p.name,
+    productType: p.product_type as "panel" | "ala-carte",
+    priceCents: p.price_cents,
+    rawMarkerCount: p.raw_marker_count,
+    markers: (p.vendor_test_product_markers ?? []).map((m) => m.raw_marker_name),
   }));
 
   return (
@@ -199,13 +211,21 @@ export default async function LabVendorDetailPage({
         </section>
 
         {cartProducts.length > 0 && (
-          <section className="px-6 py-16">
-            <div className="max-w-4xl mx-auto">
-              <VendorCartBuilder vendorName={vendor.name} peptides={peptideRows ?? []} products={cartProducts} />
-            </div>
-          </section>
+          <>
+            <section className="px-6 py-16">
+              <div className="max-w-4xl mx-auto">
+                <VendorCartBuilder vendorName={vendor.name} peptides={peptideRows ?? []} products={cartProducts} />
+              </div>
+            </section>
+            <section className="px-6 py-16">
+              <div className="max-w-4xl mx-auto">
+                <VendorCatalogView vendorName={vendor.name} products={catalogProducts} />
+              </div>
+            </section>
+          </>
         )}
 
+        {cartProducts.length === 0 && (
         <section className="px-6 py-16">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Peptide-Critical Biomarker Coverage</h2>
@@ -293,6 +313,7 @@ export default async function LabVendorDetailPage({
             </div>
           </div>
         </section>
+        )}
 
         {tierRows.length > 0 && (
           <section className="px-6 py-16" style={{ backgroundColor: "#F5F5F7" }}>
