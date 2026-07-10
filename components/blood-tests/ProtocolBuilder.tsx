@@ -32,6 +32,7 @@ interface VendorResult {
   markers_covered: number
   coverage_pct: number
   missing_markers: string[]
+  over_budget: boolean
   affiliate_url: string | null
   affiliate_program: boolean | null
 }
@@ -238,9 +239,16 @@ export default function ProtocolBuilder({
                 style={{ backgroundColor: '#F5F5F7' }}
               >
                 <div className="min-w-[180px]">
-                  <Link href={`/blood-tests/${v.slug}`} className="hover:opacity-80 transition-opacity">
-                    <p className="font-semibold" style={{ color: '#1D1D1F' }}>{v.name}</p>
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link href={`/blood-tests/${v.slug}`} className="hover:opacity-80 transition-opacity">
+                      <p className="font-semibold" style={{ color: '#1D1D1F' }}>{v.name}</p>
+                    </Link>
+                    {v.over_budget && (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full shrink-0" style={{ backgroundColor: '#FEE2E2', color: '#DC2626' }}>
+                        Over Budget
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs mt-0.5" style={{ color: '#6E6E73' }}>
                     {formatPrice(entryTierPrices[v.vendor_id] ?? v.entry_price_cents)}
                     {v.clia_certified && ' · CLIA Certified'}
