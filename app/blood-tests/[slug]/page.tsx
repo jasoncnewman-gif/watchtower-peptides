@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { supabase, type DbLabVendor, type DbVendorTier } from "@/lib/supabase";
+import type { CoverProduct } from "@/lib/set-cover";
+import VendorCartBuilder from "@/components/blood-tests/VendorCartBuilder";
 
 const BUSINESS_MODEL_LABEL: Record<string, string> = {
   subscription: "Subscription", panel: "One-Time", "ala-carte": "À La Carte",
@@ -89,7 +91,7 @@ export default async function LabVendorDetailPage({
 
   if (!vendor) notFound();
 
-  const [{ data: tiers }, { data: coverage }] = await Promise.all([
+  const [{ data: tiers }, { data: coverage }, { data: products }, { data: peptideRows }] = await Promise.all([
     supabase
       .from("vendor_tiers")
       .select("*")
@@ -99,6 +101,11 @@ export default async function LabVendorDetailPage({
       .from("vendor_biomarker_coverage")
       .select("status, specimen_type, accuracy_flag, tier_price_cents, addon_cost_cents, biomarkers(name, slug, category, tier)")
       .eq("vendor_id", vendor.id),
+    supabase
+      .from("vendor_test_products")
+      .select("id, name, product_type, price_cents, vendor_test_product_markers(biomarker_id)")
+      .eq("vendor_id", vendor.id),
+    supabase.from("peptides").select("name, slug, category").order("name"),
   ]);
 
   const tierRows = (tiers ?? []) as DbVendorTier[];
@@ -112,6 +119,17 @@ export default async function LabVendorDetailPage({
   const coveredCount = coverageRows.filter((r) => r.status === "included").length;
   const businessLabel = vendor.business_model ? BUSINESS_MODEL_LABEL[vendor.business_model] : null;
   const collectionLabel = vendor.collection_method ? COLLECTION_METHOD_LABEL[vendor.collection_method] : null;
+
+  // Cart Builder: only vendors migrated to the products model (Goodlabs first) have this data.
+  // Dedupe biomarker_ids per product -- multiple raw vendor marker names can map to the same
+  // canonical biomarker (e.g. all 17 CBC components collapse to one "CBC with Differential" id).
+  const cartProducts: CoverProduct[] = (products ?? []).map((p) => ({
+    id: p.id,
+    name: p.name,
+    priceCents: p.price_cents,
+    productType: p.product_type as "panel" | "ala-carte",
+    biomarkerIds: [...new Set((p.vendor_test_product_markers ?? []).map((m) => m.biomarker_id).filter((id): id is string => id !== null))],
+  }));
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
@@ -179,6 +197,14 @@ export default async function LabVendorDetailPage({
             )}
           </div>
         </section>
+
+        {cartProducts.length > 0 && (
+          <section className="px-6 py-16">
+            <div className="max-w-4xl mx-auto">
+              <VendorCartBuilder vendorName={vendor.name} peptides={peptideRows ?? []} products={cartProducts} />
+            </div>
+          </section>
+        )}
 
         <section className="px-6 py-16">
           <div className="max-w-4xl mx-auto">
