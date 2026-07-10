@@ -315,7 +315,7 @@ export default async function LabVendorDetailPage({
         </section>
         )}
 
-        {tierRows.length > 0 && (
+        {tierRows.length > 0 && cartProducts.length === 0 && (
           <section className="px-6 py-16" style={{ backgroundColor: "#F5F5F7" }}>
             <div className="max-w-4xl mx-auto">
               <h2 className="text-2xl font-bold mb-6" style={{ color: "#1D1D1F" }}>Pricing & Plans</h2>
