@@ -3,7 +3,7 @@
 **Owner:** Jason Newman (jason@watchtowerpeptides.com)  
 **Entity:** Four Chariots / Arba Haras Group  
 **Status:** Live — active development  
-**Last updated:** June 2026
+**Last updated:** July 2026
 
 ---
 
@@ -101,6 +101,16 @@ Buyers have no reliable way to evaluate vendor quality, purity claims, or legiti
 ### 5.8 Automated Monitoring
 - Daily URL health check (Vercel cron, 12:00 UTC) → email alert via Brevo when vendor domains go dead
 - UptimeRobot: 5-minute uptime checks on watchtowerpeptides.com → alert to jason@watchtowerpeptides.com
+
+### 5.9 Blood Test Vendor Comparison (`/blood-tests`)
+A second vertical: at-home blood testing services, scored for relevance to peptide researchers specifically (which biomarkers matter for monitoring safety/efficacy of a given protocol, not general wellness testing).
+
+- **Protocol Builder** — pick the peptides in your stack, get a ranked biomarker checklist (Safety / Efficacy / Advanced tiers) plus every eligible vendor scored by coverage %, with a budget filter and an "Over Budget" flag for vendors whose true annual cost exceeds it.
+- **Peptide profile Bloodwork tab** — the same per-peptide monitoring data surfaced on individual `/peptides/[slug]` pages.
+- **Cart Builder (per-vendor, products-model vendors only)** — pick peptides, get the actual cheapest combination of that vendor's real panels + à la carte tests to cover it, with a toggle between "cheapest for exactly what I need" and "best overall value" (credits a panel's non-target markers too, since someone getting bloodwork anyway benefits from broader data). Goodlabs is the first vendor built this way — see `CLAUDE.md`'s "Blood Test Vendor Data Model" for the schema and how to migrate another vendor onto it. The other 13 blood-test vendors still show a flatter coverage table until migrated the same way.
+- **Full catalog view (per-vendor, products-model vendors only)** — every panel and à la carte test the vendor sells, searchable, with full marker breakdowns.
+
+**Affiliate model exception:** unlike the peptide vendor review side (Section 4: "no affiliates, no paid placements"), the blood-test vertical does carry disclosed affiliate links (`lab_vendors.affiliate_url`/`affiliate_program`) — shown with an inline disclosure on every vendor card and detail page ("Watchtower Peptides may earn a referral commission... This does not affect our scoring or editorial coverage"). This is a deliberate, disclosed departure from the peptide-vendor no-affiliate stance, not an inconsistency — the two verticals are evaluated and monetized differently because blood-testing labs aren't peptide vendors and don't compete for the same trust position. Affiliate commission rates for several vendors remain unresearched/unconfirmed — logged as an open item, not blocking.
 
 ---
 
@@ -210,6 +220,8 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 **Supabase project:** `kirlzgiwyzwwkfxtpygg`  
 **Domain:** watchtowerpeptides.com (Bluehost DNS → Vercel)
 
+**Deploy workflow:** pushes to `main` go straight to production. For changes worth reviewing before they're public, push to a feature branch first — Vercel auto-builds a Preview deployment at its own URL, no setup required — then fast-forward-merge to `main` once confirmed. See `CLAUDE.md` for the exact commands.
+
 ---
 
 ## 10. Deferred / Roadmap
@@ -218,6 +230,9 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 - **BPC-157 brain/neuroprotection article** — 261 claims in KB, only tendon angle covered so far
 - **Additional KB imports** — Robert Lustig, Gil Carvalho, Nick Tiller, Joe Rogan peptide episodes
 - **Paramount Peptides COA** — email + verification code auth blocks automation; needs manual cookie share or skip decision
+- **Blood test vendor migrations** — 13 of 14 blood-test vendors still on the flat coverage model; Goodlabs is the reference implementation for migrating a vendor to the products model (Cart Builder + full catalog). Worth doing a structurally different vendor next (e.g. a pure-subscription vendor like Superpower, not panels+à-la-carte) to stress-test whether the schema/algorithm generalizes before committing further.
+- **Blood test affiliate rates** — 5+ vendors have undisclosed/unconfirmed commission rates; explicitly deferred, not yet researched
+- **À la carte pricing gaps** — `vendor_biomarker_coverage.addon_cost_cents` is null for most non-Goodlabs vendors' à la carte items (regex-extraction limitation from original seeding); Goodlabs' equivalent gap was backfilled from `notes` free text, same technique not yet applied elsewhere
 
 ### Post-launch
 - **Score history tracking** — `score_history` table exists but not wired to `compute-scores` runs

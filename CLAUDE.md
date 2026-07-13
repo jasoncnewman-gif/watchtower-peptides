@@ -58,6 +58,10 @@ Before writing any new script, run `ls scripts/ | grep <keyword>` — many tools
 - `/about` — scoring methodology + vendor distribution grid
 - `/disclaimer`, `/privacy`, `/terms` — legal pages
 - `/admin/audits` — vendor audit review queue (approve/deny score proposals and sentiment)
+- `/blood-tests` — at-home blood testing vendor comparison; Protocol Builder (pick peptides → ranked biomarker checklist + cross-vendor coverage scoring via `get_protocol_biomarkers`/`get_vendor_coverage` RPCs)
+- `/blood-tests/[slug]` — vendor detail. For vendors migrated to the products model (Goodlabs only, as of this writing): Cart Builder (`components/blood-tests/VendorCartBuilder.tsx`, greedy set-cover algorithm in `lib/set-cover.ts`) + full searchable catalog (`VendorCatalogView.tsx`), replacing the flat coverage table entirely. Other vendors still render the flat `vendor_biomarker_coverage` table + `vendor_tiers` pricing cards — see "Blood Test Vendor Data Model" below.
+
+**Peptide profile Bloodwork tab:** `/peptides/[slug]` has an 8th tab (`components/peptides/PeptideDetailTabs.tsx`) showing the same per-peptide monitoring markers as the Protocol Builder, scoped to one peptide, plus top 3 vendor matches.
 
 **Two Supabase client instances:**
 1. `lib/supabase.ts` — anon key, used by Next.js app at runtime (public RLS-gated access)
@@ -103,6 +107,16 @@ The audit skips vendors with existing pending records. Approve/deny before runni
 
 **Adding new vendors:** Use `npm run add:vendor` — creates the DB record with `status: active`, null scores, and no `last_reviewed`, so it's picked up first in the next `audit:vendors` batch.
 
+## Blood Test Vendor Data Model
+
+Two coexisting models for `/blood-tests`, because vendors migrate one at a time:
+
+**Flat coverage model (default, all vendors start here):** `vendor_biomarker_coverage` — one row per (vendor, biomarker) with a single `status`/`tier_price_cents`/`addon_cost_cents`. Works for "does this vendor offer this marker" but can't represent a bundle (a fixed marker set at one price) — it has no concept of "these 76 markers only come together for $195." Powers the flat table on `/blood-tests/[slug]` and the cross-vendor ranking in `get_vendor_coverage`.
+
+**Products model (Goodlabs only, so far):** `vendor_test_products` (one row per purchasable panel or à la carte test, `product_type` = `panel`|`ala-carte`) + `vendor_test_product_markers` (junction: `raw_marker_name` always populated, `biomarker_id` nullable — null means the vendor sells that marker but it's not one of our tracked biomarkers). This is what `lib/set-cover.ts`'s `greedySetCover()` operates on. **To migrate another vendor to this model:** fetch their full catalog (panel + à la carte pricing and marker composition — for Goodlabs this came from a `testNameMaps` JSON blob embedded in their own page's Next.js RSC stream, not a public API, so the extraction method is vendor-specific), hand-verify raw marker names against the `biomarkers` table (don't fuzzy-match — see the 77/257 Goodlabs match rate as a model: most raw markers won't correspond to anything we track, and forcing matches on assay-specificity ambiguity, e.g. "Growth Hormone" vs. "Growth Hormone (Fasting)", produces wrong data), then seed `vendor_test_products`/`vendor_test_product_markers`. Once a vendor has rows in `vendor_test_products`, its `/blood-tests/[slug]` page automatically switches to Cart Builder + Catalog View and drops the flat table/Pricing & Plans section (see `cartProducts.length > 0` branches in `app/blood-tests/[slug]/page.tsx`).
+
+**Set-cover algorithm (`lib/set-cover.ts`):** greedy, two modes. `'targeted'` (default) picks whatever covers the most *currently-uncovered target* markers per dollar — cheapest way to hit exactly the requested list, values a panel's non-target markers at zero. `'value'` credits a product for *all* its markers (tracked or not) via a running `acquiredRawNames` set across the whole cart, not each product's static total — without that dedup, two overlapping broad panels can each look individually cheap and both get selected, which is worse than either alone (caught and fixed during Goodlabs' build: an earlier version produced a $690 cart from three redundant panels; the fix settled on $506 with one panel picked where it actually added new breadth).
+
 ## Database Tables
 
 Core: `vendors`, `vendor_peptides`, `vendor_transparency`, `lab_tests`, `peptide_market_prices`, `peptides`
@@ -116,6 +130,10 @@ Knowledge base: `kb_sources`, `kb_episodes`, `kb_chunks` (pgvector HNSW), `kb_cl
 Content: `research_articles`
 
 Monitoring: `alerts`, `score_history`, `verification_flags` (migration_010 — applied but notifications not wired)
+
+Blood tests (migration_019/020): `biomarkers`, `peptide_biomarkers`, `peptide_blend_components`, `lab_vendors`, `vendor_tiers`, `vendor_biomarker_coverage`. RPCs (migration_021): `get_protocol_biomarkers(peptide_slugs)`, `get_vendor_coverage(biomarker_ids, budget_tier)`.
+
+Blood test products model (migration_022/023, Goodlabs-only so far): `vendor_test_products`, `vendor_test_product_markers` — see "Blood Test Vendor Data Model" above.
 
 Migration SQL files live in `supabase/`; apply manually in Supabase SQL Editor — there is no migration runner.
 
@@ -141,7 +159,9 @@ WATCHTOWER_CRON_TOKEN=       # cron auth header (in Vercel Production env)
 
 Supabase project ID: `kirlzgiwyzwwkfxtpygg`
 
-**Vercel env vars set (Production):** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `BREVO_API_KEY`, `WATCHTOWER_CRON_TOKEN`
+**Vercel env vars set (Production + Preview):** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `BREVO_API_KEY`, `WATCHTOWER_CRON_TOKEN` — confirmed working for Preview as of 2026-07-10.
+
+**Preview deployments:** Vercel's GitHub integration auto-builds a Preview deployment (own URL, no extra cost) for any push to a branch other than `main`. Workflow for risky/visible changes: push to a feature branch, review the preview URL, then fast-forward-merge into `main` and push once confirmed (`git checkout main && git merge --ff-only <branch> && git push origin main`). Project: `watchtower-peptides` (`prj_iHRu3hhB2aGhFdTQYz9jvUodglBE`), team `Jason Newman's projects` (`team_kpkz6Jmqr9M29y4BClL8d6H8`).
 
 **Admin auth:** `/admin` and `/api/admin` routes are protected by HTTP Basic Auth via `middleware.ts`. Username: `admin`, password: `WATCHTOWER_CRON_TOKEN` value. In dev without the token set, auth is bypassed.
 
@@ -153,3 +173,4 @@ Supabase project ID: `kirlzgiwyzwwkfxtpygg`
 - **Puppeteer lazy import:** import puppeteer inside the function body, not at module top level — stealth plugin patches Node fetch and breaks DB queries if imported at module level.
 - **`compute:scores` does not update `last_reviewed`** — must be set manually per vendor or via the audit approve flow.
 - **Supabase changes don't appear on live site** until a git push triggers Vercel redeploy. Push even when no app code changed.
+- **Transient Vercel build failures:** `errorCode: "sts_credentials_fetch_failed"` at `errorStep: "build-container-init"` (build dies right after cloning, before `npm install`) is a Vercel-side infra hiccup, not a code problem — confirmed by an identical commit succeeding on retry. If a build errors in ~1s with no actual build log output, just push an empty commit (or retrigger) rather than debugging the diff.
