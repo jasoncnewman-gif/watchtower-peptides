@@ -100,7 +100,9 @@ export default async function BloodTestsPage() {
             <div className="mb-16">
               <ProtocolBuilder
                 peptides={peptideRows ?? []}
-                entryTierPrices={Object.fromEntries(entryPriceByVendorId)}
+                entryTierPrices={Object.fromEntries(
+                  [...entryPriceByVendorId].filter((entry): entry is [string, number] => entry[1] !== null)
+                )}
               />
             </div>
 
