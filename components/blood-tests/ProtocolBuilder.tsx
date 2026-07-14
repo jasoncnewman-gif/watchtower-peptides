@@ -28,7 +28,6 @@ interface VendorResult {
   true_annual_cost_cents: number | null
   collection_method: string | null
   clia_certified: boolean
-  audience_fit_score: number | null
   markers_covered: number
   coverage_pct: number
   missing_markers: string[]

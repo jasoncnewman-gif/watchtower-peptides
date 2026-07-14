@@ -64,7 +64,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const { data } = await supabase
     .from("lab_vendors")
-    .select("name, audience_fit_score")
+    .select("name")
     .eq("slug", slug)
     .maybeSingle();
 
@@ -72,7 +72,7 @@ export async function generateMetadata({
 
   return {
     title: `${data.name} Review — Blood Testing for Peptide Researchers | Watchtower`,
-    description: `${data.name}'s blood testing panels scored against the biomarkers peptide researchers actually need to monitor. Audience fit: ${data.audience_fit_score ?? "unrated"}/10.`,
+    description: `${data.name}'s blood testing panels compared against the biomarkers peptide researchers actually need to monitor.`,
     alternates: { canonical: `/blood-tests/${slug}` },
   };
 }
@@ -187,12 +187,6 @@ export default async function LabVendorDetailPage({
                   </p>
                 )}
               </div>
-              {vendor.audience_fit_score !== null && (
-                <div>
-                  <p className="text-3xl font-bold" style={{ color: "#186784" }}>{vendor.audience_fit_score}/10</p>
-                  <p className="text-sm" style={{ color: "#6E6E73" }}>Audience fit score</p>
-                </div>
-              )}
             </div>
 
             <a

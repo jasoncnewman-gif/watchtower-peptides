@@ -19,7 +19,7 @@ export default async function BloodTestsPage() {
     .from("lab_vendors")
     .select("*")
     .neq("eligibility", "EXCLUDE")
-    .order("audience_fit_score", { ascending: false, nullsFirst: false });
+    .order("name");
 
   if (error) console.error("lab_vendors query error:", error.message);
   const vendors = (data ?? []).map((v) => dbLabVendorToLabVendor(v as DbLabVendor));
@@ -61,9 +61,43 @@ export default async function BloodTestsPage() {
     .select("name, slug, category")
     .order("name");
 
-  const membership = vendors.filter((v) => v.section === "membership");
-  const panelPackage = vendors.filter((v) => v.section === "panel-package");
-  const buildYourOwn = vendors.filter((v) => v.section === "build-your-own");
+  // Listing category is derived from each vendor's real vendor_test_products catalog
+  // shape (verified during the 2026-07 products-model migration pass), not the static
+  // lab_vendors.section field set once at initial research time -- that field goes
+  // stale the moment a vendor's real catalog turns out to be a hybrid. Goodlabs (7
+  // panels + 191 à la carte) and Marek Diagnostics (13 panels + 108 à la carte) have
+  // the identical hybrid shape but were hand-labeled into different buckets
+  // ("build-your-own" vs. "panel-package"); Everlywell (6 panels + 19 à la carte, no
+  // real subscription product at all) was labeled "membership" despite being one-time
+  // purchases. Vendors with no vendor_test_products yet (InsideTracker) fall back to
+  // the static section field since we have no real data to derive from.
+  const { data: allProducts } = await supabase.from("vendor_test_products").select("vendor_id, product_type");
+  const productCountsByVendorId = new Map<string, { panel: number; alaCarte: number }>();
+  for (const p of allProducts ?? []) {
+    const counts = productCountsByVendorId.get(p.vendor_id) ?? { panel: 0, alaCarte: 0 };
+    if (p.product_type === "panel") counts.panel++;
+    else if (p.product_type === "ala-carte") counts.alaCarte++;
+    productCountsByVendorId.set(p.vendor_id, counts);
+  }
+
+  type Category = "membership" | "panelPackage" | "hybrid" | "buildYourOwn";
+  function categoryFor(v: (typeof vendors)[number]): Category {
+    const counts = productCountsByVendorId.get(v.id);
+    if (counts && (counts.panel > 0 || counts.alaCarte > 0)) {
+      if (counts.panel > 0 && counts.alaCarte > 0) return "hybrid";
+      if (counts.panel > 0) return v.businessModel === "subscription" ? "membership" : "panelPackage";
+      return "buildYourOwn";
+    }
+    // No products yet -- fall back to the static section field.
+    if (v.section === "panel-package") return "panelPackage";
+    if (v.section === "build-your-own") return "buildYourOwn";
+    return "membership";
+  }
+
+  const membership = vendors.filter((v) => categoryFor(v) === "membership");
+  const panelPackage = vendors.filter((v) => categoryFor(v) === "panelPackage");
+  const hybrid = vendors.filter((v) => categoryFor(v) === "hybrid");
+  const buildYourOwn = vendors.filter((v) => categoryFor(v) === "buildYourOwn");
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
@@ -88,7 +122,7 @@ export default async function BloodTestsPage() {
                 Know What to Monitor. Know Which Panel Covers It.
               </h1>
               <p className="text-xl" style={{ color: "rgba(255,255,255,0.75)" }}>
-                Built for peptide researchers. Every vendor scored against the biomarkers that actually matter for your protocol.
+                Built for peptide researchers. Pick your peptides and see exactly which vendors cover the biomarkers that actually matter for your protocol.
               </p>
             </div>
           </div>
@@ -106,41 +140,61 @@ export default async function BloodTestsPage() {
               />
             </div>
 
-            <div className="mb-16">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Membership Plans</h2>
-              <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
-                Annual or monthly subscriptions with recurring access to comprehensive panels.
-              </p>
-              <div className="grid md:grid-cols-2 gap-5">
-                {membership.map((v) => (
-                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
-                ))}
+            {membership.length > 0 && (
+              <div className="mb-16">
+                <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Membership Plans</h2>
+                <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
+                  Annual or monthly subscriptions with recurring access to comprehensive panels.
+                </p>
+                <div className="grid md:grid-cols-2 gap-5">
+                  {membership.map((v) => (
+                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="mb-16">
-              <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>One-Time Panel Packages</h2>
-              <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
-                Pay once, no subscription required. Order again when you need to retest.
-              </p>
-              <div className="grid md:grid-cols-2 gap-5">
-                {panelPackage.map((v) => (
-                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
-                ))}
+            {panelPackage.length > 0 && (
+              <div className="mb-16">
+                <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>One-Time Panel Packages</h2>
+                <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
+                  Pay once, no subscription required. Order again when you need to retest.
+                </p>
+                <div className="grid md:grid-cols-2 gap-5">
+                  {panelPackage.map((v) => (
+                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div>
-              <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Build Your Own Panel</h2>
-              <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
-                Order exactly the tests you need, à la carte. Best for researchers who know their markers.
-              </p>
-              <div className="grid md:grid-cols-2 gap-5">
-                {buildYourOwn.map((v) => (
-                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
-                ))}
+            {hybrid.length > 0 && (
+              <div className="mb-16">
+                <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Panels + À La Carte</h2>
+                <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
+                  Named panels for a starting point, plus a full à la carte catalog if you want to add or swap individual markers.
+                </p>
+                <div className="grid md:grid-cols-2 gap-5">
+                  {hybrid.map((v) => (
+                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+
+            {buildYourOwn.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Build Your Own Panel</h2>
+                <p className="text-sm mb-6" style={{ color: "#6E6E73" }}>
+                  Order exactly the tests you need, à la carte. Best for researchers who know their markers.
+                </p>
+                <div className="grid md:grid-cols-2 gap-5">
+                  {buildYourOwn.map((v) => (
+                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
         </section>

@@ -270,7 +270,6 @@ export interface DbLabVendor {
   affiliate_url: string | null
   affiliate_commission: string | null
   affiliate_network: string | null
-  audience_fit_score: number | null
   eligibility: 'INCLUDE' | 'INCLUDE-NICHE' | 'EXCLUDE'
   exclusion_reason: string | null
   ny_nj_surcharge: boolean | null
@@ -313,7 +312,6 @@ export type LabVendor = {
   collectionMethod: DbLabVendor['collection_method']
   cliaCertified: boolean
   peptideRxOffered: boolean
-  audienceFitScore: number | null
   affiliateProgram: boolean
   affiliateUrl: string | null
 }
@@ -331,7 +329,6 @@ export function dbLabVendorToLabVendor(db: DbLabVendor): LabVendor {
     collectionMethod: db.collection_method,
     cliaCertified: db.clia_certified ?? false,
     peptideRxOffered: db.peptide_rx_offered,
-    audienceFitScore: db.audience_fit_score,
     affiliateProgram: db.affiliate_program ?? false,
     affiliateUrl: db.affiliate_url,
   }
@@ -513,7 +510,7 @@ export async function getLabVendors(): Promise<DbLabVendor[]> {
     .from('lab_vendors')
     .select('*')
     .neq('eligibility', 'EXCLUDE')
-    .order('audience_fit_score', { ascending: false, nullsFirst: false })
+    .order('name')
   if (error) throw error
   return data ?? []
 }

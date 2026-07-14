@@ -36,19 +36,10 @@ export default function VendorCard({ vendor, entryTierPriceCents }: { vendor: La
 
   return (
     <div className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF' }}>
-      <div className="flex items-start justify-between gap-3 mb-3">
+      <div className="mb-3">
         <Link href={`/blood-tests/${vendor.slug}`} className="hover:opacity-80 transition-opacity">
           <h3 className="font-bold text-xl" style={{ color: '#1D1D1F' }}>{vendor.name}</h3>
         </Link>
-        {vendor.audienceFitScore !== null && (
-          <span
-            className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-            style={{ backgroundColor: '#186784', color: '#FFFFFF' }}
-            title="Audience fit score — how well this vendor suits peptide researchers specifically, not a customer/quality rating"
-          >
-            {vendor.audienceFitScore}/10 Fit
-          </span>
-        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mb-4">
