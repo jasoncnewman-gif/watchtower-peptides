@@ -44,8 +44,9 @@ export default function VendorCard({ vendor, entryTierPriceCents }: { vendor: La
           <span
             className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
             style={{ backgroundColor: '#186784', color: '#FFFFFF' }}
+            title="Audience fit score — how well this vendor suits peptide researchers specifically, not a customer/quality rating"
           >
-            {vendor.audienceFitScore}/10
+            {vendor.audienceFitScore}/10 Fit
           </span>
         )}
       </div>

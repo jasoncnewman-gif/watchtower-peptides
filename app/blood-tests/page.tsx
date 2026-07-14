@@ -8,7 +8,7 @@ import { supabase, dbLabVendorToLabVendor, type DbLabVendor } from "@/lib/supaba
 
 export const metadata: Metadata = {
   title: "Blood Test Comparison for Peptide Researchers | Watchtower",
-  description: "Find the right blood testing service for your peptide protocol. Compare 14 vendors on IGF-1, hormone panels, liver enzymes, and the biomarkers that actually matter.",
+  description: "Find the right blood testing service for your peptide protocol. Compare 13 vendors on IGF-1, hormone panels, liver enzymes, and the biomarkers that actually matter.",
   alternates: { canonical: "/blood-tests" },
 };
 
@@ -24,15 +24,37 @@ export default async function BloodTestsPage() {
   if (error) console.error("lab_vendors query error:", error.message);
   const vendors = (data ?? []).map((v) => dbLabVendorToLabVendor(v as DbLabVendor));
 
-  // Entry-tier prices come from a cleaner source (the Pricing Deep Dive table) than
-  // lab_vendors.entry_price_cents, which was regex-extracted from free-text notes and can
-  // grab the wrong figure (e.g. a monthly membership fee quoted before the actual panel
-  // price). Prefer these wherever a tier exists.
+  // Entry price prefers the cheapest bundled panel from vendor_test_products (verified
+  // current pricing, kept in sync whenever a vendor is migrated to the products model)
+  // over vendor_tiers.is_entry_tier, which is only updated at initial research time and
+  // goes stale the moment a vendor's real pricing changes (e.g. SiPhox/Everlywell drifted
+  // from their vendor_tiers rows during the 2026-07 products-model migration pass) or
+  // points at something that isn't actually a purchasable test (e.g. InsideTracker's
+  // "Membership" tier is platform access, not a blood test). lab_vendors.entry_price_cents
+  // is the last-resort fallback for vendors with neither.
+  const { data: panelProducts } = await supabase
+    .from("vendor_test_products")
+    .select("vendor_id, price_cents")
+    .eq("product_type", "panel")
+    .order("price_cents");
+  const entryPanelPriceByVendorId = new Map<string, number>();
+  for (const p of panelProducts ?? []) {
+    if (!entryPanelPriceByVendorId.has(p.vendor_id)) entryPanelPriceByVendorId.set(p.vendor_id, p.price_cents);
+  }
+
   const { data: entryTiers } = await supabase
     .from("vendor_tiers")
     .select("vendor_id, price_cents")
     .eq("is_entry_tier", true);
   const entryTierPriceByVendorId = new Map((entryTiers ?? []).map((t) => [t.vendor_id, t.price_cents]));
+
+  const entryPriceByVendorId = new Map<string, number | null>();
+  for (const v of vendors) {
+    entryPriceByVendorId.set(
+      v.id,
+      entryPanelPriceByVendorId.get(v.id) ?? entryTierPriceByVendorId.get(v.id) ?? v.entryPriceCents
+    );
+  }
 
   const { data: peptideRows } = await supabase
     .from("peptides")
@@ -42,7 +64,6 @@ export default async function BloodTestsPage() {
   const membership = vendors.filter((v) => v.section === "membership");
   const panelPackage = vendors.filter((v) => v.section === "panel-package");
   const buildYourOwn = vendors.filter((v) => v.section === "build-your-own");
-  const lifeforce = vendors.find((v) => v.section === "special");
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
@@ -79,50 +100,9 @@ export default async function BloodTestsPage() {
             <div className="mb-16">
               <ProtocolBuilder
                 peptides={peptideRows ?? []}
-                entryTierPrices={Object.fromEntries(entryTierPriceByVendorId)}
+                entryTierPrices={Object.fromEntries(entryPriceByVendorId)}
               />
             </div>
-
-            {lifeforce && (
-              <div
-                className="rounded-2xl p-8 mb-16"
-                style={{ backgroundColor: "#EAF4F8", borderLeft: "4px solid #186784" }}
-              >
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#186784" }}>
-                  Managed Protocol
-                </p>
-                <h2 className="text-2xl font-bold mb-3" style={{ color: "#1D1D1F" }}>
-                  Want a physician managing your protocol and your bloodwork?
-                </h2>
-                <p className="text-sm leading-relaxed mb-5" style={{ color: "#6E6E73" }}>
-                  Lifeforce pairs physician-prescribed peptides (BPC-157, Ipamorelin, Semaglutide, and more) with quarterly
-                  blood testing and health coaching in one membership. All-in cost: ~$2,400–$4,200/yr depending on protocol.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {["Peptides Prescribed", "At-Home Blood Draw", "Physician Oversight", "HSA/FSA Eligible"].map((badge) => (
-                    <span
-                      key={badge}
-                      className="text-xs font-medium px-2.5 py-1 rounded-full"
-                      style={{ backgroundColor: "#FFFFFF", color: "#186784" }}
-                    >
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href={lifeforce.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-sm font-semibold rounded-xl px-5 py-3 transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: "#186784", color: "#FFFFFF" }}
-                >
-                  Learn more about Lifeforce ↗
-                </a>
-                <p className="text-xs mt-3" style={{ color: "#6E6E73" }}>
-                  Affiliate link — Watchtower earns a referral fee if you sign up. This does not affect our editorial scores.
-                </p>
-              </div>
-            )}
 
             <div className="mb-16">
               <h2 className="text-3xl font-bold mb-2" style={{ color: "#1D1D1F" }}>Membership Plans</h2>
@@ -131,7 +111,7 @@ export default async function BloodTestsPage() {
               </p>
               <div className="grid md:grid-cols-2 gap-5">
                 {membership.map((v) => (
-                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryTierPriceByVendorId.get(v.id)} />
+                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
                 ))}
               </div>
             </div>
@@ -143,7 +123,7 @@ export default async function BloodTestsPage() {
               </p>
               <div className="grid md:grid-cols-2 gap-5">
                 {panelPackage.map((v) => (
-                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryTierPriceByVendorId.get(v.id)} />
+                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
                 ))}
               </div>
             </div>
@@ -155,7 +135,7 @@ export default async function BloodTestsPage() {
               </p>
               <div className="grid md:grid-cols-2 gap-5">
                 {buildYourOwn.map((v) => (
-                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryTierPriceByVendorId.get(v.id)} />
+                  <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
                 ))}
               </div>
             </div>
