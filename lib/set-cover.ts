@@ -82,27 +82,69 @@ export function greedySetCover(
   }
 
   // Greedy lock-in cleanup: the loop above only compares *marginal* cost-per-marker
-  // at each step, so it can pick a cheaper-but-smaller product before it's clear a
-  // bigger product (selected later) would have covered the same ground alone -- e.g.
-  // Vitals Vault's Max Plan is a confirmed superset of its Essential Plan, but
-  // Essential can still win the first iteration on raw $/marker and get locked in.
-  // Remove any selected product whose full marker coverage is already provided by
-  // the other selected products combined; this can only reduce total cost and never
-  // reduces final coverage, since by definition nothing removed here was uniquely
-  // contributing.
+  // at each step, so it can lock in choices that turn out to be a net loss once the
+  // full picture is known. Two distinct ways that happens, each with a fixed-point
+  // cleanup pass below:
+  //
+  //   1. A selected product is a pure subset of the OTHER selected products combined
+  //      -- e.g. Vitals Vault's Max Plan is a confirmed superset of its Essential
+  //      Plan, but Essential can still win the first iteration on raw $/marker and
+  //      get locked in.
+  //   2. A GROUP of selected products, each still individually contributing
+  //      something the others don't, is nonetheless jointly dominated by a single
+  //      UNSELECTED product that alone covers everything the group covers for less
+  //      combined money -- e.g. three partial-overlap topic panels (Longevity /
+  //      Thyroid / Heart) that greedy assembles piece by piece, when one broader
+  //      panel (Ultimate) covers the same ground for less. Case 1's check can't see
+  //      this: no single member of the group is redundant against just the OTHER
+  //      selected members -- it takes a product nobody picked.
+  //
+  // Both checks additionally require raw-marker coverage (not just tracked
+  // biomarker coverage) before removing/replacing anything in 'value' mode, since
+  // that mode credits products for untracked bonus markers too -- a product can be
+  // tracked-marker-redundant while still being the only source of raw markers
+  // 'value' mode picked it for in the first place.
+  const rawSubsetOf = (p: CoverProduct, coverage: Set<string>) =>
+    mode !== 'value' || p.rawMarkerNames.every((n) => coverage.has(n))
+
   let changed = true
-  while (changed && selected.length > 1) {
+  while (changed) {
     changed = false
-    for (let i = 0; i < selected.length; i++) {
-      const othersCoverage = new Set(
-        selected.filter((_, j) => j !== i).flatMap((s) => s.product.biomarkerIds)
-      )
-      if (selected[i].product.biomarkerIds.every((id) => othersCoverage.has(id))) {
+
+    for (let i = 0; i < selected.length && selected.length > 1; i++) {
+      const others = selected.filter((_, j) => j !== i)
+      const othersBiomarkers = new Set(others.flatMap((s) => s.product.biomarkerIds))
+      const othersRaw = new Set(others.flatMap((s) => s.product.rawMarkerNames))
+      if (
+        selected[i].product.biomarkerIds.every((id) => othersBiomarkers.has(id)) &&
+        rawSubsetOf(selected[i].product, othersRaw)
+      ) {
         totalCents -= selected[i].product.priceCents
         selected.splice(i, 1)
         changed = true
         break
       }
+    }
+    if (changed) continue
+
+    for (const candidate of products) {
+      if (selected.some((s) => s.product.id === candidate.id)) continue
+      const candidateBiomarkers = new Set(candidate.biomarkerIds)
+      const candidateRaw = new Set(candidate.rawMarkerNames)
+      const dominated = selected.filter(
+        (s) =>
+          s.product.biomarkerIds.every((id) => candidateBiomarkers.has(id)) &&
+          rawSubsetOf(s.product, candidateRaw)
+      )
+      if (dominated.length === 0) continue
+      const dominatedCost = dominated.reduce((sum, s) => sum + s.product.priceCents, 0)
+      if (candidate.priceCents >= dominatedCost) continue
+
+      for (const d of dominated) selected.splice(selected.indexOf(d), 1)
+      totalCents = totalCents - dominatedCost + candidate.priceCents
+      selected.push({ product: candidate, newMarkersCovered: [] })
+      changed = true
+      break
     }
   }
 
