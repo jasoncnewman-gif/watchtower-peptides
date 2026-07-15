@@ -148,7 +148,7 @@ export default async function BloodTestsPage() {
                 </p>
                 <div className="grid md:grid-cols-2 gap-5">
                   {membership.map((v) => (
-                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                    <VendorCard key={v.id} vendor={v} />
                   ))}
                 </div>
               </div>
@@ -162,7 +162,7 @@ export default async function BloodTestsPage() {
                 </p>
                 <div className="grid md:grid-cols-2 gap-5">
                   {panelPackage.map((v) => (
-                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                    <VendorCard key={v.id} vendor={v} />
                   ))}
                 </div>
               </div>
@@ -176,7 +176,7 @@ export default async function BloodTestsPage() {
                 </p>
                 <div className="grid md:grid-cols-2 gap-5">
                   {hybrid.map((v) => (
-                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                    <VendorCard key={v.id} vendor={v} />
                   ))}
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default async function BloodTestsPage() {
                 </p>
                 <div className="grid md:grid-cols-2 gap-5">
                   {buildYourOwn.map((v) => (
-                    <VendorCard key={v.id} vendor={v} entryTierPriceCents={entryPriceByVendorId.get(v.id)} />
+                    <VendorCard key={v.id} vendor={v} />
                   ))}
                 </div>
               </div>

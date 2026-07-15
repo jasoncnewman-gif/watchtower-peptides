@@ -19,20 +19,9 @@ const COLLECTION_METHOD_LABEL: Record<string, string> = {
   multiple: 'Multiple Options',
 }
 
-function formatPrice(cents: number | null): string {
-  if (cents === null) return 'Price varies'
-  const dollars = cents / 100
-  return dollars % 1 === 0 ? `$${dollars.toFixed(0)}` : `$${dollars.toFixed(2)}`
-}
-
-export default function VendorCard({ vendor, entryTierPriceCents }: { vendor: LabVendor; entryTierPriceCents?: number | null }) {
+export default function VendorCard({ vendor }: { vendor: LabVendor }) {
   const businessLabel = vendor.businessModel ? BUSINESS_MODEL_LABEL[vendor.businessModel] : null
   const collectionLabel = vendor.collectionMethod ? COLLECTION_METHOD_LABEL[vendor.collectionMethod] : null
-  // Prefer the cheapest named tier's price (parsed from a clean pricing table) over
-  // lab_vendors.entry_price_cents, which was regex-extracted from free-text research notes
-  // and can grab the wrong dollar figure (e.g. a monthly membership fee mentioned before
-  // the actual panel price). Falls back to entry_price_cents only when no tier exists.
-  const displayPriceCents = entryTierPriceCents ?? vendor.entryPriceCents
 
   return (
     <div className="rounded-2xl p-6" style={{ backgroundColor: '#FFFFFF' }}>
@@ -62,17 +51,6 @@ export default function VendorCard({ vendor, entryTierPriceCents }: { vendor: La
           <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: '#EDE9FE', color: '#7C3AED' }}>
             Peptide Rx
           </span>
-        )}
-      </div>
-
-      <div className="mb-5">
-        <p className="text-2xl font-bold" style={{ color: '#1D1D1F' }}>{formatPrice(displayPriceCents)}</p>
-        {vendor.trueAnnualCostCents !== null && vendor.trueAnnualCostCents !== displayPriceCents && (
-          <p className="text-xs mt-0.5" style={{ color: '#6E6E73' }}>
-            {vendor.trueAnnualCostCents === 0
-              ? 'No recurring cost — one-time purchase'
-              : `${formatPrice(vendor.trueAnnualCostCents)} true annual cost`}
-          </p>
         )}
       </div>
 
