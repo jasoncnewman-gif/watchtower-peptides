@@ -81,6 +81,45 @@ export function greedySetCover(
     candidates.splice(candidates.indexOf(best.product), 1)
   }
 
+  // Greedy lock-in cleanup: the loop above only compares *marginal* cost-per-marker
+  // at each step, so it can pick a cheaper-but-smaller product before it's clear a
+  // bigger product (selected later) would have covered the same ground alone -- e.g.
+  // Vitals Vault's Max Plan is a confirmed superset of its Essential Plan, but
+  // Essential can still win the first iteration on raw $/marker and get locked in.
+  // Remove any selected product whose full marker coverage is already provided by
+  // the other selected products combined; this can only reduce total cost and never
+  // reduces final coverage, since by definition nothing removed here was uniquely
+  // contributing.
+  let changed = true
+  while (changed && selected.length > 1) {
+    changed = false
+    for (let i = 0; i < selected.length; i++) {
+      const othersCoverage = new Set(
+        selected.filter((_, j) => j !== i).flatMap((s) => s.product.biomarkerIds)
+      )
+      if (selected[i].product.biomarkerIds.every((id) => othersCoverage.has(id))) {
+        totalCents -= selected[i].product.priceCents
+        selected.splice(i, 1)
+        changed = true
+        break
+      }
+    }
+  }
+
+  // The per-product "newMarkersCovered" counts above are marginal contributions at
+  // the time each product was picked, which go stale once cleanup removes an earlier
+  // pick -- a product that showed a small marginal count because an now-removed
+  // product had already claimed most targets needs to be credited with everything it
+  // actually covers. Recompute in cart order so each target marker is attributed to
+  // exactly one product, same "first pick gets it" convention as the greedy loop.
+  const finalTargetsCovered = new Set<string>()
+  for (const s of selected) {
+    s.newMarkersCovered = s.product.biomarkerIds.filter(
+      (id) => targetBiomarkerIds.includes(id) && !finalTargetsCovered.has(id)
+    )
+    for (const id of s.newMarkersCovered) finalTargetsCovered.add(id)
+  }
+
   return {
     selected,
     totalCents,
