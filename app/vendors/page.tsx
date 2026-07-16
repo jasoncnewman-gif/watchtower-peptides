@@ -5,10 +5,15 @@ import Footer from "@/components/Footer";
 import VendorListClient from "@/components/vendors/VendorListClient";
 import { supabase, dbVendorToVendor, type DbVendor } from "@/lib/supabase";
 
+const title = "Peptide Vendor Reviews & Rankings — Independent Lab-Verified Scores";
+const description = "Independent scores for 50+ peptide vendors — ranked by lab testing, purity, transparency, and price. See which suppliers pass third-party COA verification and which to avoid.";
+
 export const metadata: Metadata = {
-  title: "Peptide Vendor Reviews & Rankings — Independent Lab-Verified Scores",
-  description: "Independent scores for 50+ peptide vendors — ranked by lab testing, purity, transparency, and price. See which suppliers pass third-party COA verification and which to avoid.",
+  title,
+  description,
   alternates: { canonical: "/vendors" },
+  openGraph: { title, description, images: [{ url: "/images/vendor-directory.png" }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/images/vendor-directory.png"] },
 };
 
 export const revalidate = 0

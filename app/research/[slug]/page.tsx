@@ -26,6 +26,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.title,
     description: data.meta_description ?? undefined,
     alternates: { canonical: `/research/${slug}` },
+    openGraph: {
+      title: data.title,
+      description: data.meta_description ?? undefined,
+      images: [{ url: '/images/research-hero.png' }],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.meta_description ?? undefined,
+      images: ['/images/research-hero.png'],
+    },
   }
 }
 
@@ -57,8 +69,22 @@ export default async function ArticlePage({ params }: Props) {
         .single()
     : { data: null }
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    ...(article.meta_description ? { description: article.meta_description } : {}),
+    ...(article.published_at ? { datePublished: article.published_at } : {}),
+    author: { '@type': 'Organization', name: 'Watchtower Peptides' },
+    publisher: { '@type': 'Organization', name: 'Watchtower Peptides' },
+  }
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FFFFFF', color: '#1D1D1F' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <Nav />
 
       <div className="pt-20">

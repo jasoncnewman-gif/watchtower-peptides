@@ -6,7 +6,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import PeptideDetailTabs, { type PeptideDetailData, type VendorTabData, type BloodworkTabData } from '@/components/peptides/PeptideDetailTabs'
 import { supabase } from '@/lib/supabase'
-import { generateSlug, stripSizeSuffix } from '@/lib/utils'
+import { generateSlug, stripSizeSuffix, truncateDescription } from '@/lib/utils'
 
 const CATEGORY_PHOTO: Record<string, string> = {
   healing:           '/images/category-healing.png',
@@ -25,20 +25,23 @@ export async function generateMetadata({
   const { slug } = await params
   const { data } = await supabase
     .from('peptides')
-    .select('name, full_name, tagline, overview, description')
+    .select('name, full_name, tagline, overview, description, category')
     .eq('slug', slug)
     .maybeSingle()
 
   if (!data) return { title: 'Peptide Not Found' }
 
   const title = data.full_name ? `${data.name} (${data.full_name})` : data.name
-  const desc = (data.tagline ?? data.overview ?? data.description ?? '')
-    .slice(0, 155)
+  const desc = truncateDescription(data.tagline ?? data.overview ?? data.description ?? '')
+    || `Research profile for ${data.name} — mechanisms, dosage, safety, clinical studies, and vendor price comparison.`
+  const image = CATEGORY_PHOTO[data.category ?? ''] ?? '/images/slide-2.png'
 
   return {
     title,
-    description: desc || `Research profile for ${data.name} — mechanisms, dosage, safety, clinical studies, and vendor price comparison.`,
+    description: desc,
     alternates: { canonical: `/peptides/${slug}` },
+    openGraph: { title, description: desc, images: [{ url: image }] },
+    twitter: { card: 'summary_large_image', title, description: desc, images: [image] },
   }
 }
 

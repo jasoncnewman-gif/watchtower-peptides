@@ -4,10 +4,15 @@ import Nav from '@/components/Nav'
 
 export const revalidate = 0
 
+const title = "Peptide Library — Research Profiles & Price Comparison"
+const description = "Independent research profiles for BPC-157, TB-500, Ipamorelin, and more — mechanisms, dosage, safety, clinical studies, and live vendor price comparison."
+
 export const metadata: Metadata = {
-  title: "Peptide Library — Research Profiles & Price Comparison",
-  description: "Independent research profiles for BPC-157, TB-500, Ipamorelin, and more — mechanisms, dosage, safety, clinical studies, and live vendor price comparison.",
+  title,
+  description,
   alternates: { canonical: "/peptides" },
+  openGraph: { title, description, images: [{ url: "/images/peptide-library.png" }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/images/peptide-library.png"] },
 }
 import Footer from '@/components/Footer'
 import PeptideLibraryClient from '@/components/peptides/PeptideLibraryClient'

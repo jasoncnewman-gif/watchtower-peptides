@@ -70,10 +70,15 @@ export async function generateMetadata({
 
   if (!data) return { title: "Vendor Not Found" };
 
+  const title = `${data.name} Review — Blood Testing for Peptide Researchers`;
+  const description = `${data.name}'s blood testing panels compared against the biomarkers peptide researchers actually need to monitor.`;
+
   return {
-    title: `${data.name} Review — Blood Testing for Peptide Researchers | Watchtower`,
-    description: `${data.name}'s blood testing panels compared against the biomarkers peptide researchers actually need to monitor.`,
+    title,
+    description,
     alternates: { canonical: `/blood-tests/${slug}` },
+    openGraph: { title, description, images: [{ url: "/images/vendor-directory.png" }] },
+    twitter: { card: "summary_large_image", title, description, images: ["/images/vendor-directory.png"] },
   };
 }
 

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { supabase, dbVendorToVendor, type DbVendor, type DbVendorPeptide, type VendorStatus } from "@/lib/supabase";
+import { truncateDescription } from "@/lib/utils";
 
 // Photo assigned per vendor based on dominant product category.
 // Replace any value with a vendor-specific image path when available.
@@ -70,13 +71,17 @@ export async function generateMetadata({
 
   const score = data.overall_score != null ? ` — Score: ${data.overall_score}/100` : "";
   const desc = data.verdict
-    ? data.verdict.slice(0, 155)
+    ? truncateDescription(data.verdict)
     : `Independent review of ${data.name}${score}. Lab verification, product quality, transparency, and customer experience scores.`;
+  const title = `${data.name} Review`;
+  const image = VENDOR_PHOTOS[slug] ?? "/images/slide-2.png";
 
   return {
-    title: `${data.name} Review`,
+    title,
     description: desc,
     alternates: { canonical: `/vendors/${slug}` },
+    openGraph: { title, description: desc, images: [{ url: image }] },
+    twitter: { card: "summary_large_image", title, description: desc, images: [image] },
   };
 }
 
@@ -174,8 +179,31 @@ export default async function VendorDetailPage({
   const latestPurity = latestTestRow?.purity_result ?? null;
   const batchInfo = latestPurity != null ? batchGrade(latestPurity) : null;
 
+  const reviewJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: {
+      "@type": "Organization",
+      name: vendor.name,
+      ...(vendor.website ? { url: vendor.website } : {}),
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: vendor.overall_score,
+      bestRating: 100,
+      worstRating: 0,
+    },
+    author: { "@type": "Organization", name: "Watchtower Peptides" },
+    ...(vendor.last_reviewed ? { datePublished: vendor.last_reviewed } : {}),
+    ...(vendor.verdict ? { reviewBody: vendor.verdict } : {}),
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
+      />
       <Nav />
 
       <div className="pt-20">

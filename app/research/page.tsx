@@ -5,10 +5,15 @@ import Footer from '@/components/Footer'
 import { supabase } from '@/lib/supabase'
 import ResearchLibraryClient from '@/components/research/ResearchLibraryClient'
 
+const title = 'Peptide Research — Expert Analysis & Evidence Reviews'
+const description = 'Evidence-based research on peptides — sourced from expert transcripts, clinical studies, and medical literature. BPC-157, TB-500, CJC-1295, and more.'
+
 export const metadata: Metadata = {
-  title: 'Peptide Research — Expert Analysis & Evidence Reviews',
-  description: 'Evidence-based research on peptides — sourced from expert transcripts, clinical studies, and medical literature. BPC-157, TB-500, CJC-1295, and more.',
+  title,
+  description,
   alternates: { canonical: '/research' },
+  openGraph: { title, description, images: [{ url: '/images/research-hero.png' }] },
+  twitter: { card: 'summary_large_image', title, description, images: ['/images/research-hero.png'] },
 }
 
 export const revalidate = 0

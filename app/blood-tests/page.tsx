@@ -6,10 +6,15 @@ import VendorCard from "@/components/blood-tests/VendorCard";
 import ProtocolBuilder from "@/components/blood-tests/ProtocolBuilder";
 import { supabase, dbLabVendorToLabVendor, type DbLabVendor } from "@/lib/supabase";
 
+const title = "Blood Test Comparison for Peptide Researchers";
+const description = "Find the right blood testing service for your peptide protocol. Compare 13 vendors on IGF-1, hormone panels, liver enzymes, and other key biomarkers.";
+
 export const metadata: Metadata = {
-  title: "Blood Test Comparison for Peptide Researchers | Watchtower",
-  description: "Find the right blood testing service for your peptide protocol. Compare 13 vendors on IGF-1, hormone panels, liver enzymes, and the biomarkers that actually matter.",
+  title,
+  description,
   alternates: { canonical: "/blood-tests" },
+  openGraph: { title, description, images: [{ url: "/images/vendor-directory.png" }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/images/vendor-directory.png"] },
 };
 
 export const revalidate = 0;

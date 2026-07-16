@@ -13,6 +13,16 @@ export function generateSlug(name: string): string {
     .replace(/-+/g, '-')
 }
 
+// Truncate meta-description copy at the last full word within maxLength, so
+// SERP snippets never end mid-word (e.g. "...and m") — appends "…" only when
+// actually cut short.
+export function truncateDescription(text: string, maxLength: number = 155): string {
+  if (text.length <= maxLength) return text
+  const cut = text.slice(0, maxLength)
+  const lastSpace = cut.lastIndexOf(' ')
+  return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`
+}
+
 // Strip trailing size/quantity suffixes so "ipamorelin-10mg" normalises to "ipamorelin"
 export function stripSizeSuffix(slug: string): string {
   return slug
