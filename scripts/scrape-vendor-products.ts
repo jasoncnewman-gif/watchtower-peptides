@@ -43,7 +43,7 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "ascension-peptides",      catalogUrl: "https://ascensionpeptides.com/collections/all" },
   { slug: "nexaph",                  catalogUrl: "https://nexaph.com/peptides" },
   { slug: "mile-high-compounds",     catalogUrl: "", isGated: true },
-  { slug: "crush-research",          catalogUrl: "https://crushresearch.shop" },
+  { slug: "crush-research",          catalogUrl: "https://crushresearch.shop/shop" },
   { slug: "omegamino",               catalogUrl: "", isGated: true },
   { slug: "orbitrex-peptides",       catalogUrl: "https://orbitrexpeptide.is/shop/" },
   { slug: "peptidology",             catalogUrl: "https://peptidology.com/collections/peptides" },
@@ -71,7 +71,7 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "apollo-peptide-sciences", catalogUrl: "https://apollopeptidesciences.com/collections/all" },
   { slug: "cernum-biosciences",      catalogUrl: "https://cernumbiosciences.com/shop" },
   { slug: "peptide-crafters",        catalogUrl: "https://peptidecrafters.com/collections/peptides" },
-  { slug: "lvlup-health",            catalogUrl: "https://lvluphealth.com/collections/all" },
+  { slug: "lvlup-health",            catalogUrl: "", isGated: true }, // account/PIN login required — no public catalog (confirmed 2026-07-17)
   { slug: "healthgevity",            catalogUrl: "https://healthgev.com/shop" },
 
   // New vendors added 2026-06-09
@@ -86,7 +86,7 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
 // ── Peptide keyword filter ────────────────────────────────────────────────
 
 const KNOWN_PEPTIDES = [
-  "bpc", "tb-500", "thymosin", "sermorelin", "cjc", "ipamorelin",
+  "bpc", "body protection compound", "tb-500", "thymosin", "sermorelin", "cjc", "ipamorelin",
   "semaglutide", "tirzepatide", "pt-141", "bremelanotide", "kisspeptin",
   "ghrp", "igf", "selank", "semax", "epitalon", "epithalon", "melanotan",
   "gh frag", "aod", "ss-31", "mots-c", "humanin", "fgl",
@@ -98,31 +98,76 @@ const KNOWN_PEPTIDES = [
   "ghk-cu", "kpv", "dsip", "ara-290", "bronchogen", "pinealon", "vilon",
   "cartalax", "foxo4", "survodutide", "mt-1", "mt-ii", "mt-2", "vip",
   "glow", "klow",
+  // Added 2026-07-17, found auditing the rest of the vendor pool: real
+  // compounds that recur across many independent vendors (Cagrilintide and
+  // Mazdutide especially — both missing meant every vendor selling them
+  // showed zero for two of the most common GLP-1-adjacent compounds sold).
+  // Also the rest of the Khavinson bioregulator family beyond what Orbitrex
+  // surfaced — Testagen/Cardiogen/Livagen/etc. are a well-established
+  // product line multiple vendors carry, not one-off names.
+  "cagrilintide", "mazdutide", "setmelanotide", "thymulin", "thymalin",
+  "thymogen", "thymagen", "pnc-27", "ace-031", "follistatin", "gonadorelin",
+  "ahk-cu", "snap-8", "snap8", "pe-22-28", "pe 22-28", "b7-33", "klotho",
+  "cerebrolysin", "vesugen", "chonluten", "livagen", "prostamax", "cortagen",
+  "ovagen", "cardiogen", "testagen", "adipotide", "176-191", "mgf",
+  "protirelin", "dihexa", "hgh", "hcg", "hmg", "tb4", "tb 4",
+  // Cross-vendor recurring name (Orbitrex, Skye, Verified, NexTech, RUO,
+  // True Research Labs all carry it) — composition unconfirmed but too
+  // consistent across independently-run stores to be vendor-specific noise.
+  "adamax",
 ];
 
 // Known non-peptide items vendors commonly list alongside their peptide
-// catalog — merch and reconstitution supplies, not research compounds.
+// catalog — merch, reconstitution supplies, SARMs, and other research
+// chemicals that are NOT peptides, not research compounds.
 // Checked first so an exact non-peptide match never falls through to the
 // "unmatched, log for review" path below and clutter it.
 const KNOWN_NON_PEPTIDES = [
   "tee", "hoodie", "towel", "shaker bottle", "water bottle",
-  "bacteriostatic water", "bacteriostic water", "sterile water",
-  "acetic acid solution", "saline", "gift card", "sticker", "keychain",
+  "bacteriostatic water", "bacteriostic water", "bac water", "sterile water",
+  "acetic acid", "saline", "gift card", "sticker", "keychain",
+  "snapback", "tank top", "long sleeve", "polo", "premium packaging",
+  "storage case", "vial storage", "loyalty reward", "shipping", "priority processing",
+  "customs invoice", "custom invoice", "milestone badge", "promotional product",
+  "reconstitution solution", "reconstitution water", "research diluent",
+  "mixing syringe", "empty air dispersal", "empty 10ml vial", "air dispersal kit",
   // Real compounds sold alongside peptides that are not themselves peptides
-  // (cofactors/supplements or small-molecule drugs) — excluded deliberately,
-  // not missing keywords.
+  // (cofactors/supplements/vitamins or small-molecule drugs) — excluded
+  // deliberately, not missing keywords.
   "nad+", "glutathione", "l-carnitine", "tesofensine", "5-amino-1mq",
-  "slu-pp-332",
+  "5-amino 1mq", "5 amino 1mq", "slu-pp-332", "slu-pp 332", "slu pp 332",
+  "botox", "lemon bottle", "methylene blue", "polyethylene glycol", "peg-400",
+  "b12", "methylcobalamin", "vitamin d", "vitamin b", "curcumin", "melatonin",
+  "aicar",
+  // SARMs — small-molecule androgen receptor ligands, not peptides, despite
+  // being sold by the same vendors as a matter of course. Deliberately not
+  // including bare "S4"/"NAD" here (checked separately above) — too short,
+  // real risk of matching inside an unrelated peptide name (e.g.
+  // "Gonadorelin" contains "nad"); classifyProduct checks the peptide list
+  // first so this only matters for names no real-peptide keyword already
+  // caught, but the safer failure mode is "left unmatched for review", not
+  // "silently misclassified as non-peptide".
+  "rad-140", "rad-150", "tlb-150", "lgd-4033", "ligandrol", "mk-677",
+  "ibutamoren", "ostarine", "mk-2866", "cardarine", "gw-501516", "sr-9009",
+  "sr-9011", "stenabolic", "yk-11", "andarine", "s23", "ru-58841",
+  "ru58841", "ac-262", "accadrine", "testolone",
 ];
 
+// Compact form (letters/digits only) used for matching so hyphen/space
+// variants of the same name (PT-141 vs "PT 141", SNAP-8 vs "SNAP8") match
+// without enumerating every punctuation variant per keyword.
+function compact(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9+]/g, "");
+}
+
 function isPeptideProduct(name: string): boolean {
-  const lower = name.toLowerCase();
-  return KNOWN_PEPTIDES.some((kw) => lower.includes(kw));
+  const c = compact(name);
+  return KNOWN_PEPTIDES.some((kw) => c.includes(compact(kw)));
 }
 
 function isKnownNonPeptide(name: string): boolean {
-  const lower = name.toLowerCase();
-  return KNOWN_NON_PEPTIDES.some((kw) => lower.includes(kw));
+  const c = compact(name);
+  return KNOWN_NON_PEPTIDES.some((kw) => c.includes(compact(kw)));
 }
 
 // Names that matched neither list — logged instead of silently dropped, so
@@ -306,6 +351,40 @@ async function scrapeWithPuppeteer(
         in_stock:     !outOfStock,
       });
     });
+
+    // Fallback for fully custom storefronts with no recognizable class names
+    // (no WooCommerce/generic markup at all — a bespoke Tailwind/Next.js
+    // build, for instance) where CARD_SEL matches nothing. Product detail
+    // links are a much more universal pattern than any CSS class naming
+    // convention, so anchor on those instead: walk up from each
+    // `/product/...`-style link to the smallest ancestor that contains both
+    // some text and something that parses as a price, and treat that as the
+    // card.
+    if (products.length === 0) {
+      const seen = new Set<string>();
+      $("a[href*='/product']").each((_, linkEl) => {
+        let card = $(linkEl);
+        for (let i = 0; i < 4; i++) {
+          const text = clean(card.text()) ?? "";
+          const price = parsePrice(text);
+          if (text && price !== null) break;
+          const parent = card.parent();
+          if (parent.length === 0) break;
+          card = parent;
+        }
+        const name = clean(card.find("img").attr("alt") ?? "") || clean(card.text())?.split(/\s{2,}|\$/)[0];
+        if (!name || seen.has(name) || classifyProduct(config.slug, name) !== "peptide") return;
+        seen.add(name);
+        const priceText = clean(card.text());
+        products.push({
+          peptide_name: name,
+          size_mg:      parseMg(name),
+          list_price:   parsePrice(priceText),
+          sale_price:   null,
+          in_stock:     !(card.text().toLowerCase().includes("sold out") || card.text().toLowerCase().includes("out of stock")),
+        });
+      });
+    }
 
     return products;
   } catch (err) {
