@@ -45,7 +45,7 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "mile-high-compounds",     catalogUrl: "", isGated: true },
   { slug: "crush-research",          catalogUrl: "https://crushresearch.shop" },
   { slug: "omegamino",               catalogUrl: "", isGated: true },
-  { slug: "orbitrex-peptides",       catalogUrl: "https://orbitrexpeptide.is" },
+  { slug: "orbitrex-peptides",       catalogUrl: "https://orbitrexpeptide.is/shop/" },
   { slug: "peptidology",             catalogUrl: "https://peptidology.com/collections/peptides" },
   { slug: "swiss-chems",             catalogUrl: "https://swisschems.is/product-category/peptides" },
   { slug: "pure-rawz",               catalogUrl: "https://purerawz.co/peptides" },
@@ -90,13 +90,56 @@ const KNOWN_PEPTIDES = [
   "semaglutide", "tirzepatide", "pt-141", "bremelanotide", "kisspeptin",
   "ghrp", "igf", "selank", "semax", "epitalon", "epithalon", "melanotan",
   "gh frag", "aod", "ss-31", "mots-c", "humanin", "fgl",
-  "retatrutide", "triptorelin", "hexarelin", "tesamorelin",
+  "retatrutide", "triptorelin", "hexarelin", "tesamorelin", "tesa-",
   "peptide yy", "gip", "glp", "oxytocin", "ll-37",
+  // Added 2026-07-17, found auditing Orbitrex: Khavinson bioregulator peptides
+  // (short synthetic peptides, distinct from GLP-1/GH-axis compounds above)
+  // and other real compounds the original list simply never included.
+  "ghk-cu", "kpv", "dsip", "ara-290", "bronchogen", "pinealon", "vilon",
+  "cartalax", "foxo4", "survodutide", "mt-1", "mt-ii", "mt-2", "vip",
+  "glow", "klow",
+];
+
+// Known non-peptide items vendors commonly list alongside their peptide
+// catalog — merch and reconstitution supplies, not research compounds.
+// Checked first so an exact non-peptide match never falls through to the
+// "unmatched, log for review" path below and clutter it.
+const KNOWN_NON_PEPTIDES = [
+  "tee", "hoodie", "towel", "shaker bottle", "water bottle",
+  "bacteriostatic water", "bacteriostic water", "sterile water",
+  "acetic acid solution", "saline", "gift card", "sticker", "keychain",
+  // Real compounds sold alongside peptides that are not themselves peptides
+  // (cofactors/supplements or small-molecule drugs) — excluded deliberately,
+  // not missing keywords.
+  "nad+", "glutathione", "l-carnitine", "tesofensine", "5-amino-1mq",
+  "slu-pp-332",
 ];
 
 function isPeptideProduct(name: string): boolean {
   const lower = name.toLowerCase();
   return KNOWN_PEPTIDES.some((kw) => lower.includes(kw));
+}
+
+function isKnownNonPeptide(name: string): boolean {
+  const lower = name.toLowerCase();
+  return KNOWN_NON_PEPTIDES.some((kw) => lower.includes(kw));
+}
+
+// Names that matched neither list — logged instead of silently dropped, so
+// an unrecognized product (a new compound, a vendor's proprietary blend
+// name) shows up for a human to classify instead of vanishing with no
+// trace. This was the actual bug behind Orbitrex showing 2 products when it
+// really sells ~60+: the old allow-list dropped everything it didn't
+// recognize with zero signal that anything had been skipped.
+const unmatchedNames = new Map<string, string[]>(); // vendor slug -> names
+
+function classifyProduct(vendorSlug: string, name: string): "peptide" | "non-peptide" | "unmatched" {
+  if (isPeptideProduct(name)) return "peptide";
+  if (isKnownNonPeptide(name)) return "non-peptide";
+  const list = unmatchedNames.get(vendorSlug) ?? [];
+  list.push(name);
+  unmatchedNames.set(vendorSlug, list);
+  return "unmatched";
 }
 
 // ── Product data type ─────────────────────────────────────────────────────
@@ -122,10 +165,10 @@ type ShopifyProduct = {
   variants: ShopifyVariant[];
 };
 
-function parseShopifyProducts(products: ShopifyProduct[]): ProductData[] {
+function parseShopifyProducts(slug: string, products: ShopifyProduct[]): ProductData[] {
   const results: ProductData[] = [];
   for (const p of products) {
-    if (!isPeptideProduct(p.title)) continue;
+    if (classifyProduct(slug, p.title) !== "peptide") continue;
     const variant = p.variants[0];
     const price = variant?.price ? parseFloat(variant.price) : null;
     const compareAt = variant?.compare_at_price ? parseFloat(variant.compare_at_price) : null;
@@ -141,7 +184,7 @@ function parseShopifyProducts(products: ShopifyProduct[]): ProductData[] {
   return results;
 }
 
-async function tryShopifyApi(catalogUrl: string, browser: Browser): Promise<ProductData[] | null> {
+async function tryShopifyApi(catalogUrl: string, slug: string, browser: Browser): Promise<ProductData[] | null> {
   const { protocol, hostname } = new URL(catalogUrl);
   const apiUrl = `${protocol}//${hostname}/products.json?limit=250`;
 
@@ -153,7 +196,7 @@ async function tryShopifyApi(catalogUrl: string, browser: Browser): Promise<Prod
     });
     if (res.ok && (res.headers.get("content-type") ?? "").includes("json")) {
       const json = (await res.json()) as { products?: ShopifyProduct[] };
-      if (json.products?.length) return parseShopifyProducts(json.products);
+      if (json.products?.length) return parseShopifyProducts(slug, json.products);
     }
   } catch {
     // fall through to browser attempt
@@ -168,7 +211,7 @@ async function tryShopifyApi(catalogUrl: string, browser: Browser): Promise<Prod
     const body = await page.evaluate(() => document.body?.innerText ?? "");
     const json = JSON.parse(body) as { products?: ShopifyProduct[] };
     if (!json.products?.length) return null;
-    return parseShopifyProducts(json.products);
+    return parseShopifyProducts(slug, json.products);
   } catch {
     return null;
   } finally {
@@ -201,7 +244,7 @@ async function tryWooCommerceApi(catalogUrl: string, slug: string, browser: Brow
 
       const results: ProductData[] = [];
       for (const p of json) {
-        if (!isPeptideProduct(p.name)) continue;
+        if (classifyProduct(slug, p.name) !== "peptide") continue;
         const rawPrice   = p.prices?.price         ? parseInt(p.prices.price)         / 100 : null;
         const rawRegular = p.prices?.regular_price  ? parseInt(p.prices.regular_price) / 100 : null;
         const rawSale    = p.prices?.sale_price     ? parseInt(p.prices.sale_price)    / 100 : null;
@@ -251,7 +294,7 @@ async function scrapeWithPuppeteer(
 
     $(CARD_SEL).each((_, el) => {
       const name = clean($(el).find(NAME_SEL).first().text()) ?? "";
-      if (!name || !isPeptideProduct(name)) return;
+      if (!name || classifyProduct(config.slug, name) !== "peptide") return;
       const priceText  = clean($(el).find(PRICE_SEL).first().text());
       const outOfStock = $(el).find(OOS_SEL).length > 0 ||
                          $(el).text().toLowerCase().includes("sold out");
@@ -310,7 +353,7 @@ async function scrapeVendor(browser: Browser, config: VendorCatalogConfig): Prom
   }
 
   // Stage 1: Shopify API (plain fetch, browser fallback for Cloudflare-protected stores)
-  const shopifyProducts = await tryShopifyApi(config.catalogUrl, browser);
+  const shopifyProducts = await tryShopifyApi(config.catalogUrl, config.slug, browser);
   if (shopifyProducts !== null) {
     log(SCRIPT, `  ${config.slug}: Shopify API → ${shopifyProducts.length} peptide products`);
     if (shopifyProducts.length > 0) await saveProducts(vendorId, config.slug, shopifyProducts);
@@ -336,7 +379,14 @@ async function scrapeVendor(browser: Browser, config: VendorCatalogConfig): Prom
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  log(SCRIPT, `Processing ${VENDOR_CONFIGS.length} vendors…`);
+  // Optional: npm run scrape:products -- <slug> [<slug> ...] to target specific
+  // vendors instead of the full ~40-vendor run (e.g. verifying a single fix).
+  const requestedSlugs = process.argv.slice(2);
+  const configs = requestedSlugs.length > 0
+    ? VENDOR_CONFIGS.filter((c) => requestedSlugs.includes(c.slug))
+    : VENDOR_CONFIGS;
+
+  log(SCRIPT, `Processing ${configs.length} vendor(s)…`);
 
   const browser = await puppeteerExtra.launch({
     headless: true,
@@ -344,12 +394,20 @@ async function main() {
   }) as unknown as Browser;
 
   try {
-    for (const config of VENDOR_CONFIGS) {
+    for (const config of configs) {
       await scrapeVendor(browser, config);
       await sleep(1500);
     }
   } finally {
     await browser.close();
+  }
+
+  if (unmatchedNames.size > 0) {
+    log(SCRIPT, "");
+    log(SCRIPT, "Unmatched product names (neither a known peptide nor a known non-peptide — review and classify):");
+    for (const [slug, names] of unmatchedNames) {
+      log(SCRIPT, `  ${slug} (${names.length}): ${names.join(", ")}`);
+    }
   }
 
   log(SCRIPT, "Done.");
