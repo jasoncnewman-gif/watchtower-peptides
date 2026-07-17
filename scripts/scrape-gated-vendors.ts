@@ -12,6 +12,7 @@ import type { Browser, Page } from "puppeteer";
 import * as cheerio from "cheerio";
 import { db } from "./lib/client.js";
 import { clean, parsePrice, parseMg, log, sleep } from "./lib/scraper.js";
+import { isPeptideProduct } from "./lib/peptide-classifier.js";
 
 // Puppeteer is lazy-imported in launchBrowser() so its stealth plugin doesn't
 // patch Node's fetch before the Supabase DB queries run.
@@ -40,23 +41,11 @@ type GatedVendorRow = {
   newWebsite?: string;
 };
 
-// ── Peptide filter ────────────────────────────────────────────────────────
-
-const KNOWN_PEPTIDES = [
-  "bpc", "tb-500", "thymosin", "sermorelin", "cjc", "ipamorelin",
-  "semaglutide", "tirzepatide", "pt-141", "bremelanotide", "kisspeptin",
-  "ghrp", "igf", "selank", "semax", "epitalon", "epithalon", "melanotan",
-  "gh frag", "aod", "ss-31", "mots-c", "humanin", "fgl",
-  "retatrutide", "triptorelin", "hexarelin", "tesamorelin",
-  "peptide yy", "gip", "glp", "oxytocin", "ll-37", "ghk",
-  "dihexa", "pinealon", "dsip", "thymulin", "mk-677",
-  "nad+", "nad ", "vip", "kpv", "selank", "ipa",
-];
-
-function isPeptide(name: string): boolean {
-  const lower = name.toLowerCase();
-  return KNOWN_PEPTIDES.some((kw) => lower.includes(kw));
-}
+// Peptide classification now lives in ./lib/peptide-classifier.ts, shared
+// with scrape-vendor-products.ts. This file used to keep its own copy,
+// which had drifted out of sync — missing Cagrilintide and Mazdutide, and
+// incorrectly listing "nad+"/"nad " and "mk-677" (a SARM, not a peptide) as
+// matches.
 
 // ── Product data ──────────────────────────────────────────────────────────
 
@@ -237,7 +226,7 @@ async function tryWooCommerceApi(page: Page, baseUrl: string): Promise<ProductDa
 
     const results: ProductData[] = [];
     for (const p of json) {
-      if (!isPeptide(p.name ?? "")) continue;
+      if (!isPeptideProduct(p.name ?? "")) continue;
       const rawPrice   = p.prices?.price          ? parseInt(p.prices.price)         / 100 : null;
       const rawRegular = p.prices?.regular_price   ? parseInt(p.prices.regular_price) / 100 : null;
       const rawSale    = p.prices?.sale_price      ? parseInt(p.prices.sale_price)    / 100 : null;
@@ -266,7 +255,7 @@ async function tryShopifyApi(page: Page, baseUrl: string): Promise<ProductData[]
 
     const results: ProductData[] = [];
     for (const p of json.products) {
-      if (!isPeptide(p.title ?? "")) continue;
+      if (!isPeptideProduct(p.title ?? "")) continue;
       const variant = p.variants?.[0];
       const price = variant?.price ? parseFloat(variant.price) : null;
       const compareAt = variant?.compare_at_price ? parseFloat(variant.compare_at_price) : null;
@@ -300,7 +289,7 @@ async function scrapeProductsFromHtml(page: Page, url: string): Promise<ProductD
 
     $(CARD_SEL).each((_, el) => {
       const name = clean($(el).find(NAME_SEL).first().text()) ?? "";
-      if (!name || !isPeptide(name)) return;
+      if (!name || !isPeptideProduct(name)) return;
       const priceText  = clean($(el).find(PRICE_SEL).first().text());
       const outOfStock = $(el).find(OOS_SEL).length > 0 ||
                          $(el).text().toLowerCase().includes("sold out");
