@@ -65,6 +65,7 @@ export async function generateMetadata({
     .from("vendors")
     .select("name, verdict, overall_score")
     .eq("slug", slug)
+    .eq("status", "active")
     .maybeSingle();
 
   if (!data) return { title: "Vendor Not Found" };
@@ -142,6 +143,7 @@ export default async function VendorDetailPage({
     .from("vendors")
     .select("*")
     .eq("slug", slug)
+    .eq("status", "active")
     .single();
 
   if (!vendorRow) notFound();
