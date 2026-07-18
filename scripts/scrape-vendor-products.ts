@@ -60,7 +60,11 @@ const VENDOR_CONFIGS: VendorCatalogConfig[] = [
   { slug: "biotech-peptides",        catalogUrl: "https://biotechpeptides.com/collections/all" },
   { slug: "sports-technology-labs",  catalogUrl: "https://sportstechnologylabs.com/shop" },
   { slug: "polaris-peptides",        catalogUrl: "https://polarispeptides.com/collections/peptides" },
-  { slug: "pivot-labs",              catalogUrl: "https://pivotlabs.com/shop" },
+  // Vendor rebranded/moved domains at some point — pivotlabs.com now expired
+  // and redirects to a domain-parking marketplace (Afternic). Real current
+  // site is pivotlabsglobal.com (confirmed 2026-07-17), fully public, no
+  // login required.
+  { slug: "pivot-labs",              catalogUrl: "https://pivotlabsglobal.com/shop" },
   { slug: "ez-peptides",             catalogUrl: "https://ezpeptides.com/collections/all" },
   { slug: "skye-peptides",           catalogUrl: "https://skyepeptides.com/collections/peptides" },
   { slug: "bulk-peptide-supply",     catalogUrl: "https://bulkpeptidesupply.com/shop" },
