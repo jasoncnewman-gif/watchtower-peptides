@@ -28,8 +28,26 @@ export default async function VendorsPage() {
   if (error) console.error("vendors query error:", error.message);
   const vendors = (data ?? []).map((v) => dbVendorToVendor(v as DbVendor));
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: title,
+    description,
+    numberOfItems: vendors.length,
+    itemListElement: vendors.map((v, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: v.name,
+      url: `https://www.watchtowerpeptides.com/vendors/${v.slug}`,
+    })),
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF", color: "#1D1D1F" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <Nav />
 
       <div className="pt-20">
