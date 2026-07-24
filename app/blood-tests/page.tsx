@@ -111,7 +111,7 @@ export default async function BloodTestsPage() {
       <div className="pt-20">
         <section className="relative" style={{ minHeight: "320px" }}>
           <Image
-            src="/images/research-hero.png"
+            src="/images/blood-tests-hero.png"
             alt="Blood Testing"
             fill
             priority
