@@ -62,12 +62,15 @@ export default function DisclaimerPage() {
 
           <section>
             <h2 className="text-lg font-semibold mb-3" style={{ color: "#1D1D1F" }}>
-              No Affiliate Relationships
+              Affiliate Relationships &amp; Scoring Independence
             </h2>
             <p>
-              Watchtower Peptides has no affiliate relationships with any vendor listed on this site.
-              We receive no commissions, referral fees, or compensation of any kind from vendors in
-              exchange for scores, rankings, or placement. Our analysis is funded independently.
+              Peptide vendor reviews on this site carry no affiliate relationships, referral fees, or
+              vendor compensation of any kind — that analysis is funded entirely independently. Some
+              blood-test vendors participate in a referral/affiliate program, disclosed directly on
+              that vendor&rsquo;s page when applicable. In every case, affiliate participation has no
+              bearing on a vendor&rsquo;s score, ranking, or placement — scoring works the same way
+              whether or not a commission relationship exists.
             </p>
           </section>
 

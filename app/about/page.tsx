@@ -105,9 +105,10 @@ export default async function AboutPage() {
               </h1>
               <p className="text-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
                 Watchtower Peptides is an independent research platform built on one operating principle:
-                every score must be derivable from publicly verifiable data. We have no affiliate relationships
-                and accept no compensation from vendors — paid or otherwise. Our independence isn&rsquo;t a
-                marketing claim. It&rsquo;s a structural constraint built into how the platform works.
+                every score must be derivable from publicly verifiable data. No score accepts compensation
+                from a vendor, paid or otherwise — and where a blood-test partner discloses a referral
+                commission on its own page, that relationship never factors into its rating. Our independence
+                isn&rsquo;t a marketing claim. It&rsquo;s a structural constraint built into how the platform works.
               </p>
             </div>
           </div>

@@ -42,7 +42,8 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
               </Link>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
-              Independent research platform. No affiliates. No paid placements. Every score is earned, not bought.
+              Independent research platform. Every score is earned, not bought — some blood-test partners pay
+              a referral commission, disclosed on their page, but it never affects a rating.
             </p>
           </div>
 
@@ -88,7 +89,7 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
         {/* Copyright + disclaimer */}
         <div className="pt-6 flex flex-col gap-2">
           <p className="text-sm" style={{ color: "#6E6E73" }}>
-            © 2026 Watchtower Peptides — Independent research only. No affiliates. No paid placements.
+            © 2026 Watchtower Peptides — Independent research only. Ratings are never influenced by affiliate relationships.
           </p>
           <p className="text-xs leading-relaxed" style={{ color: "#4E4E53" }}>
             All peptides referenced on this site are sold by third-party vendors as research chemicals
