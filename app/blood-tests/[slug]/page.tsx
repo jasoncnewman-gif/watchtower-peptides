@@ -338,14 +338,16 @@ export default async function LabVendorDetailPage({
           </section>
         )}
 
-        <section className="px-6 py-16">
-          <div className="max-w-4xl mx-auto rounded-2xl p-6" style={{ backgroundColor: "#F5F5F7" }}>
-            <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
-              Watchtower Peptides may earn a referral commission if you purchase through links on this page.
-              This does not affect our scoring or editorial coverage.
-            </p>
-          </div>
-        </section>
+        {vendor.affiliate_program && (
+          <section className="px-6 py-16">
+            <div className="max-w-4xl mx-auto rounded-2xl p-6" style={{ backgroundColor: "#F5F5F7" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#6E6E73" }}>
+                Watchtower Peptides may earn a referral commission if you purchase through links on this page.
+                This does not affect our scoring or editorial coverage.
+              </p>
+            </div>
+          </section>
+        )}
       </div>
 
       <Footer verseIndex={5} />
