@@ -3,7 +3,7 @@
 **Owner:** Jason Newman (jason@watchtowerpeptides.com)  
 **Entity:** Four Chariots / Arba Haras Group  
 **Status:** Live — active development  
-**Last updated:** July 2026
+**Last updated:** 2026-07-31
 
 ---
 
@@ -97,6 +97,7 @@ Buyers have no reliable way to evaluate vendor quality, purity claims, or legiti
 - Editable summary text before approval
 - Sentiment classifier (positive / neutral / mixed / negative / insufficient data)
 - Links to vendor pages for context
+- **Unauthenticated as of 2026-07-24** — Basic Auth was removed at the owner's request after the auth token proved hard to manage; reachable by anyone with the URL. Acceptable at current traffic levels, revisit if that changes.
 
 ### 5.8 Automated Monitoring
 - Daily URL health check (Vercel cron, 12:00 UTC) → email alert via Brevo when vendor domains go dead
@@ -110,7 +111,16 @@ A second vertical: at-home blood testing services, scored for relevance to pepti
 - **Cart Builder (per-vendor, products-model vendors only)** — pick peptides, get the actual cheapest combination of that vendor's real panels + à la carte tests to cover it, with a toggle between "cheapest for exactly what I need" and "best overall value" (credits a panel's non-target markers too, since someone getting bloodwork anyway benefits from broader data). Goodlabs, Marek Diagnostics, Vitals Vault, Jinfiniti (AgingSOS), SiPhox Health, Mito Health, Everlywell, Rythm Health, Superpower, Function Health, Hundred Health, and OneTwenty are migrated to this model so far — see `CLAUDE.md`'s "Blood Test Vendor Data Model" for the schema and how to migrate another vendor onto it. Only InsideTracker still shows a flatter coverage table.
 - **Full catalog view (per-vendor, products-model vendors only)** — every panel and à la carte test the vendor sells, searchable, with full marker breakdowns.
 
-**Affiliate model exception:** unlike the peptide vendor review side (Section 4: "no affiliates, no paid placements"), the blood-test vertical does carry disclosed affiliate links (`lab_vendors.affiliate_url`/`affiliate_program`) — shown with an inline disclosure on every vendor card and detail page ("Watchtower Peptides may earn a referral commission... This does not affect our scoring or editorial coverage"). This is a deliberate, disclosed departure from the peptide-vendor no-affiliate stance, not an inconsistency — the two verticals are evaluated and monetized differently because blood-testing labs aren't peptide vendors and don't compete for the same trust position. Affiliate commission rates for several vendors remain unresearched/unconfirmed — logged as an open item, not blocking.
+**Affiliate model exception:** unlike the peptide vendor review side (Section 4: "no affiliates, no paid placements"), the blood-test vertical does carry disclosed affiliate links (`lab_vendors.affiliate_url`/`affiliate_program`) — shown with an inline disclosure on every vendor card and detail page ("Watchtower Peptides may earn a referral commission... This does not affect our scoring or editorial coverage"). This is a deliberate, disclosed departure from the peptide-vendor no-affiliate stance, not an inconsistency — the two verticals are evaluated and monetized differently because blood-testing labs aren't peptide vendors and don't compete for the same trust position. Footer/disclaimer/about copy was rewritten 2026-07-25 to state this precisely (peptide reviews stay fully affiliate-free; blood-test vendors may disclose a commission, which never affects a score) rather than the blanket "no affiliates" claim that predated the program.
+
+**Program launched 2026-07-30. Secured, with verified terms:**
+| Vendor | Network | Terms |
+|---|---|---|
+| Superpower | Dub | $25/referral + milestone bonuses (5→$100, 10→$250, 25→$750, 50→$1,500) |
+| Hundred Health | Dub | $50 flat/first sale (application pending approval) |
+| Vitals Vault | First Promoter | Up to 10%, 30-day cookie, ~$400+ AOV |
+
+**Researched, deliberately not pursued (see repo `CLAUDE.md` for reasoning):** Everlywell (CJ Affiliate, separate publisher account required, commission unconfirmed), Goodlabs (in-house Typeform application, pays mostly in store credit not cash below 50 referrals, quarterly), InsideTracker (Awin, same publisher-account friction as CJ), OneTwenty (no published rate, possibly closed beta), Function Health (Impact, backend unconfirmed). Mito Health confirmed to have no program at all.
 
 ---
 
@@ -218,7 +228,7 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 
 **Repository:** `jasoncnewman-gif/watchtower-peptides` (GitHub → Vercel auto-deploy)  
 **Supabase project:** `kirlzgiwyzwwkfxtpygg`  
-**Domain:** watchtowerpeptides.com (Bluehost DNS → Vercel)
+**Domain:** watchtowerpeptides.com — registrar Network Solutions, DNS actually managed at Bluehost (separate from both), pointing to Vercel. **Incident 2026-07-31:** Bluehost reset its DNS zone to its own default hosting template, silently overwriting the apex A record and taking the site down (Vercel side was untouched and healthy throughout); fixed same-day by correcting the `@` A record back to `76.76.21.21`. See `CLAUDE.md`'s "Domain/DNS" entry for the exact failure signature if it recurs.
 
 **Deploy workflow:** pushes to `main` go straight to production. For changes worth reviewing before they're public, push to a feature branch first — Vercel auto-builds a Preview deployment at its own URL, no setup required — then fast-forward-merge to `main` once confirmed. See `CLAUDE.md` for the exact commands.
 
@@ -232,7 +242,7 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 - **Paramount Peptides COA** — email + verification code auth blocks automation; needs manual cookie share or skip decision
 - **Blood test vendor migrations** — only InsideTracker remains on the flat coverage model (1 of 13); Goodlabs, Marek Diagnostics, Vitals Vault, Jinfiniti (AgingSOS), SiPhox Health, Mito Health, Everlywell, Rythm Health, Superpower, Function Health, Hundred Health, and OneTwenty (all 2026-07-13/14) are the reference implementations for migrating a vendor to the products model (Cart Builder + full catalog). **Course correction (2026-07-14):** several vendors (Rythm, Superpower, Function Health, Hundred Health, OneTwenty) were initially rejected for having only one real product, reasoning "no bundle choice to build a cart around" — this was too narrow. A single-product vendor is still worth migrating: the Cart Builder shows exactly which target markers that one product covers/misses, which beats the flat model's table for vendors whose site doesn't itemize per-marker status well. All five were migrated as single-product vendors: Rythm ($79, 15/25 matched), Superpower ($199, 19/218 matched — catalog may be a partial extraction, vendor markets 359 total but only 218 were reachable via static fetch, see CLAUDE.md), Function Health ($365, 32/119 matched), Hundred Health ($199, 23/105 matched), OneTwenty ($499, 20/70 matched — also a partial extraction, vendor markets 85, 70 reachable). OneTwenty specifically was the same trap as Rythm: its two `vendor_tiers` rows (Standard $499 vs. NY/NJ $749) were explicitly the same panel, a state-compliance surcharge rather than a second bundle — migrated at the $499 standard price. What actually disqualifies a vendor is having no itemizable product at all: **InsideTracker**'s "Membership" tier is platform-access-only (no blood test), and its real "Ultimate" product ($340/48 markers claimed) has no public itemized biomarker list anywhere — checked both the product page and a dedicated biomarkers page, both dead ends — plus it's not purchasable standalone (requires the $149 membership bundled on top, $489 total). Left un-migrated for data-availability reasons, not structural ones; worth a retry if InsideTracker ever publishes a full marker list. Everlywell notably wasn't tiers at all — its real catalog was ~25 individual à-la-carte test-kit SKUs (mixed blood panels + qualitative infectious-disease tests + unrelated telehealth), found via its ecommerce sitemap rather than a `vendor_tiers`-style tier list. **Lifeforce** was checked and delisted entirely (2026-07-13, not just rejected as a migration candidate): confirmed its "two tiers" were the same 50+ biomarker panel bundled with clinical coaching/consults at two membership price points, not distinct blood-test bundles — and its `business_model: clinic` fits the same clinic/telehealth exclusion this project already applies to peptide vendors (RCV-only scope, no prescription-model operations).
 - **SiPhox Health `lab_vendors.entry_price_cents`/`true_annual_cost_cents` are stale** — currently $99/$500, left from before this migration. The live site now prices all four base focus panels uniformly at $124 (Ultimate at $249), confirmed during the 2026-07-13 products-model migration. These vendor-level summary fields feed the vendor header display and possibly CX scoring elsewhere; not touched during this migration since it was out of scope (only `vendor_test_products`/`vendor_test_product_markers` were seeded), but worth a follow-up pass to correct.
-- **Blood test affiliate rates** — 5+ vendors have undisclosed/unconfirmed commission rates; explicitly deferred, not yet researched
+- **Blood test affiliate expansion** — 3 programs secured (Superpower, Hundred Health, Vitals Vault — see Section 5.9); several more vendors researched and deliberately deprioritized for opaque/gated terms rather than left unresearched. Revisit if signup friction on the deferred ones (Everlywell/InsideTracker's ad-network publisher accounts) becomes worth the setup cost.
 - **À la carte pricing gaps** — `vendor_biomarker_coverage.addon_cost_cents` is null for most non-Goodlabs vendors' à la carte items (regex-extraction limitation from original seeding); Goodlabs' equivalent gap was backfilled from `notes` free text, same technique not yet applied elsewhere
 
 ### Post-launch
@@ -242,10 +252,11 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 - **Maxx Research Supply** — quarterly re-check for product catalog (currently none found)
 - **Reddit sentiment pipeline automation** — currently manual (run audit:vendors, approve on admin page); could schedule as Vercel cron when confidence is high enough to reduce human review load
 
-### Monetization (not yet built)
-- No current revenue. Platform runs at cost.
-- Planned: display advertising (peptide-adjacent, non-affiliate)
-- Explicitly excluded: affiliate links, paid placements, sponsored vendor boosts
+### Monetization
+- **Live (2026-07-30):** blood-test vendor affiliate links (Section 5.9) — the only revenue mechanism in production. Scoped deliberately to `/blood-tests`; not yet generating meaningful revenue (too new to have data).
+- Peptide vendor side generates no revenue and never will via affiliate/paid means — see Section 4, this is the platform's core trust claim, not an oversight.
+- Planned, not yet built: display advertising (peptide-adjacent, non-affiliate)
+- Still explicitly excluded, permanently: paid vendor placements, sponsored score boosts, any affiliate relationship on the peptide-vendor review side
 
 ---
 
