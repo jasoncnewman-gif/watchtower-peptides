@@ -156,7 +156,7 @@ export default async function VendorDetailPage({
 
   const { data: latestTestRow } = await supabase
     .from("lab_tests")
-    .select("peptide_name, purity_result, test_date")
+    .select("peptide_name, purity_result, test_date, lab_name")
     .eq("vendor_id", vendorRow.id)
     .not("purity_result", "is", null)
     .not("test_date", "is", null)
@@ -164,6 +164,10 @@ export default async function VendorDetailPage({
     .order("test_date", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  const { data: labRow } = latestTestRow?.lab_name
+    ? await supabase.from("labs").select("slug").eq("name", latestTestRow.lab_name).maybeSingle()
+    : { data: null };
 
   const { data: sentimentLogs } = await supabase
     .from("vendor_sentiment_log")
@@ -334,12 +338,26 @@ export default async function VendorDetailPage({
                       {latestTestRow.peptide_name} — {latestPurity.toFixed(1)}% Purity
                     </td>
                   </tr>
-                  <tr>
+                  <tr style={latestTestRow.lab_name ? { borderBottom: "1px solid #E5E5E7" } : undefined}>
                     <td className="py-3 font-medium" style={{ color: "#6E6E73" }}>Batch Grade</td>
                     <td className="py-3 text-right font-bold text-lg" style={{ color: batchInfo.color }}>
                       {batchInfo.grade}
                     </td>
                   </tr>
+                  {latestTestRow.lab_name && (
+                    <tr>
+                      <td className="py-3 font-medium" style={{ color: "#6E6E73" }}>Tested By</td>
+                      <td className="py-3 text-right" style={{ color: "#1D1D1F" }}>
+                        {labRow?.slug ? (
+                          <Link href={`/labs/${labRow.slug}`} style={{ color: "#5BA4C4" }}>
+                            {latestTestRow.lab_name} →
+                          </Link>
+                        ) : (
+                          latestTestRow.lab_name
+                        )}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
               {latestPurity < 95 && (

@@ -1,0 +1,153 @@
+/**
+ * Seeds the labs table with the 5 COA testing labs that have publish-ready
+ * research (docs/lab_registry.md), re-verified fresh on 2026-08-01/02:
+ * A2LA registry checked directly, corporate registrations pulled (Sunbiz/NH),
+ * verification portals live-tested where possible.
+ */
+import { db } from './lib/client'
+
+const TODAY = '2026-08-02'
+
+const LABS = [
+  {
+    slug: 'vanguard-laboratory',
+    name: 'Vanguard Laboratory',
+    legal_entity_name: 'Olympic Analytical, LLC DBA Vanguard Laboratory',
+    website: 'https://vanguardlaboratory.com',
+    claimed_location: 'Olympia, WA',
+    registered_address: '2635 Parkmont Ln. SW Ste. A, Olympia, WA 98502',
+    address_mismatch: false,
+    founded_claim: null,
+    founded_actual: null,
+    founded_mismatch: false,
+    accredited: true,
+    accreditation_body: 'A2LA',
+    accreditation_cert: '6377.01',
+    accreditation_expiration: '2027-09-30',
+    verification_portal_url: 'https://verifiedbyvanguard.com',
+    portal_verified: false,
+    what_it_is: 'Vanguard Laboratory, operated by Olympic Analytical LLC, is a third-party analytical testing lab based in Olympia, Washington, specializing in peptide purity (HPLC), endotoxin (LAL), and heavy metals testing.',
+    accreditation_summary: 'Vanguard holds ISO/IEC 17025:2017 accreditation through A2LA, certificate #6377.01 — confirmed directly on A2LA\'s own registry (customer.a2la.org), not from the lab\'s own site. The accreditation scope covers Biological Field of Testing and is current through 09/30/2027.',
+    what_we_verified: 'A2LA registry entry independently located and confirmed (organization name, address, contact, cert number, and expiration all match). Reviewed real Vanguard-issued COAs for BPC-157 and Semaglutide submitted by Certified Pep — the chromatogram headers contain authentic Agilent ChemStation file paths, the kind of instrument-generated metadata that is difficult to fake.',
+    what_we_could_not_verify: 'We did not independently test Vanguard\'s own batch-verification/reporting portal (verifiedbyvanguard.com) with a live sample lookup this session.',
+    caveats: 'A different, unrelated business — "Vanguard Labs" at vanguard-labs.xyz — shows up in general search results and has its own separate Trustpilot page. Do not confuse it with the real Vanguard Laboratory at vanguardlaboratory.com.',
+    bottom_line: 'Real, accredited, independently verifiable. This is the strongest tier of lab verification we track — a search for "is Vanguard Laboratory legit" gets a clean, confident yes.',
+    trust_tier: 'accredited',
+  },
+  {
+    slug: 'janoshik-analytical',
+    name: 'Janoshik Analytical',
+    legal_entity_name: 'Janoshik Analytical (formally registered in Prague, 2022)',
+    website: 'https://janoshik.com',
+    claimed_location: 'Czech Republic',
+    registered_address: null,
+    address_mismatch: false,
+    founded_claim: 'Operating since ~2012–2013',
+    founded_actual: null,
+    founded_mismatch: false,
+    accredited: false,
+    accreditation_body: null,
+    accreditation_cert: null,
+    accreditation_expiration: null,
+    verification_portal_url: 'https://public.janoshik.com',
+    portal_verified: false,
+    what_it_is: 'Janoshik Analytical is a Czech Republic-based peptide/research-compound testing lab, widely regarded as the community standard in the gray-market peptide space. Started informally around 2012–2013, formally registered as a company in Prague in 2022, now reportedly a ~30-person operation processing hundreds of tests daily.',
+    accreditation_summary: 'Janoshik is NOT ISO/IEC 17025 accredited and operates outside the formal accreditation framework. It substitutes public batch-key verification and over a decade of consistent, community-scrutinized results for formal accreditation.',
+    what_we_verified: 'Every Janoshik COA carries a unique verification key checkable at public.janoshik.com. Long operating history and current formal Prague registration (2022) independently confirmed via search.',
+    what_we_could_not_verify: 'Could not personally complete a live batch-key lookup this session — public.janoshik.com is behind an active Cloudflare bot challenge that blocked both a plain fetch and an automated browser. Multiple independent, 2026-dated third-party sources describe the verification flow as currently functional.',
+    caveats: 'A February 2026 data breach exposed Janoshik customer information — a real operational-security consideration for anyone submitting samples with personal details, separate from the question of whether the lab\'s test results themselves are trustworthy. Janoshik COAs are also a known impersonation target: a batch key that does not resolve on public.janoshik.com should be treated as fabricated regardless of how convincing the document looks. Chain of custody is vendor-controlled — Janoshik tests the sample it receives, which is not a guarantee the same batch is what ships to a buyer.',
+    bottom_line: 'Real, long-operating, community-trusted, and independently verifiable via a public batch-key lookup — but not accredited. Treat "no accreditation" as a known, disclosed limitation of the strongest lab in this space, not a red flag unique to Janoshik.',
+    trust_tier: 'verified_unaccredited',
+  },
+  {
+    slug: 'freedom-diagnostics',
+    name: 'Freedom Diagnostics',
+    legal_entity_name: 'Freedom Diagnostic Testing, PLLC',
+    website: 'https://freedomdiagnosticstesting.com',
+    claimed_location: 'Franklin, TN',
+    registered_address: '133 Holiday Ct Suite 106, Franklin, TN 37067',
+    address_mismatch: false,
+    founded_claim: 'Founded 2023',
+    founded_actual: null,
+    founded_mismatch: false,
+    accredited: false,
+    accreditation_body: null,
+    accreditation_cert: null,
+    accreditation_expiration: null,
+    verification_portal_url: 'https://coas.freedomdiagnosticstesting.com',
+    portal_verified: true,
+    what_it_is: 'Freedom Diagnostics is an independent commercial testing lab in Franklin, Tennessee, offering HPLC-UV and LC-MS/MS purity testing, mass-spec identity confirmation, and LAL endotoxin testing for research peptides, under CLIA registration #14D2263999.',
+    accreditation_summary: 'Freedom Diagnostics holds a CLIA registration (#14D2263999) but is NOT ISO/IEC 17025 accredited — not found in A2LA, PJLA, or ANAB registries. CLIA covers clinical diagnostic testing, not research peptide analysis, so it does not substitute for a formal analytical accreditation.',
+    what_we_verified: 'The lab\'s public COA database is live and has grown from roughly 36,600 entries (June 2026) to over 50,800 entries as of this check — real, ongoing growth that indicates active, continuing operation rather than a stagnant or abandoned dataset. Multiple independent 2026-dated sources confirm the CLIA number and Franklin, TN address. Multi-vendor usage previously confirmed (RUO Science, Oath Research, Modernaminos, AminoUSA all independently use this lab).',
+    what_we_could_not_verify: 'Could not reach CMS\'s own federal CLIA lookup directly this session — every third-party CLIA aggregator tried was Cloudflare-blocked. CLIA status is corroborated via multiple independent secondary sources, not confirmed against the primary federal registry itself.',
+    caveats: 'No physical address appears on the COA documents themselves (only "Proudly Owned and Operated in the USA") and no accreditation number is printed on the COAs — the address and CLIA number used here come from independent research, not the documents a buyer would actually receive.',
+    bottom_line: 'Real, actively growing, independently verifiable via a large public COA database, used by multiple unrelated vendors. Not ISO 17025 accredited, and CLIA registration alone does not cover research peptide analysis — a meaningful but disclosed limitation, not a fraud signal.',
+    trust_tier: 'verified_unaccredited',
+  },
+  {
+    slug: 'chromate',
+    name: 'Chromate',
+    legal_entity_name: 'Chromate Analytical Group LLC (member: Astra Bioscience LLC)',
+    website: 'https://chromate.org',
+    claimed_location: 'Hudson, NH',
+    registered_address: '142 Main St, Nashua, NH 03060',
+    address_mismatch: true,
+    founded_claim: '2024 (per site copyright notice)',
+    founded_actual: '2025-10-23',
+    founded_mismatch: true,
+    accredited: false,
+    accreditation_body: null,
+    accreditation_cert: null,
+    accreditation_expiration: null,
+    verification_portal_url: 'https://chromate.org/verify',
+    portal_verified: true,
+    what_it_is: 'Chromate is a research-compound testing lab offering RP-HPLC purity testing, LAL endotoxin testing, and ICP heavy metals testing, marketed from Hudson, NH.',
+    accreditation_summary: 'Chromate does not hold ISO/IEC 17025 accreditation and does not appear in the A2LA registry. No CLIA registration either.',
+    what_we_verified: 'The verification portal (chromate.org/verify, Job Number + Access Code) is live and functional — confirmed by loading it directly. New Hampshire\'s corporate registry (Chromate Analytical Group LLC, business ID 1007680) shows the entity is real and in "Good Standing."',
+    what_we_could_not_verify: 'Did not have a current Job Number/Access Code on hand to run a live end-to-end portal lookup this session (a prior lookup with a real Perfect Peptides code did succeed in earlier research).',
+    caveats: 'Two real discrepancies found on fresh re-verification, neither previously documented: (1) the LLC was formed 2025-10-23 — about ten months before this check — while the site\'s own footer still reads "© Chromate 2024," a real gap between the legal entity\'s age and its marketing claim. (2) The registered principal address is 142 Main St, Nashua, NH — not Hudson, NH as shown on the lab\'s own contact page. Additionally, the LLC\'s sole listed member is another company, Astra Bioscience LLC, rather than a named individual — and Astra Bioscience LLC\'s own New Hampshire registration currently shows "Not In Good Standing," a lapsed compliance status one level up the ownership chain.',
+    bottom_line: 'Real and independently verifiable — not a fabricated identity — but younger than it markets itself as, not accredited, and its ownership traces to a company that has let its own state registration lapse. Treat a Chromate COA as one real data point, not a guarantee.',
+    trust_tier: 'verified_unaccredited',
+  },
+  {
+    slug: 'horizon-analytical',
+    name: 'Horizon Analytical',
+    legal_entity_name: null,
+    website: 'https://horizonanalytical.com',
+    claimed_location: null,
+    registered_address: null,
+    address_mismatch: false,
+    founded_claim: null,
+    founded_actual: null,
+    founded_mismatch: false,
+    accredited: false,
+    accreditation_body: null,
+    accreditation_cert: null,
+    accreditation_expiration: null,
+    verification_portal_url: 'https://horizonanalytical.com/verify-coa',
+    portal_verified: true,
+    what_it_is: 'Horizon Analytical is a research-compound testing lab offering UPLC/MS purity and identity testing, with per-lot COAs searchable through a public verification portal. Offers standard peptide, peptide blend, and GLP-1-specific HPLC/MS panels, plus LAL endotoxin testing.',
+    accreditation_summary: 'Horizon Analytical does not claim ISO/IEC 17025 accreditation anywhere on its own site, and no listing was found in the A2LA registry.',
+    what_we_verified: 'The Verify COA portal (horizonanalytical.com/verify-coa) is live and fully functional — tested directly with a real historical lot number (TRL-9907743) from a True Research Labs COA and it correctly returned both matching records (compound: Selank), reproducing the original finding exactly. Endotoxin (LAL) testing is now a live paid offering ($175, 5–7 days) — a real capability added since this lab was first reviewed.',
+    what_we_could_not_verify: 'No physical address is published anywhere on the site. Direct A2LA registry search did not complete cleanly during this session (technical error on A2LA\'s own search interface) — absence of accreditation is inferred from the lab\'s own site making no such claim, not from a confirmed registry search.',
+    caveats: 'Heavy Metals and Sterility panels are both still listed as "Coming Soon," and a third gap not previously noted — "Proteins & HGH" testing — is also marked "Coming Soon." For an injectable research compound, this means Horizon currently covers identity/purity/potency and endotoxin, but not a full safety panel.',
+    bottom_line: 'Real, independently verifiable via a portal we tested ourselves with a reproducible historical match. Not accredited, no public address, and several safety-relevant panels remain unbuilt. A legitimate mid-tier verification, not a full safety guarantee.',
+    trust_tier: 'verified_unaccredited',
+  },
+]
+
+async function main() {
+  for (const lab of LABS) {
+    const { error } = await db.from('labs').upsert(
+      { ...lab, last_reviewed: TODAY },
+      { onConflict: 'slug' }
+    )
+    if (error) {
+      console.error(`Failed to upsert ${lab.slug}:`, error.message)
+      continue
+    }
+    console.log(`✓ ${lab.name} (${lab.trust_tier})`)
+  }
+}
+
+main()
