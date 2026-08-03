@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/vendors", label: "Vendor Reviews" },
+  { href: "/labs", label: "Lab Verification" },
   { href: "/peptides", label: "Peptide Library" },
   { href: "/blood-tests", label: "Blood Tests" },
   { href: "/research", label: "Research" },

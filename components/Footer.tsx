@@ -53,6 +53,7 @@ export default function Footer({ verseIndex = 0 }: FooterProps) {
               <p className="font-semibold mb-4" style={{ color: "#FFFFFF" }}>Platform</p>
               <div className="flex flex-col gap-3" style={{ color: "#6E6E73" }}>
                 <Link href="/vendors" className="hover:text-white transition-colors">Vendor Reviews</Link>
+                <Link href="/labs" className="hover:text-white transition-colors">Lab Verification</Link>
                 <Link href="/peptides" className="hover:text-white transition-colors">Peptide Library</Link>
                 <Link href="/calculator" className="hover:text-white transition-colors">Reconstitution Calculator</Link>
               </div>
