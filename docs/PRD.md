@@ -3,7 +3,7 @@
 **Owner:** Jason Newman (jason@watchtowerpeptides.com)  
 **Entity:** Four Chariots / Arba Haras Group  
 **Status:** Live — active development  
-**Last updated:** 2026-07-31
+**Last updated:** 2026-08-03
 
 ---
 
@@ -117,10 +117,20 @@ A second vertical: at-home blood testing services, scored for relevance to pepti
 | Vendor | Network | Terms |
 |---|---|---|
 | Superpower | Dub | $25/referral + milestone bonuses (5→$100, 10→$250, 25→$750, 50→$1,500) |
-| Hundred Health | Dub | $50 flat/first sale (application pending approval) |
+| Hundred Health | Dub | $50 flat/first sale — approved and live 2026-08-01 (`go.hundred.com/watchtower-peptides`) |
 | Vitals Vault | First Promoter | Up to 10%, 30-day cookie, ~$400+ AOV |
 
 **Researched, deliberately not pursued (see repo `CLAUDE.md` for reasoning):** Everlywell (CJ Affiliate, separate publisher account required, commission unconfirmed), Goodlabs (in-house Typeform application, pays mostly in store credit not cash below 50 referrals, quarterly), InsideTracker (Awin, same publisher-account friction as CJ), OneTwenty (no published rate, possibly closed beta), Function Health (Impact, backend unconfirmed). Mito Health confirmed to have no program at all.
+
+### 5.10 Lab Verification (`/labs`)
+
+Added 2026-08-02. A third vertical, distinct from both vendor reviews and blood-test vendors: independent verification of the third-party **COA testing labs** vendors cite on their certificates (Vanguard, Janoshik, Chromate, etc.) — not the peptide vendors themselves, and not the `/blood-tests` at-home blood-testing companies.
+
+- **`/labs`** — listing page, one card per lab with a trust-tier badge (Accredited / Verified, Unaccredited / Unverified) and the one-line bottom-line verdict.
+- **`/labs/[slug]`** — detail page: what the lab is, accreditation status (checked directly against the accrediting body's own registry, not the lab's marketing claim), what was independently verified vs. not, specific caveats (e.g. an address or founding-date discrepancy between marketing copy and corporate registration), a link to the lab's own public batch-verification portal, and which tracked vendors use that lab.
+- **Cross-linked both directions with `/vendors/[slug]`** — a vendor's "Latest Lab Results" table links its testing lab's name to `/labs/[slug]` when a profile exists; each lab page lists the vendors on Watchtower that use it.
+
+Built in direct response to real GSC search-query data showing people searching "is [lab] legit" and landing on the generic `/vendors` directory with ~0% CTR — see `CLAUDE.md`'s "Lab Verification (`/labs`)" section for the full root-cause story and the re-verification methodology. **5 labs published** (Vanguard, Janoshik, Freedom Diagnostics, Chromate, Horizon Analytical); 3 more have partial research not yet publish-ready (Colmaric Analyticals, ACS Lab, MZ Biolabs); Kovera Labs — the single highest search-demand lab found — has no research done yet at all.
 
 ---
 
@@ -237,6 +247,9 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 ## 10. Deferred / Roadmap
 
 ### Near-term
+- **Kovera Labs research** — the single highest search-demand COA testing lab found during the `/labs` GSC investigation (2026-08-02), with zero research done. Should be the next lab profile, not a lower priority just because it's unstarted — see `CLAUDE.md`'s "Lab Verification" section.
+- **3 more lab profiles need finishing research before publish** — Colmaric Analyticals, ACS Lab, MZ Biolabs each have an accreditation claim in `docs/lab_registry.md` explicitly marked "to be confirmed on next encounter," never followed up.
+- **Vendor page crawl-budget problem (found 2026-08-02)** — most `/vendors/[slug]` pages have never been crawled by Google at all, confirmed via GSC URL Inspection API, despite full sitemap + internal-link coverage. Not fixable with more on-page work; needs real backlinks and internal-link diversity to earn crawl priority. `/labs`' cross-links are a first, small step in that direction, not a full fix.
 - **BPC-157 brain/neuroprotection article** — 261 claims in KB, only tendon angle covered so far
 - **Additional KB imports** — Robert Lustig, Gil Carvalho, Nick Tiller, Joe Rogan peptide episodes
 - **Paramount Peptides COA** — email + verification code auth blocks automation; needs manual cookie share or skip decision
