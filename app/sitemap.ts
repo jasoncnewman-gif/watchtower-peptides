@@ -6,11 +6,12 @@ export const revalidate = 86400
 const BASE = 'https://www.watchtowerpeptides.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [{ data: vendors }, { data: peptides }, { data: articles }, { data: labVendors }] = await Promise.all([
+  const [{ data: vendors }, { data: peptides }, { data: articles }, { data: labVendors }, { data: labs }] = await Promise.all([
     supabase.from('vendors').select('slug, updated_at').in('status', ['active', 'flagged']),
     supabase.from('peptides').select('slug, updated_at'),
     supabase.from('research_articles').select('slug, updated_at').eq('status', 'published'),
     supabase.from('lab_vendors').select('slug, updated_at').neq('eligibility', 'EXCLUDE'),
+    supabase.from('labs').select('slug, updated_at'),
   ])
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -18,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/vendors`,  lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
     { url: `${BASE}/peptides`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE}/blood-tests`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE}/labs`,     lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/research`, lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/about`,    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE}/calculator`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.5 },
@@ -54,5 +56,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...vendorPages, ...peptidePages, ...articlePages, ...labVendorPages]
+  const labPages: MetadataRoute.Sitemap = (labs ?? []).map(l => ({
+    url: `${BASE}/labs/${l.slug}`,
+    lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...vendorPages, ...peptidePages, ...articlePages, ...labVendorPages, ...labPages]
 }
