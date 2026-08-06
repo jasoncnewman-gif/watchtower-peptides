@@ -93,10 +93,14 @@ Run `npm run coa:queue` to see the current queue — T3 first, then T2, then T1,
 
 ## OPEN — High Priority
 
-**[H4] Review Ascension Peptides + Peptide Partners LV tier given Kovera Labs findings** — OPEN 2026-08-06  
-`/labs/kovera-labs` published with `trust_tier: unverified` (not `verified_unaccredited` like the other 4 non-accredited labs) — two unresolved, named-source allegations: (1) possible shared ownership/IP overlap between koveralabs.com and vendor instantpeptides.com, (2) a MESO-Rx forum poster's specific claim of a ~27% purity sample receiving a passing Kovera result, plus being blacklisted after asking for transparency. Neither confirmed or refuted by us.  
+**[H5] Peptide Partners `lab_tests.lab_name` was "Kovera" not "Kovera Labs"** — DONE 2026-08-06  
+Exact-match gap on the vendor↔lab cross-link (same class of bug CLAUDE.md already warns about for this feature) meant Peptide Partners never showed up on /labs/kovera-labs' reverse vendor lookup despite having 15 Kovera-attributed records. Normalized to "Kovera Labs" via scripts/fix-kovera-labname.ts.
+
+**[H4] Review Ascension Peptides + Peptide Partners LV tier given Kovera Labs findings** — OPEN 2026-08-06, re-investigated same day  
+`/labs/kovera-labs` published with `trust_tier: unverified` (not `verified_unaccredited` like the other 4 non-accredited labs). Deeper pass same day: the "IP registration overlap with instantpeptides.com" allegation was checked directly via WHOIS/DNS (different registrar, nameservers, hosting IP, and mail provider on both domains — no overlap found) and the primary community thread shows other posters disputing the original claim as unsubstantiated, plus a real counter-example of Kovera *failing* a Glacier Aminos sample that passed elsewhere. The second allegation (a MESO-Rx poster's claim of a ~27% purity sample receiving a passing result) could not be re-verified — the source site blocks automated access on every retry — so it's neither confirmed nor refuted, just unreproduced.  
+Net effect: picture is more favorable than the initial publish, but operator/ownership identity is still fully undisclosed and the specific false-pass claim, while unconfirmed, hasn't been ruled out either.  
 Our `lab_tests` table currently credits: Ascension Peptides (50 Kovera rows, drives its T3/LV=25 tier since Session 12), Peptide Partners (15 rows), Glacier Aminos (2 rows), Ion Peptide (1 row — negligible).  
-Decision needed: leave LV tiers as-is pending further Kovera verification, or open a `verification_flags` entry (LAB_UNVERIFIABLE) on Ascension/Peptide Partners pending resolution. Not auto-applied — full writeup in docs/lab_registry.md under "Kovera Labs."
+Decision needed: leave LV tiers as-is given the weakened case against Kovera, or open a `verification_flags` entry (LAB_UNVERIFIABLE) on Ascension/Peptide Partners pending Kovera having a longer operating history. Not auto-applied — full writeup in docs/lab_registry.md under "Kovera Labs."
 
 ---
 
