@@ -91,6 +91,15 @@ Run `npm run coa:queue` to see the current queue — T3 first, then T2, then T1,
 
 ---
 
+## OPEN — High Priority
+
+**[H4] Review Ascension Peptides + Peptide Partners LV tier given Kovera Labs findings** — OPEN 2026-08-06  
+`/labs/kovera-labs` published with `trust_tier: unverified` (not `verified_unaccredited` like the other 4 non-accredited labs) — two unresolved, named-source allegations: (1) possible shared ownership/IP overlap between koveralabs.com and vendor instantpeptides.com, (2) a MESO-Rx forum poster's specific claim of a ~27% purity sample receiving a passing Kovera result, plus being blacklisted after asking for transparency. Neither confirmed or refuted by us.  
+Our `lab_tests` table currently credits: Ascension Peptides (50 Kovera rows, drives its T3/LV=25 tier since Session 12), Peptide Partners (15 rows), Glacier Aminos (2 rows), Ion Peptide (1 row — negligible).  
+Decision needed: leave LV tiers as-is pending further Kovera verification, or open a `verification_flags` entry (LAB_UNVERIFIABLE) on Ascension/Peptide Partners pending resolution. Not auto-applied — full writeup in docs/lab_registry.md under "Kovera Labs."
+
+---
+
 ## OPEN — Future / Deferred
 
 **[F1] Wire verification_flags email notifications**  

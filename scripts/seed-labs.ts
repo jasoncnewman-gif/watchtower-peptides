@@ -1,12 +1,13 @@
 /**
- * Seeds the labs table with the 5 COA testing labs that have publish-ready
- * research (docs/lab_registry.md), re-verified fresh on 2026-08-01/02:
+ * Seeds the labs table with the COA testing labs that have publish-ready
+ * research (docs/lab_registry.md). First 5 re-verified fresh on 2026-08-01/02:
  * A2LA registry checked directly, corporate registrations pulled (Sunbiz/NH),
- * verification portals live-tested where possible.
+ * verification portals live-tested where possible. Kovera Labs added 2026-08-06.
  */
 import { db } from './lib/client'
 
 const TODAY = '2026-08-02'
+const KOVERA_REVIEWED = '2026-08-06'
 
 const LABS = [
   {
@@ -134,12 +135,38 @@ const LABS = [
     bottom_line: 'Real, independently verifiable via a portal we tested ourselves with a reproducible historical match. Not accredited, no public address, and several safety-relevant panels remain unbuilt. A legitimate mid-tier verification, not a full safety guarantee.',
     trust_tier: 'verified_unaccredited',
   },
+  {
+    slug: 'kovera-labs',
+    name: 'Kovera Labs',
+    legal_entity_name: null,
+    website: 'https://koveralabs.com',
+    claimed_location: 'Buffalo Grove, IL (third-party sources) / Deerfield, IL (lab\'s own Facebook page) — unresolved inconsistency',
+    registered_address: null,
+    address_mismatch: true,
+    founded_claim: null,
+    founded_actual: '2026-01-02',
+    founded_mismatch: false,
+    accredited: false,
+    accreditation_body: null,
+    accreditation_cert: null,
+    accreditation_expiration: null,
+    verification_portal_url: 'https://koveralabs.com/verify',
+    portal_verified: false,
+    what_it_is: 'Kovera Labs is a research-compound testing lab offering HPLC purity/net-content testing and LC-MS identity confirmation, with a public per-COA verification portal. Domain registered 2026-01-02, so roughly 7 months old as of this review — one of the newest labs in this registry.',
+    accreditation_summary: 'No accreditation claim of any kind was found — no ISO/IEC 17025, no A2LA listing, no CLIA registration. A direct A2LA registry search could not be completed via automated tools this session (the search requires an interactive form), so this is inferred from the total absence of any accreditation claim, not a confirmed negative registry search.',
+    what_we_verified: 'An independent third-party analysis (vialaudit.com, not our own data pull) of Kovera\'s public verifier examined 1,816 published COAs across 146 vendor-clients as of May 2026 — median purity 99.907%, with 15 explicit purity failures and 7 identity-mismatch records published openly rather than suppressed, a real trust signal. In our own lab_tests data, four tracked vendors carry Kovera-attributed results: Ascension Peptides (50 records), Peptide Partners (15), Glacier Aminos (2), Ion Peptide (1).',
+    what_we_could_not_verify: 'No legal entity name, ownership, or corporate registration confirmed (Illinois Secretary of State search could not be completed via automated tools this session). Could not personally complete a live verification-portal lookup (no COA code on hand). WHOIS is privacy-protected. A LinkedIn profile associated with the lab could not be independently corroborated.',
+    caveats: 'Two distinct, unresolved allegations from named community sources, neither independently confirmed or refuted by us: (1) a peptidecritic.com thread alleges Kovera\'s domain/IP registration overlaps with instantpeptides.com, a vendor Kovera tests — a potential independence conflict if true. (2) A MESO-Rx forum poster ("GigaCompounds") describes submitting a sample that field-tested at ~27% purity but received a passing Kovera result, and reports being blacklisted after requesting transparency. Separately, the lab\'s own listed location is inconsistent across sources (Buffalo Grove vs. Deerfield, IL), and at least one investigator described the address as resembling a co-working space rather than a lab, though small independent labs commonly operate from compact space.',
+    bottom_line: 'Real and high-volume, not a fabricated identity — the published-failure-rate data is a genuine positive signal most captive labs wouldn\'t publish. But two specific, unresolved integrity allegations (a possible vendor-lab ownership conflict, and a specific claimed false-pass) put this in a different, more serious category than simply "not yet accredited." Treat any COA naming Kovera Labs as currently unresolved, not confirmed reliable.',
+    trust_tier: 'unverified',
+    last_reviewed: KOVERA_REVIEWED,
+  },
 ]
 
 async function main() {
   for (const lab of LABS) {
     const { error } = await db.from('labs').upsert(
-      { ...lab, last_reviewed: TODAY },
+      { ...lab, last_reviewed: (lab as any).last_reviewed ?? TODAY },
       { onConflict: 'slug' }
     )
     if (error) {
