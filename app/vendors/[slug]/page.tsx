@@ -70,11 +70,12 @@ export async function generateMetadata({
 
   if (!data) return { title: "Vendor Not Found" };
 
-  const score = data.overall_score != null ? ` — Score: ${data.overall_score}/100` : "";
+  const score = data.overall_score;
+  const tier = score != null ? ratingLabel(score) : null;
+  const title = score != null ? `${data.name} Review: ${score}/100 (${tier})` : `${data.name} Review`;
   const desc = data.verdict
-    ? truncateDescription(data.verdict)
-    : `Independent review of ${data.name}${score}. Lab verification, product quality, transparency, and customer experience scores.`;
-  const title = `${data.name} Review`;
+    ? truncateDescription(score != null ? `${tier} tier, ${score}/100. ${data.verdict}` : data.verdict)
+    : `Independent review of ${data.name}${score != null ? ` — Score: ${score}/100` : ""}. Lab verification, product quality, transparency, and customer experience scores.`;
   const image = VENDOR_PHOTOS[slug] ?? "/images/slide-2.png";
 
   return {
