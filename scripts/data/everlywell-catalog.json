@@ -1,0 +1,190 @@
+{
+  "vendor_slug": "everlywell",
+  "source_notes": "Extracted from everlywell.com product pages, 2026-07-13, via WebFetch on each /products/<slug>/ page found in the ecommerce sitemap (https://www.everlywell.com/ecommerce-sitemap.xml). Everlywell 360 confirmed unchanged at $399/83 biomarkers (matches pre-migration DB exactly, no drift this time). The pre-migration DB's second row, 'Everlywell+ (general membership)' ($39/mo, 1 free test/month + 20% off), is a discount club layered on top of the à la carte catalog, not a real bundle -- excluded entirely, same treatment as Marek's/Vitals Vault's checkout-only ambiguous add-ons. Excluded 'womens-health-test-landing-page' as a duplicate marketing page for 'womens-health-test' (same product, confirmed by URL naming). Merged 'mens-health-test' and 'mens-testosterone-performance-test' into one product -- both are $249 with the exact same 4-marker list (Cortisol, DHEA, Estradiol, Total Testosterone), confirmed identical via direct comparison, kept the 'Men's Health Test' title as canonical. All other apparently-overlapping pairs (chlamydia-gonorrhea-test $69 at-home vs. chlamydia-gonorrhea-in-person-test $94 in-person; std-in-person-test-basic $119 vs. at-home-std-test $169 vs. visby-sexual-health-test $149) were verified via each page's own content to be genuinely different products (different pathogen coverage and/or collection method/turnaround), so all kept as separate SKUs. Everlywell also sells non-blood-biomarker telehealth/prescription items (e.g. acyclovir for cold sores) which are entirely excluded -- not part of the blood-test business this migration covers. Three products (Food Sensitivity Comprehensive, Jona Gut Microbiome, Galleri) have no itemizable individual biomarker list on their public pages (204 unlisted foods, 170,000+ unlisted microorganisms, and a proprietary DNA methylation signature respectively) -- represented with a single summary raw-marker string each per their own page description, since none would ever match our tracked blood-chemistry/hormone biomarkers table regardless of itemization. Reclassified three products from the initially-assumed category based on actual page content: Celiac Disease Screening (2 markers) and FIT Colon Cancer Screening (1 marker) are ala-carte-shaped despite being screening 'tests' in name, and Women's Fertility Test / Heart Health Test are ala-carte (single-focus, few-marker tests) rather than broad panels. All infectious-disease/STD tests are ala-carte with each screened pathogen listed as its own raw marker string (decomposed, same convention as Marek's multi-component combo tests).",
+  "products": [
+    {
+      "title": "Everlywell 360",
+      "slug": "360-full-body-test",
+      "product_type": "panel",
+      "price_cents": 39900,
+      "markers": [
+        "Calcium", "Magnesium", "Zinc", "Vitamin D", "Vitamin B12", "Ferritin", "Iron", "Iron % Saturation", "Iron Binding Capacity", "Carbon Dioxide (CO2)", "Chloride", "Potassium", "Sodium",
+        "Anti-Mullerian Hormone (AMH)", "Estradiol (E2)", "Follicle Stimulating Hormone (FSH)", "Luteinizing Hormone (LH)", "Cortisol", "DHEA-Sulfate", "Thyroid-Stimulating Hormone (TSH)", "Thyroxine (T4) Free", "Triiodothyronine (T3) Free", "Prostate Specific Antigen (PSA) % Free", "Prostate Specific Antigen (PSA) Free", "Prostate Specific Antigen (PSA) Total", "Testosterone Total",
+        "Cholesterol/HDL Ratio", "HDL Cholesterol", "LDL Cholesterol", "Non-HDL Cholesterol", "Total Cholesterol", "Triglycerides", "Lipoprotein (a)", "Homocysteine", "Glucose", "Hemoglobin A1c (HbA1c)", "Insulin", "Uric Acid",
+        "Antinuclear Antibodies (ANA)", "High-Sensitivity C-Reactive Protein (hsCRP)", "Thyroglobulin Antibodies (TgAb)", "Thyroid Peroxidase Antibodies (TPO)",
+        "Alanine Aminotransferase (ALT)", "Aspartate Transaminase (AST)", "Alkaline Phosphatase (ALP)", "Gamma-glutamyl Transferase (GGT)", "Total Bilirubin", "Total Protein", "Albumin", "Globulin", "Albumin/Globulin Ratio", "Blood Urea Nitrogen (BUN)",
+        "Urine Appearance", "Urine Bacteria", "Urine Bilirubin", "Urine Color", "Urine Glucose", "Urine Hyaline Casts", "Urine Ketones", "Urine Leukocytes", "Urine Nitrites", "Urine Occult Blood", "Urine pH", "Urine Protein", "Urine Red Blood Cell (RBC)", "Urine Specific Gravity", "Urine Squamous Epithelial Cells", "Urine White Blood Cell (WBC)",
+        "BUN/Creatinine Ratio", "Creatinine", "Estimated Glomerular Filtration Rate (eGFR)",
+        "White Blood Cell (WBC) Count", "Basophils (% and Absolute)", "Eosinophils (% and Absolute)", "Lymphocytes (% and Absolute)", "Monocytes (% and Absolute)", "Neutrophils (% and Absolute)", "Hematocrit", "Hemoglobin", "Mean Corpuscular Hemoglobin (MCH)", "Mean Corpuscular Hemoglobin Concentration (MCHC)", "Mean Corpuscular Volume (MCV)", "Mean Platelet Volume (MPV)", "Platelet Count", "Red Blood Cell (RBC) Count", "Red Cell Distribution Width (RDW)"
+      ]
+    },
+    {
+      "title": "Men's Health Test",
+      "slug": "mens-health-test",
+      "product_type": "panel",
+      "price_cents": 24900,
+      "markers": ["Cortisol", "DHEA", "Estradiol", "Total Testosterone"]
+    },
+    {
+      "title": "Women's Health Test",
+      "slug": "womens-health-test",
+      "product_type": "panel",
+      "price_cents": 24900,
+      "markers": ["Estradiol", "Progesterone", "Luteinizing Hormone (LH)", "Follicle-Stimulating Hormone (FSH)", "DHEA", "Cortisol", "Thyroid-Stimulating Hormone (TSH)", "Free T4", "Total Testosterone", "Thyroid Peroxidase Antibodies"]
+    },
+    {
+      "title": "Women's Fertility Test",
+      "slug": "womens-fertility-test",
+      "product_type": "ala-carte",
+      "price_cents": 14900,
+      "markers": ["Estradiol", "Luteinizing hormone (LH)", "Follicle-stimulating hormone (FSH)", "Thyroid-stimulating hormone (TSH)", "Total Testosterone"]
+    },
+    {
+      "title": "Cholesterol and Lipids Test",
+      "slug": "cholesterol-and-lipids-test",
+      "product_type": "ala-carte",
+      "price_cents": 4900,
+      "markers": ["Total Cholesterol", "HDL", "Calculated LDL", "Triglycerides"]
+    },
+    {
+      "title": "Cortisol and Stress Test",
+      "slug": "cortisol-and-stress-test",
+      "product_type": "ala-carte",
+      "price_cents": 9900,
+      "markers": ["Cortisol", "Total Testosterone", "Thyroid-Stimulating Hormone (TSH)"]
+    },
+    {
+      "title": "Testosterone Test",
+      "slug": "testosterone-test",
+      "product_type": "ala-carte",
+      "price_cents": 6900,
+      "markers": ["Total Testosterone"]
+    },
+    {
+      "title": "Thyroid Test",
+      "slug": "thyroid-test",
+      "product_type": "ala-carte",
+      "price_cents": 14900,
+      "markers": ["TSH (Thyroid-Stimulating Hormone)", "Free T3", "Free T4", "TPO Ab (Thyroid Peroxidase Antibodies)"]
+    },
+    {
+      "title": "Heart Health Test",
+      "slug": "heart-health-test",
+      "product_type": "ala-carte",
+      "price_cents": 9900,
+      "markers": ["Total Cholesterol", "HDL", "Calculated LDL", "Triglycerides", "HbA1c"]
+    },
+    {
+      "title": "Vitamin D and Inflammation Test",
+      "slug": "vitamin-d-and-inflammation-test",
+      "product_type": "ala-carte",
+      "price_cents": 9900,
+      "markers": ["25-OH D (Vitamin D)", "hsCRP (high-sensitivity C-reactive protein)"]
+    },
+    {
+      "title": "Food Sensitivity Comprehensive Test",
+      "slug": "food-sensitivity-comprehensive-test",
+      "product_type": "panel",
+      "price_cents": 29900,
+      "markers": ["IgG Food Sensitivity Panel (204 foods, full per-food list not itemized on public page)"]
+    },
+    {
+      "title": "Celiac Disease Screening Test",
+      "slug": "celiac-disease-screening-test",
+      "product_type": "ala-carte",
+      "price_cents": 11900,
+      "markers": ["tTG-IgA (tissue transglutaminase immunoglobulin)", "Total IgA"]
+    },
+    {
+      "title": "FIT Colon Cancer Screening Test",
+      "slug": "fit-colon-cancer-screening-test",
+      "product_type": "ala-carte",
+      "price_cents": 4900,
+      "markers": ["Fecal Occult Blood (FIT)"]
+    },
+    {
+      "title": "Jona Gut Microbiome Test",
+      "slug": "jona-gut-microbiome-test",
+      "product_type": "panel",
+      "price_cents": 48500,
+      "markers": ["Gut Microbiome DNA Panel (170,000+ organisms, bacteria/fungi/viruses/archaea/parasites, full list not itemized on public page)"]
+    },
+    {
+      "title": "Galleri Multi-Cancer Early Detection Test",
+      "slug": "galleri-cancer-screening-test",
+      "product_type": "panel",
+      "price_cents": 94900,
+      "markers": ["Cell-Free DNA Methylation Cancer Signal (50+ cancer types, proprietary signature, not an itemized biomarker list)"]
+    },
+    {
+      "title": "STD Test (5-Panel)",
+      "slug": "at-home-std-test",
+      "product_type": "ala-carte",
+      "price_cents": 16900,
+      "markers": ["Chlamydia", "Gonorrhea", "Hepatitis C", "Syphilis", "Trichomoniasis"]
+    },
+    {
+      "title": "STD In-Person Test (Basic)",
+      "slug": "std-in-person-test-basic",
+      "product_type": "ala-carte",
+      "price_cents": 11900,
+      "markers": ["Chlamydia", "Gonorrhea", "HIV", "Syphilis"]
+    },
+    {
+      "title": "Chlamydia & Gonorrhea Test",
+      "slug": "chlamydia-gonorrhea-test",
+      "product_type": "ala-carte",
+      "price_cents": 6900,
+      "markers": ["Chlamydia", "Gonorrhea"]
+    },
+    {
+      "title": "Chlamydia & Gonorrhea In-Person Test",
+      "slug": "chlamydia-gonorrhea-in-person-test",
+      "product_type": "ala-carte",
+      "price_cents": 9400,
+      "markers": ["Chlamydia", "Gonorrhea"]
+    },
+    {
+      "title": "Hepatitis C Test",
+      "slug": "hepatitis-c-test",
+      "product_type": "ala-carte",
+      "price_cents": 6900,
+      "markers": ["Hepatitis C"]
+    },
+    {
+      "title": "Syphilis Test",
+      "slug": "syphilis-test",
+      "product_type": "ala-carte",
+      "price_cents": 6900,
+      "markers": ["Syphilis"]
+    },
+    {
+      "title": "Trichomoniasis Test",
+      "slug": "trichomoniasis-test",
+      "product_type": "ala-carte",
+      "price_cents": 6900,
+      "markers": ["Trichomoniasis"]
+    },
+    {
+      "title": "HIV In-Person Test",
+      "slug": "hiv-in-person-test",
+      "product_type": "ala-carte",
+      "price_cents": 7600,
+      "markers": ["HIV"]
+    },
+    {
+      "title": "OraQuick At-Home HIV Test Kit",
+      "slug": "oraquick-at-home-hiv-test-kit",
+      "product_type": "ala-carte",
+      "price_cents": 4900,
+      "markers": ["HIV"]
+    },
+    {
+      "title": "Visby Sexual Health Test",
+      "slug": "visby-sexual-health-test",
+      "product_type": "ala-carte",
+      "price_cents": 14900,
+      "markers": ["Chlamydia", "Gonorrhea", "Trichomoniasis"]
+    }
+  ]
+}

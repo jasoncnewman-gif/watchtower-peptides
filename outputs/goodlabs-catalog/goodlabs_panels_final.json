@@ -1,0 +1,473 @@
+{
+  "comprehensive-mens": {
+    "label": "Comprehensive Men's",
+    "price": "195",
+    "total_biomarkers": 76,
+    "subtests": {
+      "Apolipoprotein B": [
+        "ApoB"
+      ],
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ],
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ],
+      "Estradiol, Ultrasensitive, LC/MS": [
+        "Estradiol, Ultrasensitive (LC/MS)"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "LH": [
+        "LH"
+      ],
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ],
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ],
+      "Homocysteine": [
+        "Homocysteine"
+      ],
+      "Insulin": [
+        "Insulin (Fasting)"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Lipoprotein (a)": [
+        "Lp(a)"
+      ],
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "PSA, Total": [
+        "PSA (Total)"
+      ],
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ],
+      "TSH": [
+        "TSH"
+      ],
+      "Uric Acid": [
+        "Uric Acid"
+      ],
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Urinalysis, Macroscopic": [
+        "Urine Color",
+        "Urine Appearance",
+        "Urine Specific Gravity",
+        "Urine pH",
+        "Urine Glucose",
+        "Urine Bilirubin",
+        "Urine Ketones",
+        "Urine Blood (Occult)",
+        "Urine Protein",
+        "Urine Nitrite",
+        "Urine Leukocyte Esterase"
+      ]
+    }
+  },
+  "comprehensive-womens": {
+    "label": "Comprehensive Women's",
+    "price": "185",
+    "total_biomarkers": 76,
+    "subtests": {
+      "Apolipoprotein B": [
+        "ApoB"
+      ],
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ],
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ],
+      "Estradiol": [
+        "Estradiol (E2)"
+      ],
+      "Anti-Mullerian Hormone (AMH), Female": [
+        "AMH"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "LH": [
+        "LH"
+      ],
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ],
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ],
+      "Homocysteine": [
+        "Homocysteine"
+      ],
+      "Insulin": [
+        "Insulin (Fasting)"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Lipoprotein (a)": [
+        "Lp(a)"
+      ],
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ],
+      "TSH": [
+        "TSH"
+      ],
+      "Uric Acid": [
+        "Uric Acid"
+      ],
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Urinalysis, Macroscopic": [
+        "Urine Color",
+        "Urine Appearance",
+        "Urine Specific Gravity",
+        "Urine pH",
+        "Urine Glucose",
+        "Urine Bilirubin",
+        "Urine Ketones",
+        "Urine Blood (Occult)",
+        "Urine Protein",
+        "Urine Nitrite",
+        "Urine Leukocyte Esterase"
+      ]
+    }
+  },
+  "iron-status": {
+    "label": "Iron Status",
+    "price": "60",
+    "total_biomarkers": 28,
+    "subtests": {
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Reticulocyte Count, Automated": [
+        "Reticulocyte Count",
+        "Reticulocyte Count (Absolute)"
+      ],
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ],
+      "Transferrin": [
+        "Transferrin"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Albumin": [
+        "Albumin"
+      ]
+    }
+  },
+  "heart-health": {
+    "label": "Heart Health",
+    "price": "55",
+    "total_biomarkers": 11,
+    "subtests": {
+      "Apolipoprotein B": [
+        "ApoB"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Homocysteine": [
+        "Homocysteine"
+      ],
+      "Lipoprotein (a)": [
+        "Lp(a)"
+      ],
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "Uric Acid": [
+        "Uric Acid"
+      ]
+    }
+  },
+  "kidneys": {
+    "label": "Kidneys",
+    "price": "38",
+    "total_biomarkers": 17,
+    "subtests": {
+      "Renal Function Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "eGFR (creatinine)",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Phosphorus",
+        "Albumin"
+      ],
+      "Cystatin C with Glomerular Filtration Rate, Estimated (eGFR)": [
+        "Cystatin C",
+        "eGFR (cystatin C)"
+      ],
+      "Albumin, Random Urine with Creatinine": [
+        "Creatinine, Urine",
+        "Microalbumin Urine",
+        "Albumin/Creatinine Ratio, Urine"
+      ]
+    }
+  },
+  "nutrient": {
+    "label": "Nutrient",
+    "price": "55",
+    "total_biomarkers": 9,
+    "subtests": {
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "Zinc": [
+        "Zinc (Serum)"
+      ],
+      "Magnesium, RBC": [
+        "Magnesium RBC"
+      ]
+    }
+  },
+  "plant-based-nutrition": {
+    "label": "Plantbased",
+    "price": "185",
+    "total_biomarkers": 39,
+    "subtests": {
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "Zinc": [
+        "Zinc (Serum)"
+      ],
+      "Magnesium, RBC": [
+        "Magnesium RBC"
+      ],
+      "Methylmalonic Acid": [
+        "Methylmalonic Acid (MMA)"
+      ],
+      "Homocysteine": [
+        "Homocysteine"
+      ],
+      "OmegaCheck ": [
+        "EPA + DPA + DHA",
+        "Arachidonic Acid/EPA Ratio",
+        "Omega-6/Omega-3 Ratio",
+        "Omega-3 Total",
+        "EPA",
+        "DPA",
+        "DHA",
+        "Omega-6 Total",
+        "Arachidonic Acid",
+        "Linoleic Acid"
+      ],
+      "Iodine, Serum/Plasma": [
+        "Iodine"
+      ],
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ]
+    }
+  }
+}

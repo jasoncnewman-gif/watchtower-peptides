@@ -1,0 +1,428 @@
+{
+  "raw_token_to_canonical": {
+    "CBC w/ diff": [
+      "CBC with Differential"
+    ],
+    "Fasting insulin": [
+      "Fasting Insulin"
+    ],
+    "ALT, AST": [
+      "ALT",
+      "AST"
+    ],
+    "ALT, AST, GGT": [
+      "ALT",
+      "AST",
+      "GGT"
+    ],
+    "ALT/AST": [
+      "ALT",
+      "AST"
+    ],
+    "BUN, Creatinine": [
+      "BUN",
+      "Creatinine"
+    ],
+    "BUN, Creatinine, eGFR": [
+      "BUN",
+      "Creatinine",
+      "eGFR"
+    ],
+    "HbA1c": [
+      "HbA1c"
+    ],
+    "HbA1c (quarterly": [
+      "HbA1c"
+    ],
+    "Cortisol (AM": [
+      "Cortisol (AM)"
+    ],
+    "Cortisol (AM/PM": [
+      "Cortisol (AM)"
+    ],
+    "ApoB": [
+      "ApoB"
+    ],
+    "Lp(a": [
+      "Lp(a)"
+    ],
+    "DHEA-S": [
+      "DHEA-S"
+    ],
+    "HOMA-IR": [
+      "HOMA-IR"
+    ],
+    "hs-CRP": [
+      "hs-CRP"
+    ],
+    "hs-CRP (inflammation resolution": [
+      "hs-CRP"
+    ],
+    "IGF-1": [
+      "IGF-1"
+    ],
+    "IGF-1 (indirect": [
+      "IGF-1"
+    ],
+    "Prolactin": [
+      "Prolactin"
+    ],
+    "IGFBP-3": [
+      "IGFBP-3"
+    ],
+    "Testosterone total/free": [
+      "Testosterone (Total)",
+      "Testosterone (Free)"
+    ],
+    "Testosterone": [
+      "Testosterone (Total)"
+    ],
+    "Testosterone/Estradiol": [
+      "Testosterone (Total)",
+      "Estradiol"
+    ],
+    "FSH": [
+      "FSH"
+    ],
+    "LH": [
+      "LH"
+    ],
+    "Estradiol": [
+      "Estradiol"
+    ],
+    "Homocysteine": [
+      "Homocysteine"
+    ],
+    "TSH": [
+      "TSH"
+    ],
+    "Thyroid panel (TSH": [
+      "TSH"
+    ],
+    "Thyroid panel (TSH, fT3, fT4": [
+      "TSH",
+      "Free T3",
+      "Free T4"
+    ],
+    "Amylase": [
+      "Amylase"
+    ],
+    "Lipase": [
+      "Lipase"
+    ],
+    "Calcitonin": [
+      "Calcitonin"
+    ],
+    "SHBG": [
+      "SHBG"
+    ],
+    "Serum copper": [
+      "Serum Copper"
+    ],
+    "Ceruloplasmin": [
+      "Ceruloplasmin"
+    ],
+    "Ceruloplasmin (copper status": [
+      "Ceruloplasmin"
+    ],
+    "Serum zinc": [
+      "Serum Zinc"
+    ],
+    "BNP (cardiac context": [
+      "BNP/NT-proBNP"
+    ],
+    "BNP (cardiac history only": [
+      "BNP/NT-proBNP"
+    ],
+    "BNP / NT-proBNP": [
+      "BNP/NT-proBNP"
+    ],
+    "BNP / NT-proBNP (cardiac": [
+      "BNP/NT-proBNP"
+    ],
+    "BNP or NT-proBNP": [
+      "BNP/NT-proBNP"
+    ],
+    "PSA (males over 40": [
+      "PSA"
+    ],
+    "Telomere length (specialized": [
+      "Telomere Length"
+    ],
+    "Biological age markers": [
+      "Biological Age Score"
+    ],
+    "Biological age markers (GrimAge, PhenoAge": [
+      "Biological Age Score"
+    ],
+    "Vitamin D (25-OH) \u2014 LL-37 expression is vitamin D-regulated": [
+      "Vitamin D (25-OH)"
+    ],
+    "Fasting glucose": [
+      "Fasting Glucose"
+    ],
+    "Lipid panel": [
+      "Lipid Panel"
+    ],
+    "Lipid panel (LDL, HDL, TG": [
+      "Lipid Panel"
+    ],
+    "Lipid panel (TG, HDL especially": [
+      "Lipid Panel"
+    ],
+    "IL-6": [
+      "IL-6"
+    ],
+    "Fibrinogen": [
+      "Fibrinogen"
+    ],
+    "ACTH": [
+      "ACTH"
+    ],
+    "Ferritin": [
+      "Ferritin"
+    ],
+    "WBC differential": [
+      "WBC Differential"
+    ],
+    "CRP": [
+      "CRP"
+    ],
+    "GH (fasting": [
+      "Growth Hormone (Fasting)"
+    ],
+    "GH (fasting, morning": [
+      "Growth Hormone (Fasting)"
+    ],
+    "BDNF (specialized": [
+      "BDNF"
+    ],
+    "BDNF (if available, specialized lab": [
+      "BDNF"
+    ],
+    "ESR": [
+      "ESR"
+    ],
+    "Melatonin (specialized": [
+      "Melatonin"
+    ],
+    "AMH (females": [
+      "AMH"
+    ],
+    "CoQ10": [
+      "CoQ10"
+    ],
+    "Free fatty acids (if available": [
+      "Free Fatty Acids"
+    ],
+    "Glucagon": [
+      "Glucagon"
+    ],
+    "Leptin": [
+      "Leptin"
+    ],
+    "Progesterone (females": [
+      "Progesterone"
+    ],
+    "TIBC": [
+      "TIBC"
+    ],
+    "TIBC (copper/iron interaction": [
+      "TIBC"
+    ],
+    "8-OHdG (oxidative DNA damage, specialized": [
+      "8-OHdG"
+    ],
+    "Albumin": [
+      "Albumin"
+    ],
+    "Pre-albumin": [
+      "Pre-Albumin"
+    ],
+    "Immunoglobulins": [
+      "Immunoglobulins (IgG/IgM/IgA)"
+    ],
+    "Immunoglobulins (IgG, IgM, IgA": [
+      "Immunoglobulins (IgG/IgM/IgA)"
+    ],
+    "Ketones (glucagon effects": [
+      "Ketones"
+    ],
+    "Lactate (exercise context": [
+      "Lactate"
+    ],
+    "Lymphocyte subsets": [
+      "Lymphocyte Subsets (CD4/CD8)"
+    ],
+    "Lymphocyte subsets (CD4, CD8": [
+      "Lymphocyte Subsets (CD4/CD8)"
+    ],
+    "Mitochondrial function panels (specialized": [
+      "Mitochondrial Function Markers"
+    ],
+    "Mitochondrial function proxies (if available": [
+      "Mitochondrial Function Markers"
+    ],
+    "NK cell activity (if available": [
+      "NK Cell Activity"
+    ],
+    "Osmolality": [
+      "Osmolality"
+    ],
+    "Procalcitonin (if infection context": [
+      "Procalcitonin"
+    ],
+    "Serotonin metabolites (urine 5-HIAA if available": [
+      "Serotonin Metabolites (5-HIAA)"
+    ],
+    "Sodium (hyponatremia risk": [
+      "Sodium"
+    ],
+    "Troponin I (baseline": [
+      "Troponin I"
+    ],
+    "VEGF (if available": [
+      "VEGF"
+    ],
+    "Vasopressin (ADH": [
+      "Vasopressin (ADH)"
+    ],
+    "Calprotectin (if GI protocol": [
+      "Fecal Calprotectin"
+    ],
+    "Fecal calprotectin": [
+      "Fecal Calprotectin"
+    ],
+    "Adiponectin": [
+      "Adiponectin"
+    ],
+    "Citrulline (intestinal mass marker": [
+      "Citrulline"
+    ],
+    "Collagen biomarkers (CTX, P1NP if available": [
+      "Collagen Biomarkers (CTX/P1NP)"
+    ],
+    "Creatinine kinase": [
+      "Creatine Kinase"
+    ],
+    "GnRH stimulation test": [
+      "GnRH Stimulation Test"
+    ],
+    "Ghrelin (if available": [
+      "Ghrelin"
+    ],
+    "HGF (hepatocyte growth factor, specialized": [
+      "HGF"
+    ],
+    "Thymulin assay (not widely available": [
+      "Thymulin Assay"
+    ],
+    "CBC w/ diff (CD4/CD8 ratio if available": [
+      "CBC with Differential",
+      "Lymphocyte Subsets (CD4/CD8)"
+    ],
+    "Blood pressure (non-lab": null,
+    "Blood pressure (not a lab marker \u2014 flag separately": null,
+    "Body weight trend": null,
+    "Waist circumference (not lab": null,
+    "CBC": [
+      "CBC with Differential"
+    ]
+  },
+  "matched_to_vendor_matrix": [
+    "ALT",
+    "AST",
+    "Amylase",
+    "ApoB",
+    "BNP/NT-proBNP",
+    "BUN",
+    "Biological Age Score",
+    "CBC with Differential",
+    "Calcitonin",
+    "Ceruloplasmin",
+    "Cortisol (AM)",
+    "Creatinine",
+    "DHEA-S",
+    "Estradiol",
+    "FSH",
+    "Fasting Insulin",
+    "Free T3",
+    "Free T4",
+    "GGT",
+    "HOMA-IR",
+    "HbA1c",
+    "Homocysteine",
+    "IGF-1",
+    "IGFBP-3",
+    "LH",
+    "Lipase",
+    "Lp(a)",
+    "PSA",
+    "Prolactin",
+    "SHBG",
+    "Serum Copper",
+    "Serum Zinc",
+    "TSH",
+    "Telomere Length",
+    "Testosterone (Free)",
+    "Testosterone (Total)",
+    "Vitamin D (25-OH)",
+    "eGFR",
+    "hs-CRP"
+  ],
+  "new_no_vendor_coverage": [
+    "8-OHdG",
+    "ACTH",
+    "AMH",
+    "Adiponectin",
+    "Albumin",
+    "BDNF",
+    "CRP",
+    "Citrulline",
+    "CoQ10",
+    "Collagen Biomarkers (CTX/P1NP)",
+    "Creatine Kinase",
+    "ESR",
+    "Fasting Glucose",
+    "Fecal Calprotectin",
+    "Ferritin",
+    "Fibrinogen",
+    "Free Fatty Acids",
+    "Ghrelin",
+    "Glucagon",
+    "GnRH Stimulation Test",
+    "Growth Hormone (Fasting)",
+    "HGF",
+    "IL-6",
+    "Immunoglobulins (IgG/IgM/IgA)",
+    "Ketones",
+    "Lactate",
+    "Leptin",
+    "Lipid Panel",
+    "Lymphocyte Subsets (CD4/CD8)",
+    "Melatonin",
+    "Mitochondrial Function Markers",
+    "NK Cell Activity",
+    "Osmolality",
+    "Pre-Albumin",
+    "Procalcitonin",
+    "Progesterone",
+    "Serotonin Metabolites (5-HIAA)",
+    "Sodium",
+    "TIBC",
+    "Thymulin Assay",
+    "Troponin I",
+    "VEGF",
+    "Vasopressin (ADH)",
+    "WBC Differential"
+  ],
+  "vendor_matrix_never_referenced": [
+    "NAD+"
+  ],
+  "excluded_non_lab_tokens": [
+    "Blood pressure (non-lab",
+    "Blood pressure (not a lab marker \u2014 flag separately",
+    "Body weight trend",
+    "Waist circumference (not lab"
+  ]
+}

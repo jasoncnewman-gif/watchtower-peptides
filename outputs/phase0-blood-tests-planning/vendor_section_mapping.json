@@ -1,0 +1,17 @@
+{
+  "decision_log": {
+    "jinfiniti_added": "Added to panel-package section — was missing from every vendor list in the original 8-phase spec despite being a full INCLUDE-NICHE vendor with completed research (including the 25-marker and 18-marker audit passes). Section = panel-package because its Essential/Advanced/Ultimate/Menopause tiers are one-time purchases, same model as Marek and Vitals Vault.",
+    "just_labs_excluded": "Reverted to EXCLUDE, consistent with the original vendor eligibility audit (dead justlabs.com domain, live justlabs.health entity lacks distinguishing longevity-platform features). The original 8-phase spec resurrected it as the sole Build-Your-Own vendor with no stated rationale — treated as a spec error, not a deliberate reversal.",
+    "goodlabs_moved": "Moved from panel-package to build-your-own. Goodlabs' research-confirmed identity is fundamentally a la carte (individual $3-134 Quest-priced tests across 200+ SKUs), which fits the 'order exactly the tests you need' Build-Your-Own section description better than Panel Packages. This also resolves the schema conflict where the original spec tried to cross-list Goodlabs into two sections simultaneously — the section column can only hold one value per vendor.",
+    "vendor_name_corrections": "Original spec used bare 'SiPhox' and 'Rythm' — corrected to the exact vendor_name strings from lab_vendor_audit.json: 'SiPhox Health' and 'Rythm Health'."
+  },
+  "sections": {
+    "membership": ["Superpower", "Function Health", "Mito Health", "InsideTracker", "Everlywell", "Hundred Health", "OneTwenty", "SiPhox Health", "Rythm Health"],
+    "panel-package": ["Marek Diagnostics", "Vitals Vault", "Jinfiniti (AgingSOS)"],
+    "build-your-own": ["Goodlabs"],
+    "special": ["Lifeforce"],
+    "excluded": ["Ways2Well", "TruDiagnostic", "MyHealthspan", "Just Labs"]
+  },
+  "total_vendors": 18,
+  "counts": {"membership": 9, "panel-package": 3, "build-your-own": 1, "special": 1, "excluded": 4}
+}

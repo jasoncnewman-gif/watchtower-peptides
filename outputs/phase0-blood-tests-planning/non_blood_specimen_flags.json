@@ -1,0 +1,23 @@
+{
+  "convention": "Any vendor_biomarker_coverage cell where the underlying specimen is NOT venous/capillary blood must carry a specimen_type tag distinct from a plain ✓. Default assumption for all other markers is blood/serum unless flagged here.",
+  "flags": [
+    {"vendor": "Superpower", "marker": "CoQ10", "specimen_type": "urine", "note": "Not a direct blood CoQ10 assay — offered only as '3-Hydroxy-3-methylglutaric (Vitamin Q10/CoQ10)', a urine organic-acid metabolite via the Mosaic OAT panel that correlates with the CoQ10 synthesis pathway."},
+    {"vendor": "Superpower", "marker": "Lactate", "specimen_type": "urine", "note": "Offered only as 'Lactic' (lactic acid), a urine organic-acid metabolite via Mosaic OAT — not the blood lactate test used for exercise/mitochondrial assessment. Scored as NOT a true match for standard blood Lactate."},
+    {"vendor": "Superpower", "marker": "Serotonin Metabolites (5-HIAA)", "specimen_type": "urine", "note": "Urine organic-acid metabolite via Mosaic OAT panel, not a blood/serum test."},
+    {"vendor": "Superpower", "marker": "Ketones", "specimen_type": "urine", "note": "Urine dipstick (qualitative) + two urine organic-acid metabolites (beta-hydroxybutyrate, acetoacetate) via Mosaic OAT. No blood/serum ketone assay exists."},
+    {"vendor": "Mito Health", "marker": "Ketones", "specimen_type": "urine", "note": "Urine dipstick within urinalysis panel, all 3 tiers."},
+    {"vendor": "Marek Diagnostics", "marker": "Ketones", "specimen_type": "urine", "note": "Bundled dipstick component of the 'Urinalysis, Routine' panel ($10), not standalone."},
+    {"vendor": "OneTwenty", "marker": "Ketones", "specimen_type": "urine", "note": "Dedicated page is literally /biomarkers/ketones-urine — no blood/serum ketones page exists on the site."},
+    {"vendor": "Function Health", "marker": "Ketones", "specimen_type": "urine", "note": "Part of the standard 20-item Urinalysis panel included in base membership."},
+    {"vendor": "Vitals Vault", "marker": "Ketones", "specimen_type": "urine", "note": "Dedicated page is /biomarkers/urine-ketones — no blood/serum equivalent found in the 1,427-page sitemap."},
+    {"vendor": "Everlywell", "marker": "Ketones", "specimen_type": "urine", "note": "One of the enumerated urinalysis analytes within the 360 panel."},
+    {"vendor": "Hundred Health", "marker": "Ketones", "specimen_type": "urine", "note": "Catalog entry is literally 'Ketones - Urine'."},
+    {"vendor": "Everlywell", "marker": "Melatonin", "specimen_type": "urine", "note": "Separate standalone 'Sleep & Stress Test' ($199), 4x/day urine timepoints alongside cortisol/cortisone/creatinine — not part of the 360 panel, an additional purchase."},
+    {"vendor": "Vitals Vault", "marker": "Fecal Calprotectin", "specimen_type": "stool", "note": "Standalone stool test — non-blood by definition, flagged for matrix consistency."}
+  ],
+  "summary": {
+    "markers_with_only_nonblood_offerings": ["Ketones (8/14 vendors, all urine, zero blood/serum offerings found anywhere)"],
+    "markers_partially_nonblood": ["CoQ10 (Superpower's is urine; Marek/OneTwenty/Vitals Vault sell direct blood CoQ10)", "Lactate (Superpower's urine proxy scored as non-match; true blood Lactate is 0/14 everywhere)", "Melatonin (Everlywell's only offering is urine)"],
+    "markers_entirely_nonblood_where_offered": ["Serotonin Metabolites/5-HIAA (Superpower, urine)", "Fecal Calprotectin (Vitals Vault, stool — inherent to the marker, not a surprise)"]
+  }
+}

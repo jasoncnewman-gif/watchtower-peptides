@@ -1,0 +1,1177 @@
+vendor_slug,biomarker_slug,status,tier_name,tier_price_cents,addon_cost_cents,specimen_type,accuracy_flag,raw_annotation
+superpower,igf-1,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,igf-1,included,,,,blood,,✓ (à la carte/$40)
+vitals-vault,igf-1,included,Max,39900,,blood,,"✓ (Max/$399, also à la carte)"
+goodlabs,igf-1,included,,,,blood,,✓ (à la carte/$27)
+mito-health,igf-1,included,Ultra,145500,,blood,,"✓ (Ultra/$1,455)"
+lifeforce,igf-1,included,General,34900,,blood,,✓ (General/$349)
+function-health,igf-1,unavailable,,,,blood,,✗
+insidetracker,igf-1,unavailable,,,,blood,,✗
+everlywell,igf-1,unavailable,,,,blood,,✗
+hundred-health,igf-1,unavailable,,,,blood,,✗
+onetwenty,igf-1,unavailable,,,,blood,,✗
+siphox-health,igf-1,unavailable,,,,blood,,✗
+jinfiniti-agingsos,igf-1,unavailable,,,,blood,,✗
+rythm-health,igf-1,unavailable,,,,blood,,✗
+superpower,igfbp-3,unavailable,,,,blood,,✗
+marek-diagnostics,igfbp-3,unavailable,,,,blood,,"✗ (confirmed absent, no product page)"
+vitals-vault,igfbp-3,unavailable,,,,blood,,✗
+goodlabs,igfbp-3,included,,,,blood,,✓ (à la carte/$38) [CORRECTION vs. original audit]
+mito-health,igfbp-3,unavailable,,,,blood,,✗
+lifeforce,igfbp-3,unavailable,,,,blood,,✗
+function-health,igfbp-3,unavailable,,,,blood,,✗
+insidetracker,igfbp-3,unavailable,,,,blood,,✗
+everlywell,igfbp-3,unavailable,,,,blood,,✗
+hundred-health,igfbp-3,unavailable,,,,blood,,✗
+onetwenty,igfbp-3,unavailable,,,,blood,,✗
+siphox-health,igfbp-3,unavailable,,,,blood,,✗
+jinfiniti-agingsos,igfbp-3,unavailable,,,,blood,,✗
+rythm-health,igfbp-3,unavailable,,,,blood,,✗
+superpower,fasting-insulin,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,fasting-insulin,included,,,,blood,,✓ (à la carte)
+vitals-vault,fasting-insulin,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,fasting-insulin,included,,,,blood,,✓ (à la carte)
+mito-health,fasting-insulin,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,fasting-insulin,included,General,34900,,blood,,"✓ (General/$349, also in Metabolic add-on)"
+function-health,fasting-insulin,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,fasting-insulin,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,fasting-insulin,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,fasting-insulin,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,fasting-insulin,unavailable,,,,blood,,✗
+siphox-health,fasting-insulin,unavailable,,,,blood,,✗
+jinfiniti-agingsos,fasting-insulin,unavailable,,,,blood,,✗ (C-Peptide on Ultimate instead)
+rythm-health,fasting-insulin,unavailable,,,,blood,,✗
+superpower,homa-ir,unavailable,,,,blood,,"✗ (TG/HDL ratio proxy only, not true HOMA-IR)"
+marek-diagnostics,homa-ir,unavailable,,,,blood,,✗ (not sold as named/calculated test)
+vitals-vault,homa-ir,included,Max,39900,,blood,,"✓ (Max/$399, bundled w/ insulin)"
+goodlabs,homa-ir,unavailable,,,,blood,,✗ (no standalone; Cardio IQ IR Panel w/Score $66 is an equivalent proxy)
+mito-health,homa-ir,included,Core,19200,,blood,,"✓ (Core/$192, not in Essential)"
+lifeforce,homa-ir,included,General,34900,,blood,,✓ (General/$349)
+function-health,homa-ir,unavailable,,,,blood,,"✗ (glucose+insulin measured separately, no calculated value)"
+insidetracker,homa-ir,unavailable,,,,blood,,✗
+everlywell,homa-ir,unavailable,,,,blood,,✗
+hundred-health,homa-ir,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,homa-ir,unavailable,,,,blood,,✗
+siphox-health,homa-ir,unavailable,,,,blood,,✗
+jinfiniti-agingsos,homa-ir,unavailable,,,,blood,,✗
+rythm-health,homa-ir,unavailable,,,,blood,,✗
+superpower,hba1c,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,hba1c,included,,,,blood,,✓ (à la carte)
+vitals-vault,hba1c,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,hba1c,included,,,,blood,,✓ (à la carte)
+mito-health,hba1c,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,hba1c,included,General,34900,,blood,,✓ (General/$349)
+function-health,hba1c,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,hba1c,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,hba1c,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,hba1c,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,hba1c,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,hba1c,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,hba1c,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,hba1c,unavailable,,,,blood,,✗ (uses Fructosamine proxy instead)
+superpower,alt,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,alt,included,,,,blood,,✓ (à la carte)
+vitals-vault,alt,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,alt,included,,,,blood,,"✓ (à la carte, Hepatic Function Panel)"
+mito-health,alt,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,alt,included,General,34900,,blood,,✓ (General/$349)
+function-health,alt,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,alt,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,alt,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,alt,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,alt,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,alt,included,Heart&Metabolic,12500,,blood,,✓ (Heart&Metabolic/$125qtr — not in Core)
+jinfiniti-agingsos,alt,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,alt,unavailable,,,,blood,,"✗ (core); + (3rd-party Plus Panel only, pricing unconfirmed)"
+superpower,ast,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,ast,included,,,,blood,,✓ (à la carte)
+vitals-vault,ast,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,ast,included,,,,blood,,"✓ (à la carte, Hepatic Function Panel)"
+mito-health,ast,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,ast,included,General,34900,,blood,,✓ (General/$349)
+function-health,ast,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,ast,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,ast,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,ast,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,ast,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,ast,included,Heart&Metabolic,12500,,blood,,✓ (Heart&Metabolic/$125qtr — not in Core)
+jinfiniti-agingsos,ast,unavailable,,,,blood,,✗
+rythm-health,ast,unavailable,,,,blood,,✗ (core); + (3rd-party Plus Panel only)
+superpower,ggt,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,ggt,included,,,,blood,,✓ (à la carte)
+vitals-vault,ggt,included,Advanced,19900,,blood,,✓ (Advanced/$199)
+goodlabs,ggt,included,,,,blood,,✓ (à la carte)
+mito-health,ggt,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,ggt,unavailable,,,,blood,,✗ (no evidence found)
+function-health,ggt,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,ggt,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,ggt,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,ggt,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,ggt,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,ggt,unavailable,,,,blood,,✗
+jinfiniti-agingsos,ggt,unavailable,,,,blood,,✗
+rythm-health,ggt,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,bun,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,bun,included,,,,blood,,✓ (via CMP)
+vitals-vault,bun,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,bun,included,,,,blood,,"✓ (à la carte, Renal Function Panel/CMP)"
+mito-health,bun,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,bun,included,General,34900,,blood,,✓ (General/$349)
+function-health,bun,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,bun,unavailable,,,,blood,,✗
+everlywell,bun,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,bun,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,bun,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,bun,included,Heart&Metabolic,12500,,blood,,✓ (Heart&Metabolic/$125qtr)
+jinfiniti-agingsos,bun,unavailable,,,,blood,,✗
+rythm-health,bun,unavailable,,,,blood,,✗ (core); + (3rd-party Plus Panel only)
+superpower,creatinine,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,creatinine,included,,,,blood,,✓ (à la carte)
+vitals-vault,creatinine,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,creatinine,included,,,,blood,,✓ (à la carte)
+mito-health,creatinine,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,creatinine,included,General,34900,,blood,,✓ (General/$349)
+function-health,creatinine,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,creatinine,unavailable,,,,blood,,✗
+everlywell,creatinine,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,creatinine,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,creatinine,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,creatinine,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,creatinine,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,creatinine,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,egfr,included,Base,19900,,blood,,✓ (Base/$199) [+Cystatin C method]
+marek-diagnostics,egfr,included,,,,blood,,✓ (à la carte)
+vitals-vault,egfr,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,egfr,included,,,,blood,,"✓ (à la carte, Renal Function Panel)"
+mito-health,egfr,included,Essential,9000,,blood,,✓ (Essential/$90) [Ultra uses refined Cystatin C eGFR]
+lifeforce,egfr,included,General,34900,,blood,,✓ (General/$349)
+function-health,egfr,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,egfr,unavailable,,,,blood,,✗
+everlywell,egfr,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,egfr,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,egfr,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,egfr,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,egfr,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,egfr,unavailable,,,,blood,,"✗ (core); ? (likely on 3rd-party Plus Panel, unconfirmed)"
+superpower,cbc-with-differential,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,cbc-with-differential,included,,,,blood,,✓ (à la carte)
+vitals-vault,cbc-with-differential,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,cbc-with-differential,included,,,,blood,,✓ (à la carte)
+mito-health,cbc-with-differential,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,cbc-with-differential,included,General,34900,,blood,,✓ (General/$349)
+function-health,cbc-with-differential,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,cbc-with-differential,included,Membership,14900,,blood,,"✓ (Membership/$149, Endurance category)"
+everlywell,cbc-with-differential,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,cbc-with-differential,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,cbc-with-differential,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,cbc-with-differential,unavailable,,,,blood,,✗
+jinfiniti-agingsos,cbc-with-differential,unavailable,,,,blood,,✗
+rythm-health,cbc-with-differential,unavailable,,,,blood,,"✗ (core, only isolated Hct/Hgb males); + (3rd-party Plus Panel)"
+superpower,hs-crp,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,hs-crp,included,,,,blood,,✓ (à la carte)
+vitals-vault,hs-crp,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,hs-crp,included,,,,blood,,✓ (à la carte)
+mito-health,hs-crp,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,hs-crp,included,General,34900,,blood,,✓ (General/$349)
+function-health,hs-crp,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,hs-crp,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,hs-crp,included,360,39900,,blood,,✓ (360/$399) [dropped from standalone kits purchased after 2023-06-01]
+hundred-health,hs-crp,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,hs-crp,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,hs-crp,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,hs-crp,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,hs-crp,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,cortisol-am,included,Base,19900,,blood,,"✓ (Base/$199, AM timing not explicit)"
+marek-diagnostics,cortisol-am,included,,,,blood,,✓ (à la carte)
+vitals-vault,cortisol-am,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,cortisol-am,included,,,,blood,,✓ (à la carte/$8)
+mito-health,cortisol-am,included,Core,19200,,blood,,"✓ (Core/$192, not in Essential)"
+lifeforce,cortisol-am,unavailable,,,,blood,,✗ (no evidence found)
+function-health,cortisol-am,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,cortisol-am,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,cortisol-am,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,cortisol-am,unavailable,,,,blood,,✗
+onetwenty,cortisol-am,unavailable,,,,blood,,✗
+siphox-health,cortisol-am,included,Core,12500,,blood,CAP,✓ (Core/$125qtr) ⚠CAP [arm-patch capillary (EasyDraw) — accuracy caveat vs. venous draw]
+jinfiniti-agingsos,cortisol-am,unavailable,,,,blood,,✗
+rythm-health,cortisol-am,unavailable,,,,blood,,✗
+superpower,prolactin,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,prolactin,included,,,,blood,,✓ (à la carte)
+vitals-vault,prolactin,addon,,,,blood,,"+ (à la carte add-on, not in core tiers)"
+goodlabs,prolactin,included,,,,blood,,✓ (à la carte)
+mito-health,prolactin,included,Core,19200,,blood,,"✓ (Core/$192, not in Essential)"
+lifeforce,prolactin,unavailable,,,,blood,,✗ (no evidence found)
+function-health,prolactin,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,prolactin,unavailable,,,,blood,,✗
+everlywell,prolactin,unavailable,,,,blood,,✗
+hundred-health,prolactin,unavailable,,,,blood,,✗
+onetwenty,prolactin,unavailable,,,,blood,,✗
+siphox-health,prolactin,included,Hormone Focus,12500,,blood,,✓ (Hormone Focus/$125qtr)
+jinfiniti-agingsos,prolactin,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,prolactin,unavailable,,,,blood,,✗
+superpower,testosterone-total,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,testosterone-total,included,,,,blood,,✓ (à la carte)
+vitals-vault,testosterone-total,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,testosterone-total,included,,,,blood,,✓ (à la carte)
+mito-health,testosterone-total,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,testosterone-total,included,General,34900,,blood,,✓ (General/$349)
+function-health,testosterone-total,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,testosterone-total,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,testosterone-total,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,testosterone-total,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,testosterone-total,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,testosterone-total,included,Core,12500,,blood,CAP,✓ (Core/$125qtr) ⚠CAP [arm-patch capillary (EasyDraw) — accuracy caveat vs. venous draw]
+jinfiniti-agingsos,testosterone-total,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,testosterone-total,included,Core,7900,,blood,CAP,✓ (Core/$79mo) ⚠CAP [fingerstick capillary — accuracy caveat vs. venous draw]
+superpower,testosterone-free,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,testosterone-free,included,,,,blood,,✓ (à la carte)
+vitals-vault,testosterone-free,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,testosterone-free,included,,,,blood,,✓ (à la carte/$22)
+mito-health,testosterone-free,included,Core,19200,,blood,,✓ (Core/$192)
+lifeforce,testosterone-free,included,General,34900,,blood,,✓ (General/$349)
+function-health,testosterone-free,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,testosterone-free,included,Membership,14900,,blood,,"✓ (Membership/$149, males only)"
+everlywell,testosterone-free,unavailable,,,,blood,,✗
+hundred-health,testosterone-free,included,Core,19900,,blood,,"✓ (Core/$199, Free+Bioavailable)"
+onetwenty,testosterone-free,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,testosterone-free,included,Core,12500,,blood,CAP,✓ (Core/$125qtr) ⚠CAP [arm-patch capillary (EasyDraw) — accuracy caveat vs. venous draw]
+jinfiniti-agingsos,testosterone-free,unavailable,,,,blood,,✗
+rythm-health,testosterone-free,included,Core,7900,,blood,CAP,✓ (Core/$79mo) ⚠CAP [fingerstick capillary — accuracy caveat vs. venous draw]
+superpower,estradiol,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,estradiol,included,,,,blood,,✓ (à la carte; Standard ECLIA or Sensitive LC/MS-MS)
+vitals-vault,estradiol,included,Advanced,19900,,blood,,✓ (Advanced/$199)
+goodlabs,estradiol,included,,,,blood,,✓ (à la carte)
+mito-health,estradiol,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,estradiol,included,General,34900,,blood,,✓ (General/$349)
+function-health,estradiol,included,Base,36500,,blood,,"✓ (Base/$365, skipped if on hormonal BC)"
+insidetracker,estradiol,addon,,,,blood,,"+ (add-on at checkout, females only)"
+everlywell,estradiol,included,360,39900,,blood,,"✓ (360/$399, female panel only)"
+hundred-health,estradiol,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,estradiol,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,estradiol,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,estradiol,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,estradiol,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,lh,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,lh,included,,,,blood,,✓ (à la carte)
+vitals-vault,lh,addon,,,,blood,,"+ (à la carte add-on, bundled w/ FSH)"
+goodlabs,lh,included,,,,blood,,✓ (à la carte)
+mito-health,lh,included,Core,19200,,blood,,✓ (Core/$192)
+lifeforce,lh,included,General,34900,,blood,,✓ (General/$349)
+function-health,lh,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,lh,unavailable,,,,blood,,✗
+everlywell,lh,included,360,39900,,blood,,"✓ (360/$399, female panel only)"
+hundred-health,lh,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,lh,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,lh,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,lh,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,lh,unavailable,,,,blood,,✗
+superpower,fsh,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,fsh,included,,,,blood,,✓ (à la carte)
+vitals-vault,fsh,addon,,,,blood,,"+ (à la carte add-on, bundled w/ LH)"
+goodlabs,fsh,included,,,,blood,,✓ (à la carte)
+mito-health,fsh,included,Core,19200,,blood,,✓ (Core/$192)
+lifeforce,fsh,included,General,34900,,blood,,✓ (General/$349)
+function-health,fsh,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,fsh,unavailable,,,,blood,,✗
+everlywell,fsh,included,360,39900,,blood,,"✓ (360/$399, female panel only)"
+hundred-health,fsh,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,fsh,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,fsh,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,fsh,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,fsh,unavailable,,,,blood,,✗
+superpower,shbg,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,shbg,included,,,,blood,,✓ (à la carte)
+vitals-vault,shbg,included,Advanced,19900,,blood,,✓ (Advanced/$199)
+goodlabs,shbg,included,,,,blood,,✓ (à la carte/$8)
+mito-health,shbg,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,shbg,included,General,34900,,blood,,✓ (General/$349)
+function-health,shbg,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,shbg,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,shbg,unavailable,,,,blood,,✗
+hundred-health,shbg,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,shbg,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,shbg,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,shbg,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,shbg,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,apob,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,apob,included,,,,blood,,✓ (à la carte)
+vitals-vault,apob,included,Advanced,19900,,blood,,✓ (Advanced/$199)
+goodlabs,apob,included,,,,blood,,✓ (à la carte/$12)
+mito-health,apob,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,apob,included,General,34900,,blood,,✓ (General/$349)
+function-health,apob,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,apob,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,apob,unavailable,,,,blood,,✗
+hundred-health,apob,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,apob,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,apob,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,apob,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,apob,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,lp-a,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,lp-a,included,,,,blood,,✓ (à la carte)
+vitals-vault,lp-a,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,lp-a,included,,,,blood,,✓ (à la carte)
+mito-health,lp-a,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,lp-a,included,General,34900,,blood,,✓ (General/$349)
+function-health,lp-a,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,lp-a,unavailable,,,,blood,,✗
+everlywell,lp-a,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,lp-a,unavailable,,,,blood,,✗
+onetwenty,lp-a,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,lp-a,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,lp-a,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,lp-a,unavailable,,,,blood,,✗
+superpower,dhea-s,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,dhea-s,included,,,,blood,,✓ (à la carte)
+vitals-vault,dhea-s,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,dhea-s,included,,,,blood,,✓ (à la carte/$11)
+mito-health,dhea-s,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,dhea-s,included,General,34900,,blood,,✓ (General/$349)
+function-health,dhea-s,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,dhea-s,included,Membership,14900,,blood,,"✓ (Membership/$149, females only)"
+everlywell,dhea-s,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,dhea-s,unavailable,,,,blood,,✗
+onetwenty,dhea-s,unavailable,,,,blood,,✗
+siphox-health,dhea-s,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,dhea-s,unconfirmed,Ultimate,149800,,blood,,"± (Ultimate/$1,498, listed as ""DHEA"" — not confirmed as sulfated DHEA-S)"
+rythm-health,dhea-s,unavailable,,,,blood,,✗
+superpower,homocysteine,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,homocysteine,included,,,,blood,,✓ (à la carte)
+vitals-vault,homocysteine,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,homocysteine,included,,,,blood,,✓ (à la carte/$13)
+mito-health,homocysteine,included,Core,19200,,blood,,"✓ (Core/$192, not in Essential)"
+lifeforce,homocysteine,included,General,34900,,blood,,✓ (General/$349)
+function-health,homocysteine,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,homocysteine,unavailable,,,,blood,,✗
+everlywell,homocysteine,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,homocysteine,unavailable,,,,blood,,✗
+onetwenty,homocysteine,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,homocysteine,unavailable,,,,blood,,"✗ (unconfirmed — present in legacy ADX fingerstick line, absent from current EasyDraw Ultimate 360)"
+jinfiniti-agingsos,homocysteine,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,homocysteine,unavailable,,,,blood,,✗
+superpower,free-t3,included,Base,19900,,blood,,"✓ (Base/$199, direct assay)"
+marek-diagnostics,free-t3,included,,,,blood,,✓ (à la carte)
+vitals-vault,free-t3,unavailable,,,,blood,,"✗ (default panel = T3 Uptake method, not direct Free T3; direct FT3 only via separate à la carte)"
+goodlabs,free-t3,included,,,,blood,,✓ (à la carte)
+mito-health,free-t3,included,Core,19200,,blood,,"✓ (Core/$192, added Core+; TSH/FT4 in all 3)"
+lifeforce,free-t3,unavailable,,,,blood,,✗ (not found)
+function-health,free-t3,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,free-t3,unavailable,,,,blood,,"✗ (TSH-only, no fT3/fT4)"
+everlywell,free-t3,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,free-t3,unavailable,,,,blood,,✗ (TSH+FT4 only)
+onetwenty,free-t3,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,free-t3,included,Thyroid Focus,12500,,blood,,✓ (Thyroid Focus/$125qtr — not in Core)
+jinfiniti-agingsos,free-t3,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,free-t3,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,free-t4,unavailable,,,,blood,,✗ (no direct assay; Total T4 + calc. FTI proxy only)
+marek-diagnostics,free-t4,included,,,,blood,,✓ (à la carte)
+vitals-vault,free-t4,unavailable,,,,blood,,"✗ (default panel = Total T4, not direct Free T4; separate à la carte purchase)"
+goodlabs,free-t4,included,,,,blood,,✓ (à la carte)
+mito-health,free-t4,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,free-t4,included,General,34900,,blood,,✓ (General/$349)
+function-health,free-t4,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,free-t4,unavailable,,,,blood,,✗
+everlywell,free-t4,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,free-t4,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,free-t4,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,free-t4,included,Thyroid Focus,12500,,blood,,✓ (Thyroid Focus/$125qtr — not in Core)
+jinfiniti-agingsos,free-t4,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,free-t4,unconfirmed,,,,blood,,? (unconfirmed)
+superpower,tsh,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,tsh,included,,,,blood,,✓ (à la carte)
+vitals-vault,tsh,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,tsh,included,,,,blood,,✓ (à la carte)
+mito-health,tsh,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,tsh,included,General,34900,,blood,,✓ (General/$349)
+function-health,tsh,included,Base,36500,,blood,,"✓ (Base/$365, +TPO Ab/TgAb)"
+insidetracker,tsh,included,Membership,14900,,blood,,"✓ (Membership/$149) [TSH-only, no full thyroid panel]"
+everlywell,tsh,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,tsh,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,tsh,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,tsh,included,Core,12500,,blood,,✓ (Core/$125qtr) [Core/Heart&Metabolic get TSH-ONLY; full trio needs Thyroid/Ultimate]
+jinfiniti-agingsos,tsh,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,tsh,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,amylase,unavailable,,,,blood,,✗
+marek-diagnostics,amylase,included,,,,blood,,"✓ (à la carte, standalone product)"
+vitals-vault,amylase,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,amylase,included,,,,blood,,✓ (à la carte/$4)
+mito-health,amylase,included,Ultra,145500,,blood,,"✓ (Ultra/$1,455)"
+lifeforce,amylase,unavailable,,,,blood,,✗ (no evidence found)
+function-health,amylase,included,Base,36500,,blood,,"✓ (Base/$365, included)"
+insidetracker,amylase,unavailable,,,,blood,,✗
+everlywell,amylase,unavailable,,,,blood,,✗
+hundred-health,amylase,unavailable,,,,blood,,✗
+onetwenty,amylase,unavailable,,,,blood,,✗
+siphox-health,amylase,unavailable,,,,blood,,✗
+jinfiniti-agingsos,amylase,unavailable,,,,blood,,✗
+rythm-health,amylase,unavailable,,,,blood,,✗
+superpower,lipase,unavailable,,,,blood,,✗
+marek-diagnostics,lipase,included,,,,blood,,"✓ (à la carte, standalone product)"
+vitals-vault,lipase,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,lipase,included,,,,blood,,✓ (à la carte/$5)
+mito-health,lipase,included,Ultra,145500,,blood,,"✓ (Ultra/$1,455)"
+lifeforce,lipase,unavailable,,,,blood,,✗ (no evidence found)
+function-health,lipase,included,Base,36500,,blood,,"✓ (Base/$365, included)"
+insidetracker,lipase,unavailable,,,,blood,,✗
+everlywell,lipase,unavailable,,,,blood,,✗
+hundred-health,lipase,unavailable,,,,blood,,✗
+onetwenty,lipase,unavailable,,,,blood,,✗
+siphox-health,lipase,unavailable,,,,blood,,✗
+jinfiniti-agingsos,lipase,unavailable,,,,blood,,✗
+rythm-health,lipase,unavailable,,,,blood,,✗
+superpower,serum-zinc,unavailable,,,,blood,,✗
+marek-diagnostics,serum-zinc,included,,,,blood,,"✓ (à la carte, ""Zinc, Plasma"")"
+vitals-vault,serum-zinc,included,Max,39900,,blood,,✓ (Max/$399)
+goodlabs,serum-zinc,included,,,,blood,,✓ (à la carte/$11)
+mito-health,serum-zinc,included,Ultra,145500,,blood,,"✓ (Ultra/$1,455)"
+lifeforce,serum-zinc,unavailable,,,,blood,,✗ (no evidence found)
+function-health,serum-zinc,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,serum-zinc,unavailable,,,,blood,,✗
+everlywell,serum-zinc,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,serum-zinc,unavailable,,,,blood,,✗
+onetwenty,serum-zinc,unavailable,,,,blood,,✗
+siphox-health,serum-zinc,unavailable,,,,blood,,✗
+jinfiniti-agingsos,serum-zinc,unavailable,,,,blood,,✗
+rythm-health,serum-zinc,unavailable,,,,blood,,✗
+superpower,serum-copper,unavailable,,,,blood,,✗
+marek-diagnostics,serum-copper,included,,,,blood,,✓ (à la carte/$34)
+vitals-vault,serum-copper,addon,,,,blood,,"+ (à la carte only, not in core tiers, $ dynamic/checkout-only)"
+goodlabs,serum-copper,included,,,,blood,,✓ (à la carte/$18)
+mito-health,serum-copper,included,Ultra,145500,,blood,,"✓ (Ultra/$1,455)"
+lifeforce,serum-copper,unavailable,,,,blood,,✗
+function-health,serum-copper,unavailable,,,,blood,,✗
+insidetracker,serum-copper,unavailable,,,,blood,,✗
+everlywell,serum-copper,unavailable,,,,blood,,✗
+hundred-health,serum-copper,unavailable,,,,blood,,✗
+onetwenty,serum-copper,unavailable,,,,blood,,✗
+siphox-health,serum-copper,unavailable,,,,blood,,"✗ (only via 3rd-party reseller ""Mineral Panel"" $349 CAD, different collection method — not on siphoxhealth.com)"
+jinfiniti-agingsos,serum-copper,unavailable,,,,blood,,✗
+rythm-health,serum-copper,unavailable,,,,blood,,✗
+superpower,ceruloplasmin,unavailable,,,,blood,,✗
+marek-diagnostics,ceruloplasmin,included,,,,blood,,✓ (à la carte/$20)
+vitals-vault,ceruloplasmin,addon,,,,blood,,"+ (à la carte panel only ""Zinc Copper And Ceruloplasmin"", not standalone, not in core tiers)"
+goodlabs,ceruloplasmin,included,,,,blood,,✓ (à la carte/$15)
+mito-health,ceruloplasmin,unavailable,,,,blood,,"✗ [not confirmed on any of 3 panels; full à la carte catalog not enumerable, see notes]"
+lifeforce,ceruloplasmin,unavailable,,,,blood,,✗
+function-health,ceruloplasmin,unavailable,,,,blood,,✗
+insidetracker,ceruloplasmin,unavailable,,,,blood,,✗
+everlywell,ceruloplasmin,unavailable,,,,blood,,✗
+hundred-health,ceruloplasmin,unavailable,,,,blood,,✗
+onetwenty,ceruloplasmin,unavailable,,,,blood,,✗
+siphox-health,ceruloplasmin,unavailable,,,,blood,,✗
+jinfiniti-agingsos,ceruloplasmin,unavailable,,,,blood,,✗
+rythm-health,ceruloplasmin,unavailable,,,,blood,,✗
+superpower,vitamin-d-25-oh,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,vitamin-d-25-oh,included,,,,blood,,✓ (à la carte)
+vitals-vault,vitamin-d-25-oh,included,Essential,9900,,blood,,✓ (Essential/$99)
+goodlabs,vitamin-d-25-oh,included,,,,blood,,✓ (à la carte/$14)
+mito-health,vitamin-d-25-oh,included,Essential,9000,,blood,,✓ (Essential/$90)
+lifeforce,vitamin-d-25-oh,included,General,34900,,blood,,✓ (General/$349)
+function-health,vitamin-d-25-oh,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,vitamin-d-25-oh,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,vitamin-d-25-oh,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,vitamin-d-25-oh,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,vitamin-d-25-oh,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,vitamin-d-25-oh,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,vitamin-d-25-oh,included,Essential,29800,,blood,,✓ (Essential/$298)
+rythm-health,vitamin-d-25-oh,included,Core,7900,,blood,,✓ (Core/$79mo)
+superpower,nad,unconfirmed,,,,blood,,"? (likely — catalog item ""NADB"", probable urine NAD+ metabolite, naming uncertain)"
+marek-diagnostics,nad,unavailable,,,,blood,,"✗ (confirmed absent, no product page)"
+vitals-vault,nad,unavailable,,,,blood,,"✗ (zero matches across 1,427 sitemap pages)"
+goodlabs,nad,unavailable,,,,blood,,✗ (not found in full catalog)
+mito-health,nad,unavailable,,,,blood,,✗ (not found in any tier)
+lifeforce,nad,unavailable,,,,blood,,✗ (no evidence found)
+function-health,nad,unavailable,,,,blood,,✗
+insidetracker,nad,unavailable,,,,blood,,✗
+everlywell,nad,unavailable,,,,blood,,✗
+hundred-health,nad,unavailable,,,,blood,,✗
+onetwenty,nad,unavailable,,,,blood,,"✗ (only as prescribable NAD+ injection add-on, not a measured biomarker)"
+siphox-health,nad,unavailable,,,,blood,,✗
+jinfiniti-agingsos,nad,included,Advanced,119800,,blood,,"✓ (Advanced/$1,198, flagship differentiator)"
+rythm-health,nad,unavailable,,,,blood,,✗
+superpower,calcitonin,unavailable,,,,blood,,"✗ (edu content only, not an orderable test)"
+marek-diagnostics,calcitonin,included,,,,blood,,"✓ (à la carte/$64, ""Calcitonin (Thyrocalcitonin)"")"
+vitals-vault,calcitonin,addon,,,,blood,,"+ (à la carte only, not in core tiers, $ not disclosed)"
+goodlabs,calcitonin,unavailable,,,,blood,,✗ (absent from full catalog index)
+mito-health,calcitonin,unavailable,,,,blood,,✗ [not on any panel; à la carte catalog not enumerable]
+lifeforce,calcitonin,unavailable,,,,blood,,✗
+function-health,calcitonin,unavailable,,,,blood,,✗
+insidetracker,calcitonin,unavailable,,,,blood,,✗
+everlywell,calcitonin,unavailable,,,,blood,,✗
+hundred-health,calcitonin,unavailable,,,,blood,,✗
+onetwenty,calcitonin,unavailable,,,,blood,,✗
+siphox-health,calcitonin,unavailable,,,,blood,,✗
+jinfiniti-agingsos,calcitonin,unavailable,,,,blood,,✗
+rythm-health,calcitonin,unavailable,,,,blood,,✗
+superpower,psa,addon,,,,blood,,"+ (à la carte add-on, price undisclosed)"
+marek-diagnostics,psa,included,,,,blood,,"✓ (à la carte/$30, Total+Free+%Free)"
+vitals-vault,psa,addon,,,1400,blood,,"+ (à la carte ~$14-29 single, or bundled ""Men's Vitality Quick Check"" $39)"
+goodlabs,psa,included,,,,blood,,"✓ (à la carte/$5-12, two listings)"
+mito-health,psa,included,Core,19200,,blood,,"✓ (Core/$192, men only; also in Ultra)"
+lifeforce,psa,included,TRT track only,4900,,blood,,✓ (TRT track only/$49 initial eval — NOT the general base panel)
+function-health,psa,included,Base,36500,,blood,,"✓ (Base/$365, Total+Free+%Free)"
+insidetracker,psa,unavailable,,,,blood,,✗
+everlywell,psa,included,360,39900,,blood,,✓ (360/$399 ONLY — standalone Men's Health Test $249 does NOT include PSA)
+hundred-health,psa,included,Core,19900,,blood,,"✓ (Core/$199, incl. Free PSA per 3rd-party review)"
+onetwenty,psa,included,Standard,49900,,blood,,"✓ (Standard/$499, included, no à la carte price shown)"
+siphox-health,psa,included,Hormone Focus + Hormone+ upgrade,4500,,blood,,"✓ (Hormone Focus + Hormone+ upgrade/$45-50, male panel only)"
+jinfiniti-agingsos,psa,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498, ""Free PSA, Total PSA"", Prostate Health/men only)"
+rythm-health,psa,unavailable,,,,blood,,✗ (confirmed absent from core AND 71-marker 3rd-party Plus Panel)
+superpower,bnp-nt-probnp,unavailable,,,,blood,,✗
+marek-diagnostics,bnp-nt-probnp,unavailable,,,,blood,,"✗ (site search: only unrelated ""Bone Health Panel"" hit)"
+vitals-vault,bnp-nt-probnp,unavailable,,,,blood,,✗
+goodlabs,bnp-nt-probnp,included,,,,blood,,"✓ (à la carte/$134, NT-proBNP only — standalone BNP not found)"
+mito-health,bnp-nt-probnp,unavailable,,,,blood,,✗ [not on any panel; à la carte catalog not enumerable]
+lifeforce,bnp-nt-probnp,unavailable,,,,blood,,✗
+function-health,bnp-nt-probnp,unavailable,,,,blood,,✗
+insidetracker,bnp-nt-probnp,unavailable,,,,blood,,✗
+everlywell,bnp-nt-probnp,unavailable,,,,blood,,✗
+hundred-health,bnp-nt-probnp,unavailable,,,,blood,,✗
+onetwenty,bnp-nt-probnp,unavailable,,,,blood,,✗
+siphox-health,bnp-nt-probnp,unavailable,,,,blood,,✗
+jinfiniti-agingsos,bnp-nt-probnp,unavailable,,,,blood,,✗
+rythm-health,bnp-nt-probnp,unavailable,,,,blood,,✗
+superpower,biological-age-score,included,Base,19900,,blood,,"✓ (Base/$199, method: blood-composite ""Digital Twin"" score)"
+marek-diagnostics,biological-age-score,unavailable,,,,blood,,✗ (zero search results)
+vitals-vault,biological-age-score,included,,,,blood,,"✓ (FREE, included w/ any tier + free standalone tool; method: PhenoAge/Levine-Yale blood composite, NOT epigenetic)"
+goodlabs,biological-age-score,unavailable,,,,blood,,✗ (no aging-clock/epigenetic terminology in catalog)
+mito-health,biological-age-score,included,,,,blood,,"✓ ($9/mo membership dashboard feature, method undisclosed)"
+lifeforce,biological-age-score,included,General,34900,,blood,,"✓ (General/$349, 'Lifescore' sub-component; method: blood composite 50+ markers + questionnaire, NOT epigenetic/telomere)"
+function-health,biological-age-score,included,Base,36500,,blood,,"✓ (Base/$365, tested 2x/yr; method: blood composite per 3rd-party review, not self-disclosed)"
+insidetracker,biological-age-score,included,add-on to Ultimate,34000,,blood,,"✓ (add-on to Ultimate/$340, ""InnerAge 2.0""; method: blood composite 17m/13f markers, NOT epigenetic — deliberate choice per FAQ)"
+everlywell,biological-age-score,included,360,39900,,blood,,"✓ (360/$399 only, ""WellScore""; method: blood composite ~9 markers, NOT epigenetic)"
+hundred-health,biological-age-score,included,Core,19900,,blood,,"✓ (Core/$199, included; method: [Likely] blood composite per 3rd-party formula, NOT epigenetic — FAQ states epigenetic testing ""not yet"" offered)"
+onetwenty,biological-age-score,included,,,,blood,,"✓ (price/tier not disclosed; method: Levine PhenoAge blood composite [9 markers], NOT epigenetic; also free no-bloodwork lifestyle estimate)"
+siphox-health,biological-age-score,included,,,,blood,,"✓ (FREE ""BioAge"" dashboard score incl. w/ all memberships, method unconfirmed; ALSO standalone DNA-methylation epigenetic ""Biological Age Test"" $325)"
+jinfiniti-agingsos,biological-age-score,included,,,,blood,,"✓ (SEPARATE product ""AgeRate"", sold apart from AgingSOS panels, ~$348 [UNCONFIRMED]; method: epigenetic clock — DNA methylation, 10,000+ CpG sites, saliva)"
+rythm-health,biological-age-score,included,Core,7900,,blood,,"✓ (Core/$79mo; method UNDISCLOSED — genuine disclosure gap, likely blood composite given fingerstick-only collection)"
+superpower,telomere-length,unavailable,,,,blood,,✗ (site calls it a low-value biomarker; favors epigenetic clocks it does not sell)
+marek-diagnostics,telomere-length,unavailable,,,,blood,,✗ (zero search results)
+vitals-vault,telomere-length,unavailable,,,,blood,,✗
+goodlabs,telomere-length,unavailable,,,,blood,,✗
+mito-health,telomere-length,unavailable,,,,blood,,"✗ (blog content only, no SKU/price; à la carte catalog not enumerable)"
+lifeforce,telomere-length,unavailable,,,,blood,,✗
+function-health,telomere-length,unavailable,,,,blood,,✗
+insidetracker,telomere-length,unavailable,,,,blood,,✗ (explicitly declined per official FAQ)
+everlywell,telomere-length,unavailable,,,,blood,,✗
+hundred-health,telomere-length,unavailable,,,,blood,,✗
+onetwenty,telomere-length,unavailable,,,,blood,,✗
+siphox-health,telomere-length,unavailable,,,,blood,,"✗ (DNAmTL discussed as background science only, not sold)"
+jinfiniti-agingsos,telomere-length,unavailable,,,,blood,,✗
+rythm-health,telomere-length,unavailable,,,,blood,,✗
+superpower,lipid-panel,included,Base,19900,,blood,,✓ (Base/$199)
+marek-diagnostics,lipid-panel,included,,,,blood,,✓ (à la carte)
+vitals-vault,lipid-panel,included,Essential,9900,,blood,,"✓ (Essential/$99, all tiers)"
+goodlabs,lipid-panel,included,,,,blood,,✓ (à la carte)
+mito-health,lipid-panel,included,Essential,9000,,blood,,"✓ (Essential/$90, all 3 tiers)"
+lifeforce,lipid-panel,included,General,34900,,blood,,✓ (General/$349; Total/LDL/HDL/Triglycerides/VLDL each have dedicated pages)
+function-health,lipid-panel,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,lipid-panel,included,Membership,14900,,blood,,✓ (Membership/$149)
+everlywell,lipid-panel,included,360,39900,,blood,,✓ (360/$399)
+hundred-health,lipid-panel,included,Core,19900,,blood,,✓ (Core/$199)
+onetwenty,lipid-panel,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,lipid-panel,included,Core,12500,,blood,,✓ (Core/$125qtr)
+jinfiniti-agingsos,lipid-panel,included,Essential,29800,,blood,,"✓ (Essential/$298, all tiers)"
+rythm-health,lipid-panel,included,Core,7900,,blood,,"✓ (Core/$79mo; LDL, HDL, Triglycerides, ratios)"
+superpower,ferritin,included,Baseline,19900,,blood,,✓ (Baseline/$199)
+marek-diagnostics,ferritin,included,,,,blood,,✓ (à la carte/$9)
+vitals-vault,ferritin,included,Essential,9900,,blood,,"✓ (Essential/$99, bundled ""Iron, Ferritin & TIBC"")"
+goodlabs,ferritin,included,,,,blood,,✓ (à la carte/$9)
+mito-health,ferritin,included,Core,19200,,blood,,"✓ (Core/$192, not in Essential)"
+lifeforce,ferritin,addon,,,20000,blood,,"+ (Cardiovascular Health Advanced Panel, $200 add-on, NOT base membership)"
+function-health,ferritin,included,Base,36500,,blood,,✓ (Base/$365)
+insidetracker,ferritin,included,Ultimate,34000,,blood,,"✓ (Ultimate/$340, Endurance & Inflammation categories)"
+everlywell,ferritin,included,360,39900,,blood,,✓ (360/$399 only)
+hundred-health,ferritin,included,Core,19900,,blood,,"✓ (Core/$199, Iron panel)"
+onetwenty,ferritin,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,ferritin,included,Core,12500,,blood,,"✓ (Core/$125qtr, Thyroid Focus, GLP add-on +$75, Ultimate 360; NOT Hormone Focus/Heart&Metabolic)"
+jinfiniti-agingsos,ferritin,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498)"
+rythm-health,ferritin,included,Core,7900,,blood,,"✓ (Core/$79mo, ""Ferritin (Iron)"", Metabolic Efficiency)"
+superpower,adiponectin,included,Baseline,19900,,blood,,✓ (Baseline/$199)
+marek-diagnostics,adiponectin,unavailable,,,,blood,,✗ (zero search results)
+vitals-vault,adiponectin,addon,,,,blood,,"+ (à la carte only, price undisclosed)"
+goodlabs,adiponectin,unavailable,,,,blood,,"✗ (no slug, 404, no search hits)"
+mito-health,adiponectin,included,Ultra only,145500,,blood,,"✓ (Ultra only/$1,455)"
+lifeforce,adiponectin,addon,,,20000,blood,,"+ (Metabolic Health Advanced Panel, $200 add-on, NOT base membership)"
+function-health,adiponectin,unconfirmed,,,,blood,,"? (unclear/conflicting — Function's own guide names it, but independently-compiled base-panel list omits it; likely educational mention only)"
+insidetracker,adiponectin,unavailable,,,,blood,,✗
+everlywell,adiponectin,unavailable,,,,blood,,✗
+hundred-health,adiponectin,unavailable,,,,blood,,✗
+onetwenty,adiponectin,unavailable,,,,blood,,✗
+siphox-health,adiponectin,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,adiponectin,unavailable,,,,blood,,✗ (only in unrelated blog content)
+rythm-health,adiponectin,unavailable,,,,blood,,✗
+superpower,leptin,included,Baseline,19900,,blood,,✓ (Baseline/$199)
+marek-diagnostics,leptin,unavailable,,,,blood,,✗
+vitals-vault,leptin,addon,,,,blood,,"+ (à la carte only, price undisclosed)"
+goodlabs,leptin,included,,,,blood,,✓ (à la carte/$23)
+mito-health,leptin,included,Ultra only,145500,,blood,,"✓ (Ultra only/$1,455)"
+lifeforce,leptin,unavailable,,,,blood,,✗
+function-health,leptin,included,Base,36500,,blood,,"✓ (Base/$365, Metabolic category)"
+insidetracker,leptin,unavailable,,,,blood,,✗
+everlywell,leptin,unavailable,,,,blood,,✗ (explicitly confirmed absent from Metabolism Test)
+hundred-health,leptin,unavailable,,,,blood,,✗
+onetwenty,leptin,unavailable,,,,blood,,✗
+siphox-health,leptin,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,leptin,unavailable,,,,blood,,✗ (blog/educational only)
+rythm-health,leptin,unavailable,,,,blood,,✗
+superpower,progesterone,included,Baseline,19900,,blood,,"✓ (Baseline/$199, also lists 17-Hydroxyprogesterone separately)"
+marek-diagnostics,progesterone,included,,,,blood,,"✓ (à la carte/$17, also ""17-OH Progesterone"" separately)"
+vitals-vault,progesterone,included,Max,39900,,blood,,"✓ (Max/$399, bundled ""IGF-1, Zinc, Progesterone"")"
+goodlabs,progesterone,included,,,,blood,,"✓ (à la carte/$9, also LC/MS and 17-Hydroxyprogesterone variants)"
+mito-health,progesterone,included,,,,blood,,"✓ (Ultra only, ""Women only"" tag)"
+lifeforce,progesterone,included,General,34900,,blood,,"✓ (General/$349, Hormone Balance category)"
+function-health,progesterone,unavailable,,,,blood,,"✗ (NOT in base panel — likely lives in gated ""Extended Hormone Health"" add-on, unconfirmed)"
+insidetracker,progesterone,addon,,,8900,blood,,"+ (add-on, NOT base Ultimate — ""Estradiol + Progesterone"" add-on $89)"
+everlywell,progesterone,included,,,,blood,,"✓ (via standalone Women's Health Test $249 — NOT in the 360 panel's own hormone list, counterintuitive)"
+hundred-health,progesterone,included,Core,19900,,blood,,"✓ (Core/$199, Hormones section)"
+onetwenty,progesterone,unavailable,,,,blood,,✗ (no dedicated page despite Estradiol/Testosterone/LH/FSH all existing)
+siphox-health,progesterone,included,Hormone Focus,12500,,blood,,"✓ (Hormone Focus/$125qtr, both variants; Ultimate 360-EasyDraw)"
+jinfiniti-agingsos,progesterone,included,Ultimate,149800,,blood,,"✓ (Ultimate/$1,498, ""Hormones — Sex & Reproductive Balance"")"
+rythm-health,progesterone,included,Core,7900,,blood,,"✓ (Core/$79mo, female only, Hormone Balance category)"
+superpower,albumin,included,Baseline,19900,,blood,,✓ (Baseline/$199)
+marek-diagnostics,albumin,unconfirmed,,,,blood,,"? (not offered standalone — unconfirmed as CMP sub-line item, Marek doesn't publish itemized CMP results)"
+vitals-vault,albumin,included,Essential,9900,,blood,,"✓ (Essential/$99, CMP component)"
+goodlabs,albumin,unavailable,,,,blood,,✗ (NOT standalone — bundled only inside CMP $5 or Iron Status panel $60)
+mito-health,albumin,included,Essential,9000,,blood,,"✓ (Essential/$90, all 3 tiers)"
+lifeforce,albumin,included,General,34900,,blood,,"✓ (General/$349, Organ Health category)"
+function-health,albumin,included,Base,36500,,blood,,"✓ (Base/$365, Liver/Kidney/Urinalysis categories)"
+insidetracker,albumin,included,Ultimate,34000,,blood,,"✓ (Ultimate/$340, Recovery category)"
+everlywell,albumin,included,360,39900,,blood,,✓ (360/$399 only)
+hundred-health,albumin,included,Core,19900,,blood,,"✓ (Core/$199, THREE variants: serum, urine microalbumin, albumin/creatinine ratio)"
+onetwenty,albumin,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,albumin,included,Core-EasyDraw,12500,,blood,,"✓ (Core-EasyDraw/$125qtr, NOT Core-fingerstick; also Hormone Focus, GLP add-on, Ultimate 360)"
+jinfiniti-agingsos,albumin,included,Essential,29800,,blood,,"✓ (Essential/$298, ALL tiers)"
+rythm-health,albumin,included,Core,7900,,blood,,"✓ (Core/$79mo, Metabolic Efficiency category)"
+superpower,tibc,included,Baseline,19900,,blood,,"✓ (Baseline/$199, ""Total Iron Binding Capacity"")"
+marek-diagnostics,tibc,included,,,,blood,,"✓ (à la carte, bundled via ""Iron Panel"" w/ Iron+TransferrinSat+UIBC/$9.50)"
+vitals-vault,tibc,included,Essential,9900,,blood,,"✓ (Essential/$99, ""Iron Binding Capacity"", bundled ""Iron, Ferritin & TIBC"")"
+goodlabs,tibc,included,,,,blood,,"✓ (à la carte/$7, bundled ""Iron and TIBC"" combo, not pure standalone)"
+mito-health,tibc,included,Core,19200,,blood,,"✓ (Core/$192, not in Essential)"
+lifeforce,tibc,unavailable,,,,blood,,✗
+function-health,tibc,included,Base,36500,,blood,,"✓ (Base/$365, Vitamins/Minerals category)"
+insidetracker,tibc,included,Ultimate,34000,,blood,,"✓ (Ultimate/$340, Endurance category)"
+everlywell,tibc,included,360,39900,,blood,,"✓ (360/$399 only, ""Iron Binding Capacity"")"
+hundred-health,tibc,included,Core,19900,,blood,,"✓ (Core/$199, Iron panel)"
+onetwenty,tibc,included,Standard,49900,,blood,,"✓ (Standard/$499, ""Total Iron Binding Capacity"")"
+siphox-health,tibc,included,,,,blood,,✓ (GLP Monitoring add-on +$75 and Ultimate 360 ONLY — not in base Core/Heart&Metabolic/Hormone/Thyroid)
+jinfiniti-agingsos,tibc,unavailable,,,,blood,,✗
+rythm-health,tibc,unavailable,,,,blood,,✗ (core or Plus Panel)
+superpower,fasting-glucose,included,Baseline,19900,,blood,,"✓ (Baseline/$199, named ""Glucose"", distinct from HbA1c/Insulin Fasting)"
+marek-diagnostics,fasting-glucose,unavailable,,,,blood,,"✗ (not offered standalone — only inside CMP $9, no dedicated product)"
+vitals-vault,fasting-glucose,included,Essential,9900,,blood,,"✓ (Essential/$99, CMP component, site stresses fasting required)"
+goodlabs,fasting-glucose,included,,,,blood,,"✓ (à la carte/$8, standalone ""Glucose"", page explicitly states ""Fasting required"")"
+mito-health,fasting-glucose,included,Essential,9000,,blood,,"✓ (Essential/$90, ALL 3 tiers, panel instructions explicitly require 9-12hr fasting)"
+lifeforce,fasting-glucose,included,General,34900,,blood,,"✓ (General/$349, Metabolic Condition category, listed as ""Glucose"")"
+function-health,fasting-glucose,included,Base,36500,,blood,,"✓ (Base/$365, listed as ""Glucose"", Metabolic category)"
+insidetracker,fasting-glucose,included,Membership,14900,,blood,,"✓ (Membership/$149, listed as ""Glucose"", explicitly described as fasting blood sugar)"
+everlywell,fasting-glucose,addon,,,39900,blood,,"+ (""Glucose"" exists only inside 360/$399 panel, fasting status not specified on page)"
+hundred-health,fasting-glucose,included,Core,19900,,blood,,"✓ (Core/$199, labeled ""Glucose"", confirmed fasting per description)"
+onetwenty,fasting-glucose,included,Standard,49900,,blood,,"✓ (Standard/$499, own dedicated page, distinct from HbA1c/eAG/CGM pages)"
+siphox-health,fasting-glucose,unavailable,,,,blood,,"✗ (current EasyDraw tiers only report %HbA1c + derived eAG; only LEGACY Ultimate 360 fingerstick SKU has standalone ""Glucose"")"
+jinfiniti-agingsos,fasting-glucose,included,Advanced,119800,,blood,,"✓ (Advanced/$1,198, Ultimate/$1,498 — absent from Essential; fasting requirement not specified on page)"
+rythm-health,fasting-glucose,unavailable,,,,blood,,✗ (core uses Fructosamine as glycemic proxy instead; possibly in 3rd-party Plus Panel CMP but unconfirmed/inferred only)
+superpower,crp-standard,unavailable,,,,blood,,"✗ (only hs-CRP sold, no separate standard CRP SKU)"
+marek-diagnostics,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP exists in catalog)
+vitals-vault,crp-standard,included,,,,blood,,"✓ (à la carte, distinct from hs-CRP which is the Essential-tier bundled version; page explicitly warns not to trend interchangeably)"
+goodlabs,crp-standard,included,,,,blood,,"✓ (à la carte/$5, distinct standalone test, separate from hs-CRP $9)"
+mito-health,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP across all 3 tiers)
+lifeforce,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP exists)
+function-health,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP exists)
+insidetracker,crp-standard,unavailable,,,,blood,,"✗ (only hs-CRP; InsideTracker markets hs-CRP only, never standard CRP)"
+everlywell,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP exists)
+hundred-health,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP)
+onetwenty,crp-standard,unavailable,,,,blood,,"✗ (hs-CRP page explicitly acknowledges ""the regular CRP test"" exists as a different assay but confirms OneTwenty only runs hs-CRP — clean sourced negative)"
+siphox-health,crp-standard,unavailable,,,,blood,,✗ (all 12 SKUs list only hs-CRP)
+jinfiniti-agingsos,crp-standard,unavailable,,,,blood,,✗ (only hs-CRP across all panels)
+rythm-health,crp-standard,unconfirmed,,,,blood,,"? (core = hs-CRP only, explicitly labeled; Plus Panel marketing copy just says ""CRP"" unqualified — genuinely ambiguous, page access blocked 403)"
+superpower,sodium,included,Baseline,19900,,blood,,✓ (Baseline/$199)
+marek-diagnostics,sodium,unavailable,,,,blood,,✗ (not offered standalone — only inside CMP)
+vitals-vault,sodium,included,Essential,9900,,blood,,"✓ (Essential/$99, CMP component)"
+goodlabs,sodium,unavailable,,,,blood,,✗ (NOT standalone — bundled only inside CMP $5)
+mito-health,sodium,included,Essential,9000,,blood,,"✓ (Essential/$90, ALL 3 tiers)"
+lifeforce,sodium,included,General,34900,,blood,,"✓ (General/$349, Organ Health/electrolytes)"
+function-health,sodium,included,Base,36500,,blood,,"✓ (Base/$365, Kidney/Electrolytes categories)"
+insidetracker,sodium,included,Ultimate,34000,,blood,,"✓ (Ultimate/$340, Recovery category)"
+everlywell,sodium,included,360,39900,,blood,,✓ (360/$399 only)
+hundred-health,sodium,included,Core,19900,,blood,,"✓ (Core/$199, Electrolytes)"
+onetwenty,sodium,included,Standard,49900,,blood,,✓ (Standard/$499)
+siphox-health,sodium,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,sodium,unavailable,,,,blood,,✗
+rythm-health,sodium,unconfirmed,,,,blood,,"? (not itemized on core; possibly in Plus Panel CMP — inferred only, not verified)"
+superpower,acth,unavailable,,,,blood,,"✗ (only appears in educational HPA-axis guide content, not orderable)"
+marek-diagnostics,acth,included,,,,blood,,"✓ (à la carte/$60, ""ACTH, Plasma"")"
+vitals-vault,acth,included,,,,blood,,"✓ (à la carte, TWO products: plasma ACTH + ""ACTH Stimulation (3 Specimens)"" cosyntropin test)"
+goodlabs,acth,included,,,,blood,,"✓ (à la carte/$18, ""ACTH, Plasma"")"
+mito-health,acth,unavailable,,,,blood,,✗
+lifeforce,acth,unavailable,,,,blood,,✗
+function-health,acth,unavailable,,,,blood,,✗
+insidetracker,acth,unavailable,,,,blood,,✗
+everlywell,acth,unavailable,,,,blood,,✗
+hundred-health,acth,unavailable,,,,blood,,✗
+onetwenty,acth,unavailable,,,,blood,,✗
+siphox-health,acth,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,acth,unavailable,,,,blood,,✗ (blog-only mention)
+rythm-health,acth,unavailable,,,,blood,,✗
+superpower,il-6,unavailable,,,,blood,,✗
+marek-diagnostics,il-6,unavailable,,,,blood,,✗ (zero results across IL-6/interleukin variants)
+vitals-vault,il-6,included,,,,blood,,"✓ (à la carte, price undisclosed)"
+goodlabs,il-6,included,,,,blood,,"✓ (à la carte/$119, ""Interleukin-6 (IL-6)"")"
+mito-health,il-6,unavailable,,,,blood,,✗
+lifeforce,il-6,unavailable,,,,blood,,✗
+function-health,il-6,unavailable,,,,blood,,✗
+insidetracker,il-6,unavailable,,,,blood,,"✗ (inflammation marker used is hs-CRP, not IL-6)"
+everlywell,il-6,unavailable,,,,blood,,✗ (inflammation product measures hs-CRP only)
+hundred-health,il-6,unavailable,,,,blood,,✗
+onetwenty,il-6,unavailable,,,,blood,,"✗ (blog-only mention with reference range, not actually tested)"
+siphox-health,il-6,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,il-6,included,Advanced,119800,,blood,,"✓ (Advanced/$1,198, Ultimate/$1,498, ""Inflammation & Immunity"")"
+rythm-health,il-6,unavailable,,,,blood,,✗
+superpower,fibrinogen,unavailable,,,,blood,,✗
+marek-diagnostics,fibrinogen,included,,,,blood,,"✓ (à la carte/$50, ""Fibrinogen (Factor I) Activity"")"
+vitals-vault,fibrinogen,included,,,,blood,,"✓ (à la carte, ""Fibrinogen Activity, Clauss"", price undisclosed)"
+goodlabs,fibrinogen,included,,,,blood,,✓ (à la carte/$10)
+mito-health,fibrinogen,unavailable,,,,blood,,✗
+lifeforce,fibrinogen,unavailable,,,,blood,,✗
+function-health,fibrinogen,unconfirmed,,,,blood,,"? (unclear/conflicting — Function's own guide names it, base-panel list omits it, likely not in current base panel)"
+insidetracker,fibrinogen,unavailable,,,,blood,,✗
+everlywell,fibrinogen,unavailable,,,,blood,,✗
+hundred-health,fibrinogen,unavailable,,,,blood,,✗
+onetwenty,fibrinogen,unavailable,,,,blood,,"✗ (blog-only mention with reference range, not actually tested)"
+siphox-health,fibrinogen,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,fibrinogen,unavailable,,,,blood,,✗ (blog-only)
+rythm-health,fibrinogen,unavailable,,,,blood,,✗
+superpower,esr,included,Baseline,19900,,blood,,"✓ (Baseline/$199, ""Erythrocyte Sedimentation Rate"")"
+marek-diagnostics,esr,included,,,,blood,,"✓ (à la carte/$14, ""ESR - Westergren"")"
+vitals-vault,esr,included,Essential,9900,,blood,,"✓ (Essential/$99, ""Sed Rate By Modified Westergren"", bundled with hs-CRP)"
+goodlabs,esr,included,,,,blood,,"✓ (à la carte/$3, ""Sedimentation Rate-Westergren"")"
+mito-health,esr,unavailable,,,,blood,,✗ (only appears as a comparison reference inside Rheumatoid Factor's description text)
+lifeforce,esr,unavailable,,,,blood,,✗
+function-health,esr,addon,,,,blood,,"+ (ONLY in gated ""Extended Autoimmunity"" add-on, HTTP 401, price undisclosed — NOT in base panel)"
+insidetracker,esr,unavailable,,,,blood,,✗
+everlywell,esr,unavailable,,,,blood,,✗
+hundred-health,esr,unavailable,,,,blood,,✗ (only false-positive JS cart-code hits)
+onetwenty,esr,unavailable,,,,blood,,"✗ (blog-only mention, not actually tested)"
+siphox-health,esr,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,esr,unavailable,,,,blood,,✗ (blog-only)
+rythm-health,esr,unavailable,,,,blood,,✗
+superpower,wbc-differential,included,Baseline,19900,,blood,,"✓ (Baseline/$199 each, sold as 5 individual components: Neutrophils/Lymphocytes/Monocytes/Eosinophils/Basophils + absolute counts)"
+marek-diagnostics,wbc-differential,addon,,,900,blood,,+ (not standalone — bundled inside CBC w/ Differential $9 sale/$12 reg)
+vitals-vault,wbc-differential,addon,,,9900,blood,,"+ (NOT standalone — bundled inside ""CBC With Differential and Platelets"" Essential/$99; individual components each have own à la carte pages)"
+goodlabs,wbc-differential,addon,,,400,blood,,"+ (NOT standalone — bundled only inside ""CBC with Differential/Platelet"" $4)"
+mito-health,wbc-differential,addon,,,,blood,,"+ (bundled only — components itemized within CBC, all 3 tiers, cheapest Essential)"
+lifeforce,wbc-differential,addon,,,,blood,,"+ (bundled only — part of base CBC panel, individual components listed, no standalone SKU)"
+function-health,wbc-differential,addon,,,36500,blood,,"+ (bundled, not standalone — Base/$365, Immune Regulation category)"
+insidetracker,wbc-differential,addon,,,,blood,,"+ (bundled only, no standalone SKU — part of Ultimate's Inflammation category)"
+everlywell,wbc-differential,addon,,,,blood,,+ (not standalone — components exist only inside 360's Immune/Blood Cell category)
+hundred-health,wbc-differential,addon,,,,blood,,+ (bundled — individual components listed separately under CBC)
+onetwenty,wbc-differential,addon,,,,blood,,"+ (bundled only — CBC page + 13 individually-indexed differential component pages, no standalone product)"
+siphox-health,wbc-differential,unavailable,,,,blood,,✗ (no CBC/differential in any SKU — consistent with original matrix)
+jinfiniti-agingsos,wbc-differential,unavailable,,,,blood,,✗ (confirms original audit finding — no CBC/differential on any panel)
+rythm-health,wbc-differential,addon,,,,blood,,"+ (not standalone on core, only isolates Hct/Hgb male-only; 3rd-party Plus Panel explicitly includes ""complete blood count with differential"")"
+superpower,glucagon,unavailable,,,,blood,,✗
+marek-diagnostics,glucagon,unavailable,,,,blood,,✗ (zero results)
+vitals-vault,glucagon,included,,,,blood,,"✓ (à la carte, price undisclosed)"
+goodlabs,glucagon,unavailable,,,,blood,,"✗ (no slug, 404, no search hits)"
+mito-health,glucagon,unavailable,,,,blood,,✗
+lifeforce,glucagon,unavailable,,,,blood,,✗
+function-health,glucagon,unavailable,,,,blood,,✗
+insidetracker,glucagon,unavailable,,,,blood,,✗
+everlywell,glucagon,unavailable,,,,blood,,✗
+hundred-health,glucagon,unavailable,,,,blood,,✗
+onetwenty,glucagon,unavailable,,,,blood,,✗
+siphox-health,glucagon,unavailable,,,,blood,,✗ (absent from all 12 SKUs)
+jinfiniti-agingsos,glucagon,unavailable,,,,blood,,✗ (blog-only physiology discussion)
+rythm-health,glucagon,unavailable,,,,blood,,✗
+superpower,amh,included,Baseline,19900,,blood,,"✓ (Baseline/$199, ""Anti-Mullerian Hormone"")"
+marek-diagnostics,amh,included,,,,blood,,"✓ (à la carte/$55 sale reg $88, ""Anti-Mullerian Hormone (AMH)"")"
+vitals-vault,amh,included,,,,blood,,"✓ (à la carte, sex-specific products, separate male/female pages)"
+goodlabs,amh,included,,,,blood,,"✓ (à la carte/$28, ""Anti-Mullerian Hormone (AMH)"")"
+mito-health,amh,included,Core,19200,,blood,,"✓ (Core/$192, ""Women only"" tag, labeled ""Mullerian inhibiting substance"" — same hormone, different name)"
+lifeforce,amh,unavailable,,,,blood,,✗
+function-health,amh,included,Base,36500,,blood,,"✓ (Base/$365, Female Hormones category)"
+insidetracker,amh,unavailable,,,,blood,,✗ (fertility-adjacent content never mentions AMH)
+everlywell,amh,addon,,,39900,blood,,"+ (NOT standalone — only in 360/$399, female panel; standalone ""Ovarian Reserve Test"" appears DISCONTINUED, now redirects to a fertility test that excludes AMH)"
+hundred-health,amh,unavailable,,,,blood,,✗
+onetwenty,amh,unavailable,,,,blood,,✗
+siphox-health,amh,unconfirmed,,,,blood,,⚠ (offered ONLY on legacy fingerstick line — Hormone Focus + Ultimate 360 legacy — DROPPED from current EasyDraw product line entirely)
+jinfiniti-agingsos,amh,unavailable,,,,blood,,✗
+rythm-health,amh,unavailable,,,,blood,,✗
+superpower,8-ohdg,unavailable,,,,blood,,✗
+marek-diagnostics,8-ohdg,unavailable,,,,blood,,✗
+vitals-vault,8-ohdg,unavailable,,,,blood,,"✗ (404 template, zero sitemap hits)"
+goodlabs,8-ohdg,unavailable,,,,blood,,✗
+mito-health,8-ohdg,unavailable,,,,blood,,✗
+lifeforce,8-ohdg,unavailable,,,,blood,,✗
+function-health,8-ohdg,unavailable,,,,blood,,✗
+insidetracker,8-ohdg,unavailable,,,,blood,,✗
+everlywell,8-ohdg,unavailable,,,,blood,,✗
+hundred-health,8-ohdg,unavailable,,,,blood,,✗
+onetwenty,8-ohdg,unavailable,,,,blood,,✗
+siphox-health,8-ohdg,unavailable,,,,blood,,✗
+jinfiniti-agingsos,8-ohdg,included,Advanced,119800,,blood,,"✓ (Advanced/$1,198, Ultimate/$1,498, Menopause/$398, ""Aging & Cellular Health"")"
+rythm-health,8-ohdg,unavailable,,,,blood,,✗
+superpower,hgf,unavailable,,,,blood,,✗
+marek-diagnostics,hgf,unavailable,,,,blood,,✗
+vitals-vault,hgf,unavailable,,,,blood,,✗
+goodlabs,hgf,unavailable,,,,blood,,✗
+mito-health,hgf,unavailable,,,,blood,,✗
+lifeforce,hgf,unavailable,,,,blood,,✗
+function-health,hgf,unavailable,,,,blood,,✗
+insidetracker,hgf,unavailable,,,,blood,,✗
+everlywell,hgf,unavailable,,,,blood,,✗
+hundred-health,hgf,unavailable,,,,blood,,✗
+onetwenty,hgf,unavailable,,,,blood,,✗
+siphox-health,hgf,unavailable,,,,blood,,✗
+jinfiniti-agingsos,hgf,unavailable,,,,blood,,✗
+rythm-health,hgf,unavailable,,,,blood,,✗
+superpower,thymulin-assay,unavailable,,,,blood,,✗
+marek-diagnostics,thymulin-assay,unavailable,,,,blood,,✗
+vitals-vault,thymulin-assay,unavailable,,,,blood,,✗
+goodlabs,thymulin-assay,unavailable,,,,blood,,✗
+mito-health,thymulin-assay,unavailable,,,,blood,,✗
+lifeforce,thymulin-assay,unavailable,,,,blood,,✗
+function-health,thymulin-assay,unavailable,,,,blood,,✗
+insidetracker,thymulin-assay,unavailable,,,,blood,,✗
+everlywell,thymulin-assay,unavailable,,,,blood,,✗
+hundred-health,thymulin-assay,unavailable,,,,blood,,✗
+onetwenty,thymulin-assay,unavailable,,,,blood,,✗
+siphox-health,thymulin-assay,unavailable,,,,blood,,✗
+jinfiniti-agingsos,thymulin-assay,unavailable,,,,blood,,✗
+rythm-health,thymulin-assay,unavailable,,,,blood,,✗
+superpower,mitochondrial-function-markers,unavailable,,,,blood,,✗
+marek-diagnostics,mitochondrial-function-markers,unavailable,,,,blood,,"✗ (only standalone CoQ10 exists, not a panel)"
+vitals-vault,mitochondrial-function-markers,unavailable,,,,blood,,✗
+goodlabs,mitochondrial-function-markers,unavailable,,,,blood,,✗
+mito-health,mitochondrial-function-markers,unavailable,,,,blood,,✗ (notable given the brand name)
+lifeforce,mitochondrial-function-markers,unavailable,,,,blood,,✗
+function-health,mitochondrial-function-markers,unavailable,,,,blood,,✗
+insidetracker,mitochondrial-function-markers,unavailable,,,,blood,,✗
+everlywell,mitochondrial-function-markers,unavailable,,,,blood,,✗
+hundred-health,mitochondrial-function-markers,unavailable,,,,blood,,✗
+onetwenty,mitochondrial-function-markers,unavailable,,,,blood,,"✗ (CoQ10 tested individually but not as a ""mitochondrial panel"")"
+siphox-health,mitochondrial-function-markers,unavailable,,,,blood,,✗
+jinfiniti-agingsos,mitochondrial-function-markers,unavailable,,,,blood,,"✗ (marketing copy references ""mitochondrial function"" narratively — framing for already-counted NAD+/ROM/TAC/8-OHdG, not a standalone panel)"
+rythm-health,mitochondrial-function-markers,unavailable,,,,blood,,✗
+superpower,nk-cell-activity,unavailable,,,,blood,,✗
+marek-diagnostics,nk-cell-activity,unavailable,,,,blood,,✗
+vitals-vault,nk-cell-activity,unavailable,,,,blood,,✗
+goodlabs,nk-cell-activity,unavailable,,,,blood,,✗
+mito-health,nk-cell-activity,unavailable,,,,blood,,✗
+lifeforce,nk-cell-activity,unavailable,,,,blood,,✗
+function-health,nk-cell-activity,unavailable,,,,blood,,✗
+insidetracker,nk-cell-activity,unavailable,,,,blood,,✗
+everlywell,nk-cell-activity,unavailable,,,,blood,,✗
+hundred-health,nk-cell-activity,unavailable,,,,blood,,"✗ (only mentioned in Lymphocyte descriptive text, not standalone)"
+onetwenty,nk-cell-activity,unavailable,,,,blood,,✗
+siphox-health,nk-cell-activity,unavailable,,,,blood,,✗
+jinfiniti-agingsos,nk-cell-activity,unavailable,,,,blood,,✗
+rythm-health,nk-cell-activity,unavailable,,,,blood,,✗
+superpower,gnrh-stimulation-test,unavailable,,,,blood,,✗
+marek-diagnostics,gnrh-stimulation-test,unavailable,,,,blood,,✗
+vitals-vault,gnrh-stimulation-test,unavailable,,,,blood,,✗
+goodlabs,gnrh-stimulation-test,unavailable,,,,blood,,✗
+mito-health,gnrh-stimulation-test,unavailable,,,,blood,,✗
+lifeforce,gnrh-stimulation-test,unavailable,,,,blood,,✗
+function-health,gnrh-stimulation-test,unavailable,,,,blood,,✗
+insidetracker,gnrh-stimulation-test,unavailable,,,,blood,,✗
+everlywell,gnrh-stimulation-test,unavailable,,,,blood,,✗
+hundred-health,gnrh-stimulation-test,unavailable,,,,blood,,✗
+onetwenty,gnrh-stimulation-test,unavailable,,,,blood,,✗
+siphox-health,gnrh-stimulation-test,unavailable,,,,blood,,✗
+jinfiniti-agingsos,gnrh-stimulation-test,unavailable,,,,blood,,✗
+rythm-health,gnrh-stimulation-test,unavailable,,,,blood,,✗
+superpower,serotonin-metabolites-5-hiaa,included,Baseline,19900,,blood,,"✓ (Baseline/$199, ""5-Hydroxyindoleacetic (5-HIAA) (serotonin)"", part of Mosaic Diagnostics urine organic acids panel)"
+marek-diagnostics,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+vitals-vault,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+goodlabs,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+mito-health,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+lifeforce,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+function-health,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+insidetracker,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+everlywell,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+hundred-health,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+onetwenty,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+siphox-health,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+jinfiniti-agingsos,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+rythm-health,serotonin-metabolites-5-hiaa,unavailable,,,,blood,,✗
+superpower,vasopressin-adh,unavailable,,,,blood,,✗
+marek-diagnostics,vasopressin-adh,unavailable,,,,blood,,✗
+vitals-vault,vasopressin-adh,unavailable,,,,blood,,"✗ (404 template, zero sitemap hits)"
+goodlabs,vasopressin-adh,included,,,,blood,,"✓ (à la carte/$39, ""Antidiuretic Hormone (ADH), Plasma"")"
+mito-health,vasopressin-adh,unavailable,,,,blood,,✗
+lifeforce,vasopressin-adh,unavailable,,,,blood,,✗
+function-health,vasopressin-adh,unavailable,,,,blood,,✗
+insidetracker,vasopressin-adh,unavailable,,,,blood,,✗
+everlywell,vasopressin-adh,unavailable,,,,blood,,✗
+hundred-health,vasopressin-adh,unavailable,,,,blood,,✗
+onetwenty,vasopressin-adh,unavailable,,,,blood,,✗
+siphox-health,vasopressin-adh,unavailable,,,,blood,,✗
+jinfiniti-agingsos,vasopressin-adh,unavailable,,,,blood,,✗
+rythm-health,vasopressin-adh,unavailable,,,,blood,,✗
+superpower,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+marek-diagnostics,collagen-biomarkers-ctx-p1np,included,,,,blood,,"✓ (bundled only, ""Bone Health Panel"" $250, explicitly includes both CTx and P1NP)"
+vitals-vault,collagen-biomarkers-ctx-p1np,included,,,,blood,,"✓ (à la carte, BOTH offered as dedicated products)"
+goodlabs,collagen-biomarkers-ctx-p1np,included,,,,blood,,"✓ (à la carte, BOTH standalone: CTx $62, P1NP $98)"
+mito-health,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+lifeforce,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+function-health,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+insidetracker,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+everlywell,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+hundred-health,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+onetwenty,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+siphox-health,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+jinfiniti-agingsos,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+rythm-health,collagen-biomarkers-ctx-p1np,unavailable,,,,blood,,✗
+superpower,bdnf,unavailable,,,,blood,,✗
+marek-diagnostics,bdnf,unavailable,,,,blood,,✗
+vitals-vault,bdnf,unavailable,,,,blood,,"✗ (404 template, zero sitemap hits)"
+goodlabs,bdnf,unavailable,,,,blood,,✗
+mito-health,bdnf,unavailable,,,,blood,,✗
+lifeforce,bdnf,unavailable,,,,blood,,✗
+function-health,bdnf,unavailable,,,,blood,,✗
+insidetracker,bdnf,unavailable,,,,blood,,✗
+everlywell,bdnf,unavailable,,,,blood,,✗
+hundred-health,bdnf,unavailable,,,,blood,,✗
+onetwenty,bdnf,unavailable,,,,blood,,✗
+siphox-health,bdnf,unavailable,,,,blood,,✗
+jinfiniti-agingsos,bdnf,unavailable,,,,blood,,✗
+rythm-health,bdnf,unavailable,,,,blood,,✗
+superpower,citrulline,unavailable,,,,blood,,✗
+marek-diagnostics,citrulline,unavailable,,,,blood,,✗
+vitals-vault,citrulline,addon,,,,blood,,"+ (bundled only, within a 34-analyte ""Plasma Amino Acid Analysis"" panel, not standalone)"
+goodlabs,citrulline,unavailable,,,,blood,,"✗ (near-miss trap correctly avoided: ""Cyclic Citrullinated Peptide (CCP) Antibody"" exists but is an RA autoimmune marker, NOT the amino acid)"
+mito-health,citrulline,unavailable,,,,blood,,✗
+lifeforce,citrulline,unavailable,,,,blood,,✗
+function-health,citrulline,unavailable,,,,blood,,✗
+insidetracker,citrulline,unavailable,,,,blood,,✗
+everlywell,citrulline,unavailable,,,,blood,,✗
+hundred-health,citrulline,unavailable,,,,blood,,✗
+onetwenty,citrulline,unavailable,,,,blood,,✗
+siphox-health,citrulline,unavailable,,,,blood,,✗
+jinfiniti-agingsos,citrulline,unavailable,,,,blood,,✗
+rythm-health,citrulline,unavailable,,,,blood,,✗
+superpower,coq10,unconfirmed,Baseline,19900,,blood,,"? (Baseline/$199 — only indirect: urine organic-acid metabolite ""3-Hydroxy-3-methylglutaric (Vitamin Q10/CoQ10)"" via Mosaic OAT, NOT a direct blood assay)"
+marek-diagnostics,coq10,included,,,,blood,,"✓ (à la carte/$80, direct blood/serum LC/MS test, NOT a urine proxy)"
+vitals-vault,coq10,included,,,,blood,,"✓ (à la carte, standalone)"
+goodlabs,coq10,included,,,,blood,,✓ (à la carte/$27)
+mito-health,coq10,unavailable,,,,blood,,✗
+lifeforce,coq10,unavailable,,,,blood,,✗
+function-health,coq10,unavailable,,,,blood,,✗
+insidetracker,coq10,unavailable,,,,blood,,✗
+everlywell,coq10,unavailable,,,,blood,,"✗ (only referenced in a blog article about heart-health supplements, not measured)"
+hundred-health,coq10,unavailable,,,,blood,,✗
+onetwenty,coq10,included,Standard,49900,,blood,,"✓ (Standard/$499, dedicated page)"
+siphox-health,coq10,unavailable,,,,blood,,✗
+jinfiniti-agingsos,coq10,unavailable,,,,blood,,✗ (genuinely absent despite aging-biology focus)
+rythm-health,coq10,unavailable,,,,blood,,✗
+superpower,creatine-kinase,unavailable,,,,blood,,✗
+marek-diagnostics,creatine-kinase,unavailable,,,,blood,,✗ (search only surfaces unrelated hits)
+vitals-vault,creatine-kinase,included,,,,blood,,"✓ (à la carte, standalone CK Total; also CK-MB and CK-Isoenzymes variants)"
+goodlabs,creatine-kinase,included,,,,blood,,"✓ (à la carte, TWO SKUs: CK Total $6, CK-MB and Total $50)"
+mito-health,creatine-kinase,unavailable,,,,blood,,✗
+lifeforce,creatine-kinase,unavailable,,,,blood,,✗
+function-health,creatine-kinase,unavailable,,,,blood,,✗
+insidetracker,creatine-kinase,included,Ultimate,34000,,blood,,"✓ (Ultimate/$340, ""Recovery"" category)"
+everlywell,creatine-kinase,unavailable,,,,blood,,✗
+hundred-health,creatine-kinase,unavailable,,,,blood,,✗
+onetwenty,creatine-kinase,unavailable,,,,blood,,✗
+siphox-health,creatine-kinase,unavailable,,,,blood,,✗
+jinfiniti-agingsos,creatine-kinase,included,Essential,29800,,blood,,"✓ (Essential/$298, on ALL 4 panels)"
+rythm-health,creatine-kinase,unavailable,,,,blood,,✗ (not in core; 3rd-party Plus Panel CMP does not include CK)
+superpower,fecal-calprotectin,unavailable,,,,stool,,✗
+marek-diagnostics,fecal-calprotectin,unavailable,,,,stool,,✗ (no stool testing at all)
+vitals-vault,fecal-calprotectin,included,,,,stool,,"✓ (à la carte, standalone stool test)"
+goodlabs,fecal-calprotectin,unavailable,,,,stool,,✗
+mito-health,fecal-calprotectin,unavailable,,,,stool,,✗
+lifeforce,fecal-calprotectin,unavailable,,,,stool,,✗ (no GI/stool testing found anywhere)
+function-health,fecal-calprotectin,unavailable,,,,stool,,"✗ CURRENTLY (own /biomarker-categories/gut page says gut/microbiome testing ""coming soon"" — worth a recheck later)"
+insidetracker,fecal-calprotectin,unavailable,,,,stool,,✗
+everlywell,fecal-calprotectin,unavailable,,,,stool,,"✗ (closest offerings are Food Sensitivity/Celiac Screening, neither includes calprotectin)"
+hundred-health,fecal-calprotectin,unavailable,,,,stool,,✗
+onetwenty,fecal-calprotectin,unavailable,,,,stool,,✗
+siphox-health,fecal-calprotectin,unavailable,,,,stool,,✗
+jinfiniti-agingsos,fecal-calprotectin,unavailable,,,,stool,,"✗ (blood/fingerstick-only vendor, no stool testing)"
+rythm-health,fecal-calprotectin,unavailable,,,,stool,,"✗ (Rythm is blood-only, no GI panel)"
+superpower,free-fatty-acids,unavailable,,,,blood,,✗
+marek-diagnostics,free-fatty-acids,unavailable,,,,blood,,"✗ (only Carnitine and ""Omega-Check"" fatty-acid-ratio panel exist, neither is a literal NEFA test)"
+vitals-vault,free-fatty-acids,unconfirmed,,,,blood,,"? (unclear/partial — only ""Fatty Acid Panel Comprehensive (C8-C26)"" exists, mostly % composition, not confirmed to report classic free/non-esterified fatty acid concentration; scored as NOT a true match)"
+goodlabs,free-fatty-acids,unavailable,,,,blood,,✗
+mito-health,free-fatty-acids,unavailable,,,,blood,,✗
+lifeforce,free-fatty-acids,unavailable,,,,blood,,✗
+function-health,free-fatty-acids,unavailable,,,,blood,,"✗ (Omega-3/Omega-6 ratios tested, but not ""free fatty acids"" as a distinct marker)"
+insidetracker,free-fatty-acids,unavailable,,,,blood,,✗
+everlywell,free-fatty-acids,unavailable,,,,blood,,✗
+hundred-health,free-fatty-acids,unavailable,,,,blood,,✗
+onetwenty,free-fatty-acids,unavailable,,,,blood,,✗
+siphox-health,free-fatty-acids,unavailable,,,,blood,,✗
+jinfiniti-agingsos,free-fatty-acids,unavailable,,,,blood,,✗
+rythm-health,free-fatty-acids,unavailable,,,,blood,,✗ (core lipid markers are Triglycerides/LDL/HDL/ApoB only)
+superpower,ghrelin,unavailable,,,,blood,,✗
+marek-diagnostics,ghrelin,unavailable,,,,blood,,✗
+vitals-vault,ghrelin,unavailable,,,,blood,,"✗ (404 template, zero sitemap hits; leptin/GLP-1 exist but not ghrelin)"
+goodlabs,ghrelin,unavailable,,,,blood,,✗
+mito-health,ghrelin,unavailable,,,,blood,,✗
+lifeforce,ghrelin,unavailable,,,,blood,,✗
+function-health,ghrelin,unavailable,,,,blood,,✗
+insidetracker,ghrelin,unavailable,,,,blood,,✗
+everlywell,ghrelin,unavailable,,,,blood,,"✗ (discussed only in blog content about ""hunger hormones"")"
+hundred-health,ghrelin,unavailable,,,,blood,,✗
+onetwenty,ghrelin,unavailable,,,,blood,,✗
+siphox-health,ghrelin,unavailable,,,,blood,,✗
+jinfiniti-agingsos,ghrelin,unavailable,,,,blood,,✗
+rythm-health,ghrelin,unavailable,,,,blood,,✗
+superpower,growth-hormone-fasting,unavailable,,,,blood,,"✗ (only IGF-1 is present, no direct GH/somatotropin assay)"
+marek-diagnostics,growth-hormone-fasting,included,,,,blood,,"✓ (à la carte/$29.50, ""Growth Hormone, Serum"" — distinct standalone product from IGF-1)"
+vitals-vault,growth-hormone-fasting,included,,,,blood,,"✓ (à la carte, standalone, explicitly distinguished from IGF-1 on-page; fasting requirement not strictly stated, varies by clinician)"
+goodlabs,growth-hormone-fasting,included,,,,blood,,"✓ (à la carte/$19, but not explicitly labeled ""fasting"" in catalog)"
+mito-health,growth-hormone-fasting,unavailable,,,,blood,,"✗ (Ultra tier explicitly uses IGF-1 as a proxy instead — ""GH spikes and vanishes within minutes"")"
+lifeforce,growth-hormone-fasting,unavailable,,,,blood,,✗ (only growth-axis marker is IGF-1)
+function-health,growth-hormone-fasting,unavailable,,,,blood,,"✗ (only appears educationally in ""Sleep 101"" guide, not orderable)"
+insidetracker,growth-hormone-fasting,unavailable,,,,blood,,✗ (no fasting GH; IGF-1 also absent)
+everlywell,growth-hormone-fasting,unavailable,,,,blood,,✗
+hundred-health,growth-hormone-fasting,unavailable,,,,blood,,✗ (no GH/hGH/somatotropin marker; IGF-1 also absent)
+onetwenty,growth-hormone-fasting,unavailable,,,,blood,,✗ (no dedicated page)
+siphox-health,growth-hormone-fasting,unavailable,,,,blood,,✗ (no fasting GH marker; IGF-1 also absent from catalog)
+jinfiniti-agingsos,growth-hormone-fasting,unconfirmed,,,,blood,,"⚠ (""HGH"" offered on Ultimate ONLY $1,498, but page explicitly states ""No fasting is required"" for the overall protocol — offered but likely NOT a fasting draw)"
+rythm-health,growth-hormone-fasting,unavailable,,,,blood,,✗ (hormone panel limited to Estradiol/Progesterone/Testosterone/SHBG; no GH found)
+superpower,immunoglobulins-igg-igm-iga,unconfirmed,,,,blood,,? (partial — IgA and IgE offered as Baseline/$199; NO total IgG or IgM found anywhere)
+marek-diagnostics,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,"✗ (only unrelated thyroid-immunity products exist: TSI, Thyroglobulin Ab, TPO Ab)"
+vitals-vault,immunoglobulins-igg-igm-iga,included,,,,blood,,"✓ (à la carte, ""Total Immunoglobulins Panel for IgA, IgG, IgM, IgE"" — covers all 3 requested + IgE; individual IgG/IgA standalone tests too, no standalone IgM-alone)"
+goodlabs,immunoglobulins-igg-igm-iga,unconfirmed,,,,blood,,"? (partial — only IgA has a dedicated serum test $14; no general IgG/IgM quantification, only virus-specific CMV IgG/IgM antibody tests)"
+mito-health,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗
+lifeforce,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗ (base panel has CBC w/Diff cell counts but no quantitative Ig panel)
+function-health,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗ (Immune Regulation category has cell counts/hs-CRP but no IgG/IgM/IgA panel)
+insidetracker,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗
+everlywell,immunoglobulins-igg-igm-iga,unconfirmed,,,,blood,,"? (different marker — Food Sensitivity Test measures food-specific IgG reactivity, 96 or 204 foods, NOT general serum Ig quantitation — clinically distinct)"
+hundred-health,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,"✗ (only appears as background description text for general ""Globulin"" marker, not its own test)"
+onetwenty,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗
+siphox-health,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗
+jinfiniti-agingsos,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,✗
+rythm-health,immunoglobulins-igg-igm-iga,unavailable,,,,blood,,"✗ (CBC w/diff on Plus Panel covers cell counts, not immunoglobulin quantification)"
+superpower,ketones,included,Baseline,19900,,urine,,✓ (urine) (Baseline/$199 — dipstick + 2 urine organic-acid metabolites; no blood/serum ketone assay exists)
+marek-diagnostics,ketones,addon,,,1000,urine,,"+ (urine) (bundled only inside ""Urinalysis, Routine"" $10, dipstick, NOT standalone)"
+vitals-vault,ketones,included,,,,urine,,"✓ (urine) (à la carte, ""Urine Ketones"" — no blood/serum ketones page found)"
+goodlabs,ketones,unavailable,,,,blood,,✗
+mito-health,ketones,included,,,,urine,,"✓ (urine) (all 3 tiers, cheapest Essential/$90 — urine dipstick within urinalysis)"
+lifeforce,ketones,unavailable,,,,blood,,✗
+function-health,ketones,included,Base,36500,,urine,,"✓ (urine) (Base/$365, part of standard 20-item Urinalysis panel)"
+insidetracker,ketones,unavailable,,,,blood,,✗
+everlywell,ketones,included,360,39900,,urine,,"✓ (urine) (360/$399, within urinalysis component)"
+hundred-health,ketones,included,Core,19900,,urine,,"✓ (urine) (Core/$199, ""Ketones - Urine"")"
+onetwenty,ketones,included,Standard,49900,,urine,,"✓ (urine) (Standard/$499, dedicated page is literally /biomarkers/ketones-urine)"
+siphox-health,ketones,unavailable,,,,blood,,✗
+jinfiniti-agingsos,ketones,unavailable,,,,blood,,✗
+rythm-health,ketones,unavailable,,,,blood,,✗
+superpower,lactate,unconfirmed,,,,blood,,"? (urine, non-match) (only as ""Lactic"" urine organic-acid metabolite via Mosaic OAT — not the blood lactate test for exercise/mitochondrial assessment)"
+marek-diagnostics,lactate,unavailable,,,,blood,,✗
+vitals-vault,lactate,unavailable,,,,blood,,"✗ (only LDH exists; vendor's OWN page copy explicitly states LDH is ""a different test with different clinical use"" than lactate)"
+goodlabs,lactate,unavailable,,,,blood,,"✗ (near-miss trap correctly avoided: ""Lactate Dehydrogenase (LD)"" exists but is a DIFFERENT enzyme test, not plasma Lactate)"
+mito-health,lactate,unavailable,,,,blood,,✗
+lifeforce,lactate,unavailable,,,,blood,,✗
+function-health,lactate,unavailable,,,,blood,,✗
+insidetracker,lactate,unavailable,,,,blood,,✗
+everlywell,lactate,unavailable,,,,blood,,"✗ (only blog content on lactate threshold and LDH, no standalone blood lactate test)"
+hundred-health,lactate,unavailable,,,,blood,,✗
+onetwenty,lactate,unavailable,,,,blood,,✗
+siphox-health,lactate,unavailable,,,,blood,,✗
+jinfiniti-agingsos,lactate,unavailable,,,,blood,,✗
+rythm-health,lactate,unavailable,,,,blood,,✗
+superpower,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (standard Lymphocytes/Lymphs counts exist as part of CBC differential, but no CD4/CD8 subset panel found anywhere, including the Advanced Panel add-on)"
+marek-diagnostics,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (CBC reports total Lymphocytes/NLR only, no flow-cytometry subset panel)"
+vitals-vault,lymphocyte-subsets-cd4-cd8,included,,,,blood,,"✓ (à la carte, TWO panels explicitly report CD4/CD8 Ratio via flow cytometry: ""Lymphocyte Subset Panel 1"" and ""Panel 4"")"
+goodlabs,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,✗
+mito-health,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (only basic CBC differential lymphocyte counts, no flow-cytometry subset panel)"
+lifeforce,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,✗ (base CBC-Diff reports total Lymphocytes as %/count only)
+function-health,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,✗ (only total lymphocyte count part of CBC/differential)
+insidetracker,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (only total Lymphocytes %, part of CBC differential)"
+everlywell,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (CD4 only mentioned in blog content about HIV symptoms, not purchasable)"
+hundred-health,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (only general ""Lymphocytes"" and ""Lymphocytes Percentage"")"
+onetwenty,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (only ""lymphocytes-absolute"", total count, no CD4/CD8 subset page)"
+siphox-health,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,✗ (no CBC/differential or flow-cytometry immune-subset markers at all)
+jinfiniti-agingsos,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,✗
+rythm-health,lymphocyte-subsets-cd4-cd8,unavailable,,,,blood,,"✗ (Plus Panel CBC gives total lymphocyte count/%, not flow-cytometry CD4/CD8)"
+superpower,melatonin,unavailable,,,,blood,,✗
+marek-diagnostics,melatonin,unavailable,,,,blood,,✗
+vitals-vault,melatonin,unavailable,,,,blood,,"✗ (404 template, zero sitemap hits)"
+goodlabs,melatonin,unavailable,,,,blood,,✗
+mito-health,melatonin,unavailable,,,,blood,,✗
+lifeforce,melatonin,unavailable,,,,blood,,✗
+function-health,melatonin,unavailable,,,,blood,,"✗ (only surfaces in ""Sleep 101"" educational guide, not orderable)"
+insidetracker,melatonin,unavailable,,,,blood,,✗
+everlywell,melatonin,included,,,,urine,,"✓ (urine) (separate standalone ""Sleep & Stress Test"" $199, 4x/day urine timepoints w/ cortisol/cortisone/creatinine — NOT bundled in 360, additional purchase)"
+hundred-health,melatonin,unavailable,,,,blood,,✗
+onetwenty,melatonin,unavailable,,,,blood,,✗
+siphox-health,melatonin,unavailable,,,,blood,,✗
+jinfiniti-agingsos,melatonin,unavailable,,,,blood,,✗ (genuinely absent despite aging-biology focus)
+rythm-health,melatonin,unavailable,,,,blood,,✗
+superpower,osmolality,unavailable,,,,blood,,✗
+marek-diagnostics,osmolality,unavailable,,,,blood,,✗
+vitals-vault,osmolality,unavailable,,,,blood,,"✗ (404 template, zero sitemap hits)"
+goodlabs,osmolality,unavailable,,,,blood,,✗
+mito-health,osmolality,unavailable,,,,blood,,✗
+lifeforce,osmolality,unavailable,,,,blood,,✗
+function-health,osmolality,unavailable,,,,blood,,✗
+insidetracker,osmolality,unavailable,,,,blood,,✗
+everlywell,osmolality,unavailable,,,,blood,,✗
+hundred-health,osmolality,unavailable,,,,blood,,✗
+onetwenty,osmolality,unavailable,,,,blood,,✗
+siphox-health,osmolality,unavailable,,,,blood,,✗
+jinfiniti-agingsos,osmolality,unavailable,,,,blood,,✗
+rythm-health,osmolality,unavailable,,,,blood,,✗
+superpower,pre-albumin,unavailable,,,,blood,,"✗ (regular Albumin and Albumin/Globulin Ratio exist, but no prealbumin/transthyretin marker)"
+marek-diagnostics,pre-albumin,unavailable,,,,blood,,✗
+vitals-vault,pre-albumin,unavailable,,,,blood,,"✗ (404 template; only Albumin/ratios and general Protein Electrophoresis exist, none confirmed to report prealbumin)"
+goodlabs,pre-albumin,unavailable,,,,blood,,✗
+mito-health,pre-albumin,unavailable,,,,blood,,✗ (only Albumin/Albumin-Globulin Ratio exist)
+lifeforce,pre-albumin,unavailable,,,,blood,,✗ (base panel has Albumin/Globulin/Total Protein but not prealbumin specifically)
+function-health,pre-albumin,unavailable,,,,blood,,"✗ (Liver category has Albumin and Albumin/Globulin ratio, not prealbumin)"
+insidetracker,pre-albumin,unavailable,,,,blood,,✗ (only standard Albumin included)
+everlywell,pre-albumin,unavailable,,,,blood,,✗ (360's Liver/Kidney/Bladder section has Total Protein/Albumin/Globulin/A:G Ratio but not prealbumin)
+hundred-health,pre-albumin,unavailable,,,,blood,,✗ (only general Albumin and Total Protein)
+onetwenty,pre-albumin,unavailable,,,,blood,,"✗ (only ""albumin"" and ""albumin-globulin-ratio"" exist)"
+siphox-health,pre-albumin,unavailable,,,,blood,,"✗ (general Albumin and Total Protein present, not prealbumin specifically)"
+jinfiniti-agingsos,pre-albumin,unavailable,,,,blood,,✗ (only standard Albumin exists)
+rythm-health,pre-albumin,unavailable,,,,blood,,✗
+superpower,procalcitonin,unavailable,,,,blood,,✗
+marek-diagnostics,procalcitonin,unavailable,,,,blood,,"✗ (near-miss trap correctly avoided: only ""Calcitonin (Thyrocalcitonin)"" exists, a DIFFERENT thyroid-C-cell marker)"
+vitals-vault,procalcitonin,unavailable,,,,blood,,✗
+goodlabs,procalcitonin,unavailable,,,,blood,,✗
+mito-health,procalcitonin,unavailable,,,,blood,,✗
+lifeforce,procalcitonin,unavailable,,,,blood,,✗
+function-health,procalcitonin,unavailable,,,,blood,,✗
+insidetracker,procalcitonin,unavailable,,,,blood,,✗
+everlywell,procalcitonin,unavailable,,,,blood,,✗
+hundred-health,procalcitonin,unavailable,,,,blood,,✗
+onetwenty,procalcitonin,unavailable,,,,blood,,✗
+siphox-health,procalcitonin,unavailable,,,,blood,,✗
+jinfiniti-agingsos,procalcitonin,unavailable,,,,blood,,✗
+rythm-health,procalcitonin,unavailable,,,,blood,,✗
+superpower,troponin-i,unavailable,,,,blood,,✗ (checked the dedicated Cardiovascular add-on panel too — offers ADMA/SDMA/Lp(a)/Oxidized LDL instead)
+marek-diagnostics,troponin-i,unavailable,,,,blood,,"✗ (near-miss trap correctly avoided: only ""High Sensitive Troponin T (hsTnT)"" $108 exists, a DIFFERENT troponin isoform)"
+vitals-vault,troponin-i,unavailable,,,,blood,,"✗ (404 template; unrelated ""Post-COVID Cardiac and Pulmonary Panel"" surfaced but doesn't appear to include troponin by name)"
+goodlabs,troponin-i,unavailable,,,,blood,,✗
+mito-health,troponin-i,unavailable,,,,blood,,✗
+lifeforce,troponin-i,unavailable,,,,blood,,✗
+function-health,troponin-i,unavailable,,,,blood,,✗
+insidetracker,troponin-i,unavailable,,,,blood,,✗
+everlywell,troponin-i,unavailable,,,,blood,,✗
+hundred-health,troponin-i,unavailable,,,,blood,,✗
+onetwenty,troponin-i,unavailable,,,,blood,,✗
+siphox-health,troponin-i,unavailable,,,,blood,,✗
+jinfiniti-agingsos,troponin-i,unavailable,,,,blood,,✗
+rythm-health,troponin-i,unavailable,,,,blood,,✗
+superpower,vegf,unavailable,,,,blood,,✗
+marek-diagnostics,vegf,unavailable,,,,blood,,✗
+vitals-vault,vegf,included,,,,blood,,"✓ (à la carte, standalone ELISA test)"
+goodlabs,vegf,unavailable,,,,blood,,✗
+mito-health,vegf,unavailable,,,,blood,,✗
+lifeforce,vegf,unavailable,,,,blood,,✗
+function-health,vegf,unavailable,,,,blood,,✗
+insidetracker,vegf,unavailable,,,,blood,,✗
+everlywell,vegf,unavailable,,,,blood,,✗
+hundred-health,vegf,unavailable,,,,blood,,✗
+onetwenty,vegf,unavailable,,,,blood,,✗
+siphox-health,vegf,unavailable,,,,blood,,✗
+jinfiniti-agingsos,vegf,unavailable,,,,blood,,✗
+rythm-health,vegf,unavailable,,,,blood,,✗

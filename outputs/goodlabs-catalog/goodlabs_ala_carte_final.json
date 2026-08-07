@@ -1,0 +1,2662 @@
+{
+  "albumin-creatinine-ratio-random-urine": {
+    "title": "Albumin, Random Urine with Creatinine - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Albumin, Random Urine with Creatinine": [
+        "Creatinine, Urine",
+        "Microalbumin Urine",
+        "Albumin/Creatinine Ratio, Urine"
+      ]
+    }
+  },
+  "abo-group-and-rh-type": {
+    "title": "ABO Group and Rh Type - $12 | Goodlabs",
+    "price": "12",
+    "total_biomarkers": 2,
+    "subtests": {
+      "ABO Group and Rh Type": [
+        "ABO Blood Group",
+        "Rh Type"
+      ]
+    }
+  },
+  "17-hydroxyprogesterone": {
+    "title": "17-Hydroxyprogesterone - $24 | Goodlabs",
+    "price": "24",
+    "total_biomarkers": 1,
+    "subtests": {
+      "17-Hydroxyprogesterone": [
+        "17-Hydroxyprogesterone"
+      ]
+    }
+  },
+  "aldosterone-plasma-renin-activity-ratio": {
+    "title": "Aldosterone/Plasma Renin Activity Ratio - $51 | Goodlabs",
+    "price": "51",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Aldosterone/Plasma Renin Activity Ratio, LC/MS/MS": [
+        "Aldosterone",
+        "Plasma Renin Activity",
+        "Aldosterone/Renin Activity Ratio (ARR)"
+      ]
+    }
+  },
+  "alpha-gal-ige": {
+    "title": "Galactose-Alpha-1,3-Galactose (Alpha-Gal) IgE - $45 | Goodlabs",
+    "price": "45",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Galactose-Alpha-1,3-Galactose (Alpha-Gal) IgE": [
+        "Alpha-Gal IgE"
+      ]
+    }
+  },
+  "aluminum-blood": {
+    "title": "Aluminum, Blood - $145 | Goodlabs",
+    "price": "145",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Aluminum, Blood": [
+        "Aluminum (Serum)"
+      ]
+    }
+  },
+  "androstenedione": {
+    "title": "Androstenedione - $17 | Goodlabs",
+    "price": "17",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Androstenedione": [
+        "Androstenedione"
+      ]
+    }
+  },
+  "amylase": {
+    "title": "Amylase - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Amylase": [
+        "Amylase"
+      ]
+    }
+  },
+  "ana-screen-ifa-with-reflex-to-titer-and-pattern": {
+    "title": "ANA Screen, IFA, with Reflex to Titer and Pattern - $6 | Goodlabs",
+    "price": "6",
+    "total_biomarkers": 1,
+    "subtests": {
+      "ANA Screen,IFA, with Reflex to Titer and Pattern": [
+        "ANA Screen"
+      ]
+    }
+  },
+  "ammonia-plasma": {
+    "title": "Ammonia, Plasma - $90 | Goodlabs",
+    "price": "90",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Ammonia, Plasma": [
+        "Ammonia"
+      ]
+    }
+  },
+  "aptt": {
+    "title": "aPTT - $15 | Goodlabs",
+    "price": "15",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Partial Thromboplastin Time, Activated": [
+        "aPTT"
+      ]
+    }
+  },
+  "apolipoprotein-a-1": {
+    "title": "Apolipoprotein A-1 - $19 | Goodlabs",
+    "price": "19",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Apolipoprotein A1": [
+        "Apolipoprotein A1"
+      ]
+    }
+  },
+  "antidiuretic-hormone-adh-plasma": {
+    "title": "Antidiuretic Hormone (ADH), Plasma - $39 | Goodlabs",
+    "price": "39",
+    "total_biomarkers": 1,
+    "subtests": {
+      "ADH": [
+        "Vasopressin (ADH)"
+      ]
+    }
+  },
+  "anti-mullerian-hormone-amh": {
+    "title": "Anti-Mullerian Hormone (AMH) - $28 | Goodlabs",
+    "price": "28",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Anti-Mullerian Hormone (AMH), Female": [
+        "AMH"
+      ]
+    }
+  },
+  "apolipoprotein-b": {
+    "title": "Apolipoprotein B - $12 | Goodlabs",
+    "price": "12",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Apolipoprotein B": [
+        "ApoB"
+      ]
+    }
+  },
+  "arsenic-blood": {
+    "title": "Arsenic, Blood - $19 | Goodlabs",
+    "price": "19",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Arsenic, Blood": [
+        "Arsenic"
+      ]
+    }
+  },
+  "bodybuilder-panel": {
+    "title": "Bodybuilder Panel - $215 | Goodlabs",
+    "price": "215",
+    "total_biomarkers": 59,
+    "subtests": {
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ],
+      "Testosterone, Free (Dialysis) and Total, MS": [
+        "Testosterone (Total)",
+        "Free Testosterone (Direct)"
+      ],
+      "Estradiol, Ultrasensitive, LC/MS": [
+        "Estradiol, Ultrasensitive (LC/MS)"
+      ],
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "Apolipoprotein B": [
+        "ApoB"
+      ],
+      "Dihydrotestosterone": [
+        "Dihydrotestosterone"
+      ],
+      "PSA, Total": [
+        "PSA (Total)"
+      ],
+      "Sex Hormone Binding Globulin (SHBG)": [
+        "SHBG"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Cystatin C with Glomerular Filtration Rate, Estimated (eGFR)": [
+        "Cystatin C",
+        "eGFR (cystatin C)"
+      ],
+      "IGF-1, LC/MS": [
+        "IGF-1",
+        "IGF-1 Z-Score"
+      ],
+      "Gamma Glutamyl Transferase (GGT)": [
+        "GGT"
+      ],
+      "TSH": [
+        "TSH"
+      ],
+      "T3, Free": [
+        "T3 Free"
+      ],
+      "Prolactin": [
+        "Prolactin"
+      ],
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ],
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ]
+    }
+  },
+  "c-peptide": {
+    "title": "C-Peptide - $18 | Goodlabs",
+    "price": "18",
+    "total_biomarkers": 1,
+    "subtests": {
+      "C-Peptide": [
+        "C-Peptide"
+      ]
+    }
+  },
+  "cardio-iq-insulin-resistance-panel-with-score": {
+    "title": "Cardio IQ Insulin Resistance Panel with Score - $66 | Goodlabs",
+    "price": "66",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Cardio IQ  Insulin Resistance Panel with Score": [
+        "Insulin (Fasting)",
+        "C-Peptide",
+        "Insulin Resistance Score"
+      ]
+    }
+  },
+  "cadmium-blood": {
+    "title": "Cadmium, Blood - $21 | Goodlabs",
+    "price": "21",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cadmium, Blood": [
+        "Cadmium (Blood)"
+      ]
+    }
+  },
+  "cardio-iq-lipoprotein-fractionation-ion-mobility": {
+    "title": "Cardio IQ Lipoprotein Fractionation, Ion Mobility - $38 | Goodlabs",
+    "price": "38",
+    "total_biomarkers": 6,
+    "subtests": {
+      "Cardio IQ  Lipoprotein Fractionation, Ion Mobility": [
+        "LDL Particle Number",
+        "Small LDL Particle Number",
+        "Medium LDL Particle Number",
+        "HDL Large Particle Number",
+        "LDL Pattern",
+        "LDL Size"
+      ]
+    }
+  },
+  "cardio-iq-vitamin-d-25-hydroxy": {
+    "title": "Cardio IQ Vitamin D, 25-Hydroxy - $26 | Goodlabs",
+    "price": "26",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Cardio IQ  Vitamin D, 25-Hydroxy": [
+        "Vitamin D (25-OH)",
+        "Vitamin D3 (25-OH D3)",
+        "Vitamin D2 (25-OH D2)"
+      ]
+    }
+  },
+  "ceruloplasmin": {
+    "title": "Ceruloplasmin - $12 | Goodlabs",
+    "price": "15",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Ceruloplasmin": [
+        "Ceruloplasmin"
+      ]
+    }
+  },
+  "celiac-disease-antibody-evaluation": {
+    "title": "Celiac Disease Antibody Evaluation - $24 | Goodlabs",
+    "price": "24",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Immunoglobulin A, (IgA) Serum": [
+        "IgA (Serum) "
+      ],
+      "Transglutaminase, IgA Abs.": [
+        "Tissue Transglutaminase Ab, IgA"
+      ]
+    }
+  },
+  "chlamydia-neisseria-gonorrhoeae": {
+    "title": "Chlamydia/Neisseria gonorrhoeae - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Chlamydia/Neisseria gonorrhoeae RNA, TMA, Urogenital": [
+        "Chlamydia trachomatis",
+        "Neisseria gonorrhoeae"
+      ]
+    }
+  },
+  "cmv-igg": {
+    "title": "CMV IgG - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cytomegalovirus (CMV) Ab, IgG": [
+        "Cytomegalovirus (CMV) IgG"
+      ]
+    }
+  },
+  "cmv-igm": {
+    "title": "CMV IgM - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cytomegalovirus (CMV) Ab, IgM": [
+        "Cytomegalovirus (CMV) IgM"
+      ]
+    }
+  },
+  "cobalt-blood": {
+    "title": "Cobalt, Blood - $68 | Goodlabs",
+    "price": "68",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cobalt, Blood": [
+        "Cobalt (Blood)"
+      ]
+    }
+  },
+  "coenzyme-q10-total": {
+    "title": "Coenzyme Q10, Total - $27 | Goodlabs",
+    "price": "60",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Coenzyme Q10": [
+        "Coenzyme Q10"
+      ]
+    }
+  },
+  "collagen-type-i-c-telopeptide-ctx": {
+    "title": "Collagen Type I C-Telopeptide (CTx) - $62 | Goodlabs",
+    "price": "62",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Collagen Type I C-Telopeptide (CTx)": [
+        "C-Telopeptide (CTX)"
+      ]
+    }
+  },
+  "comprehensive-excluding-hormones": {
+    "title": "Comprehensive Panel (excluding hormones) - $250 | Goodlabs",
+    "price": "250",
+    "total_biomarkers": 57,
+    "subtests": {
+      "Apolipoprotein B (Apo B)": [
+        "ApoB"
+      ],
+      "CBC w/Diff, Platelet Ct.": [
+        "Hematocrit",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Neutrophils (%)",
+        "Absolute Neutrophils",
+        "Eosinophils (%)",
+        "Basophils (%)",
+        "WBC",
+        "MPV"
+      ],
+      "Comprehensive Metabolic Panel (AMA)": [
+        "Albumin",
+        "Creatinine",
+        "Potassium",
+        "Total Protein",
+        "Sodium",
+        "ALP",
+        "Chloride",
+        "Carbon Dioxide",
+        "Globulin",
+        "Calcium (Total)",
+        "Total Bilirubin",
+        "AST",
+        "BUN",
+        "Glucose (Fasting)",
+        "Albumin/Globulin Ratio",
+        "ALT"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Hemoglobin A1c (Glycohgb)": [
+        "HbA1c"
+      ],
+      "Homocysteine Level": [
+        "Homocysteine"
+      ],
+      "Insulin, Fasting": [
+        "Insulin (Fasting)"
+      ],
+      "Iron + TIBC": [
+        "Serum Iron",
+        "Transferrin Saturation (TSAT)",
+        "TIBC"
+      ],
+      "Lipoprotein-a (Lp-a)": [
+        "Lp(a)"
+      ],
+      "Lipid Screen (Basic Lipid Panel) (AMA)": [
+        "Total Cholesterol",
+        "Triglycerides",
+        "HDL-Cholesterol",
+        "Non-HDL Cholesterol"
+      ],
+      "Thyroid Stimulating Hormone (TSH)": [
+        "TSH"
+      ],
+      "Uric Acid, Serum": [
+        "Uric Acid"
+      ],
+      "Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate (Folic Acid)": [
+        "Folate (Serum)"
+      ],
+      "Vitamin D, 25-Hydroxy, Serum": [
+        "Vitamin D (25-OH)"
+      ],
+      "C-Reactive Protein (hs-CRP), High Sensitivity": [
+        "hs-CRP"
+      ],
+      "Urinalysis, Routine": [
+        "Urine Color",
+        "Urine Protein",
+        "Urine Glucose",
+        "Urine Ketones",
+        "Urine Bilirubin",
+        "Urine Blood (Occult)",
+        "Urine Nitrite",
+        "Urine Leukocyte Esterase",
+        "Epithelial Cells (Urine)"
+      ]
+    }
+  },
+  "complete-blood-count-cbc-with-differential-platelet": {
+    "title": "Complete Blood Count (CBC) with Differential/Platelet - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 17,
+    "subtests": {
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ]
+    }
+  },
+  "acth-plasma": {
+    "title": "ACTH, Plasma - $18 | Goodlabs",
+    "price": "18",
+    "total_biomarkers": 1,
+    "subtests": {
+      "ACTH, Plasma": [
+        "ACTH"
+      ]
+    }
+  },
+  "comprehensive-metabolic-panel-cmp": {
+    "title": "Comprehensive Metabolic Panel (CMP) - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 17,
+    "subtests": {
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ]
+    }
+  },
+  "cortisol": {
+    "title": "Cortisol - $8 | Goodlabs",
+    "price": "8",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cortisol, Total": [
+        "Cortisol (AM Serum)"
+      ]
+    }
+  },
+  "cortisol-total-lcms": {
+    "title": "Cortisol, Total, LC/MS - $14 | Goodlabs",
+    "price": "14",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cortisol, Total, LC/MS": [
+        "Cortisol (AM Serum)"
+      ]
+    }
+  },
+  "creatine-kinase-ck-mb-and-total": {
+    "title": "Creatine Kinase (CK), MB and Total - $50 | Goodlabs",
+    "price": "50",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Creatine Kinase (CK), MB/Total": [
+        "Creatine Kinase (CK)",
+        "Creatine Kinase (CK), MB"
+      ]
+    }
+  },
+  "crp": {
+    "title": "CRP - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "C-Reactive Protein (CRP)": [
+        "CRP"
+      ]
+    }
+  },
+  "copper-serum-or-plasma": {
+    "title": "Copper, Serum or Plasma - $14 | Goodlabs",
+    "price": "18",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Copper": [
+        "Copper (Serum)"
+      ]
+    }
+  },
+  "creatine-kinase-ck-total": {
+    "title": "Creatine Kinase (CK), Total - $6 | Goodlabs",
+    "price": "6",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Creatine Kinase (CK), Total": [
+        "Creatine Kinase (CK)"
+      ]
+    }
+  },
+  "culture-urine-routine": {
+    "title": "Culture, Urine, Routine - $12 | Goodlabs",
+    "price": "12",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Culture, Urine, Routine": [
+        "Urine Culture"
+      ]
+    }
+  },
+  "cystatin-c": {
+    "title": "Cystatin C - $18 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Cystatin C with Glomerular Filtration Rate, Estimated (eGFR)": [
+        "Cystatin C",
+        "eGFR (cystatin C)"
+      ]
+    }
+  },
+  "d-dimer": {
+    "title": "D-Dimer - $40 | Goodlabs",
+    "price": "40",
+    "total_biomarkers": 1,
+    "subtests": {
+      "D-Dimer, Quantitative": [
+        "D-Dimer"
+      ]
+    }
+  },
+  "dhea-sulfate": {
+    "title": "DHEA-Sulfate - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ]
+    }
+  },
+  "diabetes-risk-index": {
+    "title": "Diabetes Risk Index (DRI) - $13 | Goodlabs",
+    "price": "13",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Diabetes Risk Index (DRI)": [
+        "Diabetes Risk Index (DRI)"
+      ]
+    }
+  },
+  "cyclic-citrullinated-peptide-ccp-antibody-igg": {
+    "title": "Cyclic Citrullinated Peptide (CCP) Antibody (IgG) - $28 | Goodlabs",
+    "price": "28",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cyclic Citrullinated Peptide (CCP) Antibody (IgG)": [
+        "Anti-CCP"
+      ]
+    }
+  },
+  "dihydrotestosterone-dht": {
+    "title": "Dihydrotestosterone (DHT) - $35 | Goodlabs",
+    "price": "35",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Dihydrotestosterone": [
+        "Dihydrotestosterone"
+      ]
+    }
+  },
+  "dihydrotestosterone-dht-free": {
+    "title": "Dihydrotestosterone (DHT), Free, LC/MS/Dialysis - $240 | Goodlabs",
+    "price": "240",
+    "total_biomarkers": 3,
+    "subtests": {
+      "DHT, Free, LCMS/Dialysis": [
+        "Dihydrotestosterone",
+        "Dihydrotestosterone, Free Percentage",
+        "Dihydrotestosterone, Free"
+      ]
+    }
+  },
+  "epstein-barr-virus-early-antigen-d-antibody-igg": {
+    "title": "Epstein-Barr Virus Early Antigen D Antibody (IgG) - $75 | Goodlabs",
+    "price": "75",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Epstein-Barr Virus Early Antigen D Antibody (IgG)": [
+        "EBV Early Antigen D IgG"
+      ]
+    }
+  },
+  "epstein-barr-virus-antibody-panel": {
+    "title": "Epstein-Barr Virus Antibody Panel - $77 | Goodlabs",
+    "price": "77",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Epstein-Barr Virus Antibody Panel": [
+        "EBV VCA IgM",
+        "EBV VCA IgG",
+        "EBV EBNA IgG"
+      ]
+    }
+  },
+  "estradiol": {
+    "title": "Estradiol - $8 | Goodlabs",
+    "price": "8",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Estradiol": [
+        "Estradiol (E2)"
+      ]
+    }
+  },
+  "estradiol-sensitive-lcms": {
+    "title": "Estradiol, Sensitive, LC/MS - $31 | Goodlabs",
+    "price": "36",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Estradiol, Ultrasensitive, LC/MS": [
+        "Estradiol, Ultrasensitive (LC/MS)"
+      ]
+    }
+  },
+  "estrogens-fractionated-lcms": {
+    "title": "Estrogens, Fractionated, LC/MS - $263 | Goodlabs",
+    "price": "263",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Estrogens, Fractionated, LC/MS": [
+        "Estrone (E1)",
+        "Estradiol, Ultrasensitive (LC/MS)",
+        "Estriol (E3)"
+      ]
+    }
+  },
+  "estrogens-total-immunoassay": {
+    "title": "Estrogens, Total, Immunoassay - $23 | Goodlabs",
+    "price": "23",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Estrogens, Total, Immunoassay": [
+        "Estrogens, Total"
+      ]
+    }
+  },
+  "female-athlete-performance-panel": {
+    "title": "Female Athlete Performance Panel - $180 | Goodlabs",
+    "price": "180",
+    "total_biomarkers": 66,
+    "subtests": {
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ],
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ],
+      "Insulin": [
+        "Insulin (Fasting)"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "Magnesium, RBC": [
+        "Magnesium RBC"
+      ],
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ],
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ],
+      "TSH": [
+        "TSH"
+      ],
+      "T4 Free (FT4)": [
+        "T4 Free"
+      ],
+      "T3, Free": [
+        "T3 Free"
+      ],
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ],
+      "Estradiol, Ultrasensitive, LC/MS": [
+        "Estradiol, Ultrasensitive (LC/MS)"
+      ],
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ],
+      "LH": [
+        "LH"
+      ],
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ],
+      "Prolactin": [
+        "Prolactin"
+      ],
+      "Cortisol, Total": [
+        "Cortisol (AM Serum)"
+      ],
+      "Creatine Kinase (CK), Total": [
+        "Creatine Kinase (CK)"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ]
+    }
+  },
+  "dna-ds-antibody": {
+    "title": "DNA (ds) Antibody - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "DNA (ds) Antibody": [
+        "Anti-dsDNA"
+      ]
+    }
+  },
+  "estrone": {
+    "title": "Estrone - $29 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Estrone": [
+        "Estrone (E1)"
+      ]
+    }
+  },
+  "ferritin": {
+    "title": "Ferritin - $9 | Goodlabs",
+    "price": "9",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Ferritin": [
+        "Ferritin"
+      ]
+    }
+  },
+  "folate": {
+    "title": "Folate, Serum - $6 | Goodlabs",
+    "price": "6",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Folate, Serum": [
+        "Folate (Serum)"
+      ]
+    }
+  },
+  "fibrinogen": {
+    "title": "Fibrinogen - $10 | Goodlabs",
+    "price": "10",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Fibrinogen Activity, Clauss": [
+        "Fibrinogen"
+      ]
+    }
+  },
+  "fructosamine": {
+    "title": "Fructosamine - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Fructosamine": [
+        "Fructosamine"
+      ]
+    }
+  },
+  "fsh": {
+    "title": "FSH - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ]
+    }
+  },
+  "fsh-and-lh": {
+    "title": "FSH and LH - $9 | Goodlabs",
+    "price": "9",
+    "total_biomarkers": 2,
+    "subtests": {
+      "FSH and LH": [
+        "FSH",
+        "LH"
+      ]
+    }
+  },
+  "folate-rbc": {
+    "title": "Folate, RBC - $15 | Goodlabs",
+    "price": "15",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Folate, RBC": [
+        "RBC Folate"
+      ]
+    }
+  },
+  "full-celiac-panel": {
+    "title": "Full Celiac Panel (Antibodies + HLA genetic testing) - $81 | Goodlabs",
+    "price": "81",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Celiac Disease Eval + HLA Genetics": [
+        "Tissue Transglutaminase Ab, IgA"
+      ]
+    }
+  },
+  "full-monty": {
+    "title": "Full Monty - $115 | Goodlabs",
+    "price": "115",
+    "total_biomarkers": 13,
+    "subtests": {
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Transferrin": [
+        "Transferrin"
+      ],
+      "Uric Acid": [
+        "Uric Acid"
+      ],
+      "Vitamin A (Retinol)": [
+        "Vitamin A (Retinol)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "Magnesium, RBC": [
+        "Magnesium RBC"
+      ],
+      "Ceruloplasmin": [
+        "Ceruloplasmin"
+      ],
+      "Copper": [
+        "Copper (Serum)"
+      ],
+      "Hemoglobin": [
+        "Hemoglobin"
+      ],
+      "Zinc": [
+        "Zinc (Serum)"
+      ]
+    }
+  },
+  "gastrin": {
+    "title": "Gastrin - $23 | Goodlabs",
+    "price": "23",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Gastrin, Serum": [
+        "Gastrin"
+      ]
+    }
+  },
+  "gamma-glutamyl-transferase-ggt": {
+    "title": "Gamma Glutamyl Transferase (GGT) - $6 | Goodlabs",
+    "price": "6",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Gamma Glutamyl Transferase (GGT)": [
+        "GGT"
+      ]
+    }
+  },
+  "glucose": {
+    "title": "Glucose - $8 | Goodlabs",
+    "price": "8",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Glucose": [
+        "Glucose (Fasting)"
+      ]
+    }
+  },
+  "glucose-tolerance-test-gtt-two-hour-oral-who-protocol": {
+    "title": "Glucose Tolerance Test (GTT), Two Hour Oral (WHO Protocol) - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Glucose (2 Spec, WHO) Toler,S": [
+        "Glucose (2-hour Post-load)",
+        "Glucose (Fasting)"
+      ]
+    }
+  },
+  "glyca": {
+    "title": "GlycA - $26 | Goodlabs",
+    "price": "26",
+    "total_biomarkers": 1,
+    "subtests": {
+      "GlycA": [
+        "GlycA"
+      ]
+    }
+  },
+  "growth-hormone-gh": {
+    "title": "Growth Hormone (GH) - $19 | Goodlabs",
+    "price": "34",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Growth Hormone (GH)": [
+        "Growth Hormone (GH)"
+      ]
+    }
+  },
+  "hcg-total-quantitative": {
+    "title": "hCG, Total, Quantitative - $12 | Goodlabs",
+    "price": "12",
+    "total_biomarkers": 1,
+    "subtests": {
+      "hCG, Total, Quantitative": [
+        "hCG, Total, Quantitative"
+      ]
+    }
+  },
+  "hemoglobin": {
+    "title": "Hemoglobin (Hb) - $1 | Goodlabs",
+    "price": "1",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Hemoglobin": [
+        "Hemoglobin"
+      ]
+    }
+  },
+  "hemoglobin-a1c-hba1c": {
+    "title": "Hemoglobin A1c (HbA1c) - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ]
+    }
+  },
+  "hemoglobinopathy-evaluation": {
+    "title": "Hemoglobinopathy Evaluation - $24 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 5,
+    "subtests": {
+      "Hemoglobinopathy Evaluation": [
+        "Hemoglobin A",
+        "Hemoglobin F (Fetal)",
+        "Hemoglobin A2",
+        "Hemoglobin S",
+        "Hemoglobin Pattern Interpretation"
+      ]
+    }
+  },
+  "hepatic-function-panel": {
+    "title": "Hepatic Function Panel - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 10,
+    "subtests": {
+      "Hepatic Function Panel": [
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "Direct Bilirubin",
+        "Indirect Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ]
+    }
+  },
+  "heavy-metals": {
+    "title": "Heavy Metals - $45 | Goodlabs",
+    "price": "45",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Arsenic, Blood": [
+        "Arsenic"
+      ],
+      "Lead (Venous)": [
+        "Lead (Blood)"
+      ],
+      "Mercury, Blood": [
+        "Mercury (Blood)"
+      ]
+    }
+  },
+  "hepatitis-b-surface-antibody-quantitative": {
+    "title": "Hepatitis B Surface Antibody Immunity, Quantitative - $23 | Goodlabs",
+    "price": "23",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Hepatitis B Surface Antibody Immunity, Quantitative": [
+        "Hepatitis B Surface Antibody"
+      ]
+    }
+  },
+  "hepatitis-b-surface-antigen": {
+    "title": "Hepatitis B Surface Antigen - $10 | Goodlabs",
+    "price": "10",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Hepatitis B Surface Antigen with Reflex Confirmation": [
+        "Hepatitis B Surface Antigen"
+      ]
+    }
+  },
+  "hepatitis-c-antibody": {
+    "title": "Hepatitis C Antibody - $13 | Goodlabs",
+    "price": "13",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Hepatitis C Antibody with Reflex to HCV, RNA, Quantitative, Real-Time PCR": [
+        "Hepatitis C Antibody"
+      ]
+    }
+  },
+  "high-sensitivity-c-reactive-protein-hs-crp": {
+    "title": "High-Sensitivity C-Reactive Protein (hs-CRP) - $9 | Goodlabs",
+    "price": "9",
+    "total_biomarkers": 1,
+    "subtests": {
+      "hs-CRP": [
+        "hs-CRP"
+      ]
+    }
+  },
+  "homocysteine": {
+    "title": "Homocysteine - $13 | Goodlabs",
+    "price": "13",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Homocysteine": [
+        "Homocysteine"
+      ]
+    }
+  },
+  "hiv-1-2-antigen": {
+    "title": "HIV-1/2 Antigen and Antibodies, Fourth Generation, with Reflexes - $24 | Goodlabs",
+    "price": "24",
+    "total_biomarkers": 1,
+    "subtests": {
+      "HIV-1/2 Antigen and Antibodies, Fourth Generation, with Reflexes": [
+        "HIV-1/2 Antigen and Antibodies"
+      ]
+    }
+  },
+  "human-transforming-growth-factor-beta-1": {
+    "title": "Human Transforming Growth Factor beta 1 (TGF-b1) - $158 | Goodlabs",
+    "price": "158",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Human Transforming Growth Factor beta 1 (TGF-b1)": [
+        "Transforming Growth Factor beta 1"
+      ]
+    }
+  },
+  "igf-1": {
+    "title": "Insulin-Like Growth Factor I (IGF-1) LC/MS - $24 | Goodlabs",
+    "price": "27",
+    "total_biomarkers": 2,
+    "subtests": {
+      "IGF-1, LC/MS": [
+        "IGF-1",
+        "IGF-1 Z-Score"
+      ]
+    }
+  },
+  "igf-binding-protein-2": {
+    "title": "IGF Binding Protein 2 (IGFBP-2) - $151 | Goodlabs",
+    "price": "151",
+    "total_biomarkers": 1,
+    "subtests": {
+      "IGF Binding Protein-2 (IGFBP-2)": [
+        "IGF Binding Protein 2"
+      ]
+    }
+  },
+  "immunoglobulin-a-iga-serum": {
+    "title": "Immunoglobulin A (IgA) - Serum - $14 | Goodlabs",
+    "price": "14",
+    "total_biomarkers": 1,
+    "subtests": {
+      "IgA": [
+        "IgA (Serum) "
+      ]
+    }
+  },
+  "igf-binding-protein-3": {
+    "title": "IGF Binding Protein 3 (IGFBP-3) - $38 | Goodlabs",
+    "price": "38",
+    "total_biomarkers": 1,
+    "subtests": {
+      "IGF Binding Protein-3 (IGFBP-3)": [
+        "IGF Binding Protein 3"
+      ]
+    }
+  },
+  "inhibin-b": {
+    "title": "Inhibin B - $291 | Goodlabs",
+    "price": "291",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Inhibin B": [
+        "Inhibin B"
+      ]
+    }
+  },
+  "insulin": {
+    "title": "Insulin - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Insulin": [
+        "Insulin (Fasting)"
+      ]
+    }
+  },
+  "interleukin-1-beta-il1b": {
+    "title": "Interleukin-1 Beta (IL-1\u03b2) - $800 | Goodlabs",
+    "price": "800",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Interleukin-1 Beta": [
+        "Interleukin-1 Beta"
+      ]
+    }
+  },
+  "interleukin-6-il6": {
+    "title": "Interleukin-6 (IL-6) - $119 | Goodlabs",
+    "price": "119",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Interleukin-6 (IL-6), Serum": [
+        "Interleukin-6"
+      ]
+    }
+  },
+  "intrinsic-factor-blocking-antibody": {
+    "title": "Intrinsic Factor Blocking Antibody - $174 | Goodlabs",
+    "price": "174",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Intrinsic Factor Blocking Antibody": [
+        "Intrinsic Factor Blocking Antibody"
+      ]
+    }
+  },
+  "iodine-serum-or-plasma": {
+    "title": "Iodine, Serum/Plasma - $53 | Goodlabs",
+    "price": "53",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Iodine, Serum/Plasma": [
+        "Iodine"
+      ]
+    }
+  },
+  "iodine-random-urine": {
+    "title": "Iodine, Random Urine - $45 | Goodlabs",
+    "price": "45",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Iodine, Random Urine": [
+        "Iodine (Urine)"
+      ]
+    }
+  },
+  "iron-and-tibc": {
+    "title": "Iron and TIBC - $7 | Goodlabs",
+    "price": "7",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ]
+    }
+  },
+  "iron-tibc-and-ferritin-panel": {
+    "title": "Iron, TIBC and Ferritin Panel - $15 | Goodlabs",
+    "price": "15",
+    "total_biomarkers": 4,
+    "subtests": {
+      "Iron, TIBC and Ferritin Panel": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)",
+        "Ferritin"
+      ]
+    }
+  },
+  "lactate-dehydrogenase-ld": {
+    "title": "Lactate Dehydrogenase (LD) - $3 | Goodlabs",
+    "price": "3",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Lactate Dehydrogenase (LD)": [
+        "LDH"
+      ]
+    }
+  },
+  "ldl-cholesterol-direct": {
+    "title": "LDL Cholesterol (Direct) - $3 | Goodlabs",
+    "price": "10",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Direct LDL": [
+        "LDL-Cholesterol"
+      ]
+    }
+  },
+  "lead-venous": {
+    "title": "Lead (Venous) - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Lead (Venous)": [
+        "Lead (Blood)"
+      ]
+    }
+  },
+  "lh": {
+    "title": "LH - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "LH": [
+        "LH"
+      ]
+    }
+  },
+  "lipase": {
+    "title": "Lipase - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Lipase": [
+        "Lipase"
+      ]
+    }
+  },
+  "lipid-panel": {
+    "title": "Lipid Panel - $8 | Goodlabs",
+    "price": "8",
+    "total_biomarkers": 6,
+    "subtests": {
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ]
+    }
+  },
+  "leptin": {
+    "title": "Leptin - $23 | Goodlabs",
+    "price": "23",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Leptin": [
+        "Leptin"
+      ]
+    }
+  },
+  "lipoprotein-a": {
+    "title": "Lipoprotein (a) - $16 | Goodlabs",
+    "price": "20",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Lipoprotein (a)": [
+        "Lp(a)"
+      ]
+    }
+  },
+  "lp-pla2-activity": {
+    "title": "Lp-PLA2 Activity - $36 | Goodlabs",
+    "price": "36",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Lp-PLA2 Activity": [
+        "Lp-PLA2 Activity"
+      ]
+    }
+  },
+  "magnesium-rbc": {
+    "title": "Magnesium, RBC - $8 | Goodlabs",
+    "price": "13",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Magnesium, RBC": [
+        "Magnesium RBC"
+      ]
+    }
+  },
+  "measles-antibody-igg-immune-status": {
+    "title": "Measles Antibody (IgG), Immune Status - $42 | Goodlabs",
+    "price": "42",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Measles Antibody (IgG), Immune Status": [
+        "Measles IgG"
+      ]
+    }
+  },
+  "menopause-health": {
+    "title": "Menopause Health - $125 | Goodlabs",
+    "price": "125",
+    "total_biomarkers": 55,
+    "subtests": {
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "Apolipoprotein B": [
+        "ApoB"
+      ],
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ],
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ],
+      "Insulin": [
+        "Insulin (Fasting)"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "TSH": [
+        "TSH"
+      ],
+      "T4 Free (FT4)": [
+        "T4 Free"
+      ],
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Estradiol, Ultrasensitive, LC/MS": [
+        "Estradiol, Ultrasensitive (LC/MS)"
+      ],
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ],
+      "LH": [
+        "LH"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Sed Rate by Modified Westergren": [
+        "ESR"
+      ]
+    }
+  },
+  "metabolic-health": {
+    "title": "Metabolic Health - $60 | Goodlabs",
+    "price": "60",
+    "total_biomarkers": 20,
+    "subtests": {
+      "Hemoglobin A1c (Glycohgb)": [
+        "HbA1c"
+      ],
+      "Uric Acid, Serum": [
+        "Uric Acid"
+      ],
+      "Comprehensive Metabolic Panel (AMA)": [
+        "Albumin",
+        "Creatinine",
+        "Potassium",
+        "Total Protein",
+        "Sodium",
+        "ALP",
+        "Chloride",
+        "Carbon Dioxide",
+        "Globulin",
+        "Calcium (Total)",
+        "Total Bilirubin",
+        "AST",
+        "BUN",
+        "Glucose (Fasting)",
+        "Albumin/Globulin Ratio",
+        "ALT"
+      ],
+      "Cystatin C": [
+        "Cystatin C"
+      ],
+      "Insulin, Fasting": [
+        "Insulin (Fasting)"
+      ]
+    }
+  },
+  "mercury-blood": {
+    "title": "Mercury, Blood - $21 | Goodlabs",
+    "price": "21",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Mercury, Blood": [
+        "Mercury (Blood)"
+      ]
+    }
+  },
+  "mens-hormone": {
+    "title": "Men&#x27;s Hormone - $65 | Goodlabs",
+    "price": "65",
+    "total_biomarkers": 9,
+    "subtests": {
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ],
+      "Estradiol, Ultrasensitive, LC/MS": [
+        "Estradiol, Ultrasensitive (LC/MS)"
+      ],
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ],
+      "LH": [
+        "LH"
+      ],
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ]
+    }
+  },
+  "methylmalonic-acid": {
+    "title": "Methylmalonic Acid - $27 | Goodlabs",
+    "price": "27",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Methylmalonic Acid": [
+        "Methylmalonic Acid (MMA)"
+      ]
+    }
+  },
+  "methylmalonic-acid-serum": {
+    "title": "Methylmalonic Acid, Serum or Plasma - $24 | Goodlabs",
+    "price": "24",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Methylmalonic Acid, Serum": [
+        "Methylmalonic Acid (MMA)"
+      ]
+    }
+  },
+  "molybdenum-serum-or-plasma": {
+    "title": "Molybdenum, Serum or Plasma - $105 | Goodlabs",
+    "price": "158",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Molybdenum, Serum/Plasma": [
+        "Molybdenum"
+      ]
+    }
+  },
+  "mthfr-genetic-test": {
+    "title": "MTHFR Genetic Test - $75 | Goodlabs",
+    "price": "130",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Methylenetetrahydrofolate Reductase (MTHFR), DNA Mutation Analysis": [
+        "MTHFR Genetic Test"
+      ]
+    }
+  },
+  "myeloperoxidase-antibody-mpo": {
+    "title": "Myeloperoxidase Antibody (MPO) - $28 | Goodlabs",
+    "price": "28",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Myeloperoxidase Antibody (MPO)": [
+        "Myeloperoxidase Antibody"
+      ]
+    }
+  },
+  "mycoplasma-genitalium-rrna-tma": {
+    "title": "Mycoplasma genitalium rRNA TMA - $122 | Goodlabs",
+    "price": "122",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Mycoplasma genitalium, rRNA, TMA": [
+        "Mycoplasma genitalium"
+      ]
+    }
+  },
+  "myeloperoxidase-mpo": {
+    "title": "Cardio IQ Myeloperoxidase (MPO) - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Cardio IQ  Myeloperoxidase (MPO)": [
+        "Myeloperoxidase"
+      ]
+    }
+  },
+  "nmr-lipoprofile": {
+    "title": "NMR LipoProfile - $38 | Goodlabs",
+    "price": "38",
+    "total_biomarkers": 5,
+    "subtests": {
+      "Lipoprotein Fractionation, NMR": [
+        "LDL Particle Number",
+        "Small LDL Particle Number",
+        "LDL Size",
+        "HDL-P (Total)",
+        "HDL Large Particle Number"
+      ]
+    }
+  },
+  "nt-probnp": {
+    "title": "NT-proBNP - $134 | Goodlabs",
+    "price": "134",
+    "total_biomarkers": 1,
+    "subtests": {
+      "NT-proBNP": [
+        "NT-proBNP"
+      ]
+    }
+  },
+  "omegacheck": {
+    "title": "OmegaCheck - $42 | Goodlabs",
+    "price": "42",
+    "total_biomarkers": 10,
+    "subtests": {
+      "OmegaCheck ": [
+        "EPA + DPA + DHA",
+        "Arachidonic Acid/EPA Ratio",
+        "Omega-6/Omega-3 Ratio",
+        "Omega-3 Total",
+        "EPA",
+        "DPA",
+        "DHA",
+        "Omega-6 Total",
+        "Arachidonic Acid",
+        "Linoleic Acid"
+      ]
+    }
+  },
+  "oral-glucose-insulin-tolerance-test-ogtt": {
+    "title": "Oral Glucose + Insulin Tolerance Test over 2 hours (4 Specimens) (OGTT) - $38 | Goodlabs",
+    "price": "38",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Glucose Tolerance Test, 4 Specimens": [
+        "Glucose (Fasting)"
+      ]
+    }
+  },
+  "oxldl": {
+    "title": "OxLDL - $42 | Goodlabs",
+    "price": "42",
+    "total_biomarkers": 1,
+    "subtests": {
+      "OxLDL": [
+        "Oxidized LDL"
+      ]
+    }
+  },
+  "potassium": {
+    "title": "Potassium, Serum - $3 | Goodlabs",
+    "price": "3",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Potassium, Serum": [
+        "Potassium"
+      ]
+    }
+  },
+  "phosphate-as-phosphorus": {
+    "title": "Phosphate (as Phosphorus) - $3 | Goodlabs",
+    "price": "3",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Phosphate (as Phosphorus)": [
+        "Phosphorus"
+      ]
+    }
+  },
+  "pregnenolone-ms": {
+    "title": "Pregnenolone, MS - $23 | Goodlabs",
+    "price": "38",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Pregnenolone, LC/MS": [
+        "Pregnenolone"
+      ]
+    }
+  },
+  "procollagen-type-i-intact-n-terminal-propeptide": {
+    "title": "Procollagen Type I Intact N Terminal Propeptide - $98 | Goodlabs",
+    "price": "98",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Procollagen Type I Intact N Terminal Propeptide": [
+        "Procollagen Type I Intact N-Terminal Propeptide (P1NP)"
+      ]
+    }
+  },
+  "progesterone": {
+    "title": "Progesterone - $9 | Goodlabs",
+    "price": "9",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Progesterone, Immunoassay": [
+        "Progesterone"
+      ]
+    }
+  },
+  "progesterone-lcms": {
+    "title": "Progesterone, LC/MS - $16 | Goodlabs",
+    "price": "16",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Progesterone, LC/MS": [
+        "Progesterone"
+      ]
+    }
+  },
+  "prolactin-total-and-monomeric": {
+    "title": "Prolactin, Total and Monomeric - $505 | Goodlabs",
+    "price": "505",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Prolactin, Total and Monomeric": [
+        "Prolactin",
+        "Prolactin, Monomeric"
+      ]
+    }
+  },
+  "protein-total-random-urine-with-creatinine": {
+    "title": "Protein, Total, Random Urine with Creatinine - $15 | Goodlabs",
+    "price": "15",
+    "total_biomarkers": 3,
+    "subtests": {
+      "Protein, Total, Random Urine with Creatinine": [
+        "Creatinine, Urine",
+        "Protein/Creatinine Ratio, Urine",
+        "Protein, Total, Urine"
+      ]
+    }
+  },
+  "psa-total-percent-free": {
+    "title": "PSA Total+% Free - $12 | Goodlabs",
+    "price": "12",
+    "total_biomarkers": 3,
+    "subtests": {
+      "PSA, Free and Total": [
+        "PSA (Total)",
+        "PSA (Free)",
+        "PSA (Free) Percentage"
+      ]
+    }
+  },
+  "prolactin": {
+    "title": "Prolactin - $9 | Goodlabs",
+    "price": "9",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Prolactin": [
+        "Prolactin"
+      ]
+    }
+  },
+  "psa-total-reflex-to-free": {
+    "title": "PSA Total (Reflex To Free) - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "PSA, Total": [
+        "PSA (Total)"
+      ]
+    }
+  },
+  "pt-w-inr": {
+    "title": "PT w/INR - $7 | Goodlabs",
+    "price": "7",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Prothrombin Time with INR": [
+        "INR",
+        "PT"
+      ]
+    }
+  },
+  "quantiferon-tb-gold-plus-1-tube": {
+    "title": "QuantiFERON-TB Gold Plus, 1 Tube - $74 | Goodlabs",
+    "price": "74",
+    "total_biomarkers": 5,
+    "subtests": {
+      "QuantiFERON -TB Gold Plus, 1 Tube": [
+        "QuantiFERON-TB Gold Plus Interpretation",
+        "QuantiFERON-TB Nil",
+        "QuantiFERON-TB Mitogen-Nil",
+        "QuantiFERON-TB TB1-Nil",
+        "QuantiFERON-TB TB2-Nil"
+      ]
+    }
+  },
+  "quest-ad-detect-phosphorylated-tau217-plasma": {
+    "title": "Quest AD-Detect Phosphorylated tau217 (p-tau217), Plasma - $270 | Goodlabs",
+    "price": "270",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Quest AD-Detect&reg; Phosphorylated tau217(p-tau217), Plasma": [
+        "Phosphorylated tau217 (p-tau217), Plasma"
+      ]
+    }
+  },
+  "pth-intact-without-calcium": {
+    "title": "PTH, Intact without Calcium - $32 | Goodlabs",
+    "price": "32",
+    "total_biomarkers": 1,
+    "subtests": {
+      "PTH, Intact without Calcium": [
+        "Parathyroid Hormone (PTH), Intact"
+      ]
+    }
+  },
+  "rbc-copper": {
+    "title": "RBC Copper - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Copper, RBC": [
+        "Copper (RBC)"
+      ]
+    }
+  },
+  "renal-function-panel": {
+    "title": "Renal Function Panel - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 12,
+    "subtests": {
+      "Renal Function Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "eGFR (creatinine)",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Phosphorus",
+        "Albumin"
+      ]
+    }
+  },
+  "rheumatoid-factor": {
+    "title": "Rheumatoid Factor - $7 | Goodlabs",
+    "price": "7",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Rheumatoid Factor": [
+        "RF"
+      ]
+    }
+  },
+  "reticulocyte-count": {
+    "title": "Reticulocyte Count - $5 | Goodlabs",
+    "price": "9",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Reticulocyte Count, Automated": [
+        "Reticulocyte Count",
+        "Reticulocyte Count (Absolute)"
+      ]
+    }
+  },
+  "rpr-syphilis-screening": {
+    "title": "RPR (Rapid Plasma Reagin) - Syphilis Screening - $7 | Goodlabs",
+    "price": "7",
+    "total_biomarkers": 1,
+    "subtests": {
+      "RPR (Monitor) with Reflex to Titer": [
+        "RPR (Rapid Plasma Reagin)"
+      ]
+    }
+  },
+  "sedimentation-rate-westergren-esr": {
+    "title": "Sedimentation Rate-Westergren (ESR) - $3 | Goodlabs",
+    "price": "6",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Sed Rate by Modified Westergren": [
+        "ESR"
+      ]
+    }
+  },
+  "selenium-serum-or-plasma": {
+    "title": "Selenium, Serum or Plasma - $12 | Goodlabs",
+    "price": "12",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Selenium": [
+        "Selenium"
+      ]
+    }
+  },
+  "serum-amyloid-a": {
+    "title": "Serum Amyloid A - $300 | Goodlabs",
+    "price": "300",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Serum Amyloid A (SAA)": [
+        "Serum Amyloid A"
+      ]
+    }
+  },
+  "sex-hormone-binding-globulin-shbg": {
+    "title": "Sex Hormone Binding Globulin (SHBG) - $8 | Goodlabs",
+    "price": "8",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Sex Hormone Binding Globulin (SHBG)": [
+        "SHBG"
+      ]
+    }
+  },
+  "sm-and-sm-rnp-antibodies": {
+    "title": "Sm and Sm/RNP Antibodies - $36 | Goodlabs",
+    "price": "36",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Sm and Sm/RNP Antibodies": [
+        "Anti-Sm",
+        "Sm/RNP Antibodies"
+      ]
+    }
+  },
+  "sirolimus": {
+    "title": "Sirolimus (Rapamycin) - $16 | Goodlabs",
+    "price": "17",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Sirolimus, LC/MS/MS": [
+        "Sirolimus"
+      ]
+    }
+  },
+  "small-dense-ldl": {
+    "title": "Small Dense LDL (sdLDL) - $43 | Goodlabs",
+    "price": "43",
+    "total_biomarkers": 1,
+    "subtests": {
+      "sdLDL": [
+        "Small Dense LDL Cholesterol"
+      ]
+    }
+  },
+  "std-screening": {
+    "title": "STD Screening - $73 | Goodlabs",
+    "price": "73",
+    "total_biomarkers": 6,
+    "subtests": {
+      "HIV-1/2 Antigen and Antibodies, Fourth Generation, with Reflexes": [
+        "HIV-1/2 Antigen and Antibodies"
+      ],
+      "RPR (Monitor) with Reflex to Titer": [
+        "RPR (Rapid Plasma Reagin)"
+      ],
+      "Hepatitis B Surface Antigen with Reflex Confirmation": [
+        "Hepatitis B Surface Antigen"
+      ],
+      "Hepatitis C Antibody with Reflex to HCV, RNA, Quantitative, Real-Time PCR": [
+        "Hepatitis C Antibody"
+      ],
+      "Chlamydia/Neisseria gonorrhoeae RNA, TMA, Urogenital": [
+        "Chlamydia trachomatis",
+        "Neisseria gonorrhoeae"
+      ]
+    }
+  },
+  "t3-reverse": {
+    "title": "Reverse T3 Serum/Plasma - $18 | Goodlabs",
+    "price": "18",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Reverse T3, Serum": [
+        "Reverse T3"
+      ]
+    }
+  },
+  "t3-reverse-lcmsms": {
+    "title": "T3 Reverse, LC/MS/MS - $27 | Goodlabs",
+    "price": "27",
+    "total_biomarkers": 1,
+    "subtests": {
+      "T3 Reverse, LC/MS/MS": [
+        "Reverse T3"
+      ]
+    }
+  },
+  "superpower-panel": {
+    "title": "All the tests in &quot;Superpower&quot; - $125 | Goodlabs",
+    "price": "125",
+    "total_biomarkers": 72,
+    "subtests": {
+      "Urinalysis, Macroscopic": [
+        "Urine Color",
+        "Urine Appearance",
+        "Urine Specific Gravity",
+        "Urine pH",
+        "Urine Glucose",
+        "Urine Bilirubin",
+        "Urine Ketones",
+        "Urine Blood (Occult)",
+        "Urine Protein",
+        "Urine Nitrite",
+        "Urine Leukocyte Esterase"
+      ],
+      "Comprehensive Metabolic Panel": [
+        "Glucose (Fasting)",
+        "BUN",
+        "Creatinine",
+        "BUN/Creatinine Ratio",
+        "Sodium",
+        "Potassium",
+        "Chloride",
+        "Carbon Dioxide",
+        "Calcium (Total)",
+        "Total Protein",
+        "Albumin",
+        "Globulin",
+        "Albumin/Globulin Ratio",
+        "Total Bilirubin",
+        "ALP",
+        "AST",
+        "ALT"
+      ],
+      "CBC (includes Differential and Platelets)": [
+        "WBC",
+        "Red Blood Cell Count",
+        "Hemoglobin",
+        "Hematocrit",
+        "MCV",
+        "MCH",
+        "MCHC",
+        "RDW (RDW-CV)",
+        "Platelet Count",
+        "MPV",
+        "Absolute Neutrophils",
+        "Absolute Lymphocytes",
+        "Absolute Eosinophils",
+        "Absolute Basophils",
+        "Neutrophils (%)",
+        "Eosinophils (%)",
+        "Basophils (%)"
+      ],
+      "Lipid Panel with Reflex to Direct LDL": [
+        "Total Cholesterol",
+        "HDL-Cholesterol",
+        "Triglycerides",
+        "LDL-Cholesterol",
+        "Total Cholesterol/HDL Ratio",
+        "Non-HDL Cholesterol"
+      ],
+      "Apolipoprotein B": [
+        "ApoB"
+      ],
+      "Hemoglobin A1c": [
+        "HbA1c"
+      ],
+      "Uric Acid": [
+        "Uric Acid"
+      ],
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ],
+      "hs-CRP": [
+        "hs-CRP"
+      ],
+      "Ferritin": [
+        "Ferritin"
+      ],
+      "Cortisol, Total": [
+        "Cortisol (AM Serum)"
+      ],
+      "Iron, Total and Total Iron Binding Capacity": [
+        "Serum Iron",
+        "TIBC",
+        "Transferrin Saturation (TSAT)"
+      ],
+      "Gamma Glutamyl Transferase (GGT)": [
+        "GGT"
+      ],
+      "TSH": [
+        "TSH"
+      ],
+      "T4 (Thyroxine), Total": [
+        "T4 Total"
+      ],
+      "T3 Uptake": [
+        "T3 Uptake"
+      ],
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ],
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ],
+      "Estradiol": [
+        "Estradiol (E2)"
+      ]
+    }
+  },
+  "t4-thyroxine-total": {
+    "title": "T4 (Thyroxine), Total - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 1,
+    "subtests": {
+      "T4 (Thyroxine), Total": [
+        "T4 Total"
+      ]
+    }
+  },
+  "t3-uptake": {
+    "title": "T3 Uptake - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "T3 Uptake": [
+        "T3 Uptake"
+      ]
+    }
+  },
+  "t3-total": {
+    "title": "T3 Total - $8 | Goodlabs",
+    "price": "8",
+    "total_biomarkers": 1,
+    "subtests": {
+      "T3 Total": [
+        "T3 Total"
+      ]
+    }
+  },
+  "testosterone-free-profile-i": {
+    "title": "Testosterone, Free (Calculated) and Total, SHBG, Albumin - $59 | Goodlabs",
+    "price": "59",
+    "total_biomarkers": 4,
+    "subtests": {
+      "Testosterone Free, Profile I": [
+        "Testosterone (Total)",
+        "SHBG",
+        "Albumin",
+        "Free Testosterone (Calculated)"
+      ]
+    }
+  },
+  "testosterone-free-bioavailable-and-total-ms": {
+    "title": "Testosterone, Free, Bioavailable and Total, MS - $22 | Goodlabs",
+    "price": "22",
+    "total_biomarkers": 5,
+    "subtests": {
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ]
+    }
+  },
+  "testosterone-free-and-total-ms": {
+    "title": "Testosterone, Free and Total, MS - $15 | Goodlabs",
+    "price": "15",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Testosterone, Free (Dialysis) and Total, MS": [
+        "Testosterone (Total)",
+        "Free Testosterone (Direct)"
+      ]
+    }
+  },
+  "thyroglobulin-antibody": {
+    "title": "Thyroglobulin Antibody - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Thyroglobulin Antibodies": [
+        "TgAb"
+      ]
+    }
+  },
+  "testosterone-total-ms": {
+    "title": "Testosterone, Total, MS - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Testosterone, Total, MS": [
+        "Testosterone (Total)"
+      ]
+    }
+  },
+  "thyroglobulin-panel": {
+    "title": "Thyroglobulin Panel - $25 | Goodlabs",
+    "price": "25",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Thyroglobulin Panel": [
+        "TgAb",
+        "Thyroglobulin"
+      ]
+    }
+  },
+  "thyroid-peroxidase-antibody-tpo": {
+    "title": "Thyroid Peroxidase Antibody (TPO) - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Thyroid Peroxidase Antibodies (TPO)": [
+        "TPOAb"
+      ]
+    }
+  },
+  "thyroid": {
+    "title": "Thyroid - $55 | Goodlabs",
+    "price": "55",
+    "total_biomarkers": 6,
+    "subtests": {
+      "TSH": [
+        "TSH"
+      ],
+      "T4 Free (FT4)": [
+        "T4 Free"
+      ],
+      "T3, Free": [
+        "T3 Free"
+      ],
+      "Thyroglobulin Antibodies": [
+        "TgAb"
+      ],
+      "Thyroid Peroxidase Antibodies (TPO)": [
+        "TPOAb"
+      ],
+      "T3 Reverse, LC/MS/MS": [
+        "Reverse T3"
+      ]
+    }
+  },
+  "tmao-trimethylamine-n-oxide": {
+    "title": "TMAO (Trimethylamine N-Oxide) - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "TMAO (Trimethylamine N-Oxide)": [
+        "TMAO"
+      ]
+    }
+  },
+  "tissue-transglutaminase-ttg-antibodies-iga-igg": {
+    "title": "Tissue Transglutaminase (tTG) Antibodies (IgA, IgG) - $13 | Goodlabs",
+    "price": "191",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Tissue Transglutaminase (tTG) Antibodies (IgG, IgA)": [
+        "Tissue Transglutaminase Ab, IgA"
+      ]
+    }
+  },
+  "thyroid-stimulating-hormone-tsh": {
+    "title": "Thyroid Stimulating Hormone (TSH) - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "TSH": [
+        "TSH"
+      ]
+    }
+  },
+  "trab-tsh-receptor-binding-antibody": {
+    "title": "TRAb (TSH Receptor Binding Antibody) - $53 | Goodlabs",
+    "price": "53",
+    "total_biomarkers": 1,
+    "subtests": {
+      "TRAb (TSH Receptor Binding Antibody)": [
+        "TRAb"
+      ]
+    }
+  },
+  "thyroxine-free-free-t4": {
+    "title": "Thyroxine, Free (Free T4) - $6 | Goodlabs",
+    "price": "6",
+    "total_biomarkers": 1,
+    "subtests": {
+      "T4 Free (FT4)": [
+        "T4 Free"
+      ]
+    }
+  },
+  "transferrin": {
+    "title": "Transferrin - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Transferrin": [
+        "Transferrin"
+      ]
+    }
+  },
+  "trichomonas-vaginalis-rna-tma": {
+    "title": "Trichomonas vaginalis RNA Qualitative TMA - $30 | Goodlabs",
+    "price": "30",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Trichomonas vaginalis RNA, Qualitative, TMA": [
+        "Trichomonas vaginalis"
+      ]
+    }
+  },
+  "triiodothyronine-t3-free": {
+    "title": "Triiodothyronine (T3), Free - $10 | Goodlabs",
+    "price": "10",
+    "total_biomarkers": 1,
+    "subtests": {
+      "T3, Free": [
+        "T3 Free"
+      ]
+    }
+  },
+  "tryptase": {
+    "title": "Tryptase - $50 | Goodlabs",
+    "price": "50",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Tryptase": [
+        "Tryptase"
+      ]
+    }
+  },
+  "tumor-necrosis-factor-alpha": {
+    "title": "Tumor Necrosis Factor-Alpha - $20 | Goodlabs",
+    "price": "45",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Tumor Necrosis Factor-Alpha, Highly Sensitive": [
+        "Tumor Necrosis Factor-Alpha"
+      ]
+    }
+  },
+  "urinalysis": {
+    "title": "Urinalysis - $4 | Goodlabs",
+    "price": "4",
+    "total_biomarkers": 11,
+    "subtests": {
+      "Urinalysis, Macroscopic": [
+        "Urine Color",
+        "Urine Appearance",
+        "Urine Specific Gravity",
+        "Urine pH",
+        "Urine Glucose",
+        "Urine Bilirubin",
+        "Urine Ketones",
+        "Urine Blood (Occult)",
+        "Urine Protein",
+        "Urine Nitrite",
+        "Urine Leukocyte Esterase"
+      ]
+    }
+  },
+  "uric-acid": {
+    "title": "Uric Acid - $5 | Goodlabs",
+    "price": "5",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Uric Acid": [
+        "Uric Acid"
+      ]
+    }
+  },
+  "vitamin-a-serum": {
+    "title": "Vitamin A, Serum or Plasma - $13 | Goodlabs",
+    "price": "33",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Vitamin A (Retinol)": [
+        "Vitamin A (Retinol)"
+      ]
+    }
+  },
+  "vitamin-b1-thiamine-whole-blood": {
+    "title": "Vitamin B1 (Thiamine), Whole Blood - $24 | Goodlabs",
+    "price": "27",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Micronutrient, Vitamin B1 (Thiamine), Blood": [
+        "Vitamin B1 (Thiamine)"
+      ]
+    }
+  },
+  "vitamin-b12": {
+    "title": "Vitamin B12 (Cobalamin) - $10 | Goodlabs",
+    "price": "10",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Micronutrient, Vitamin B12": [
+        "Vitamin B12"
+      ]
+    }
+  },
+  "vitamin-b2-riboflavin": {
+    "title": "Vitamin B2 (Riboflavin) - $59 | Goodlabs",
+    "price": "59",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Vitamin B2 (Riboflavin)": [
+        "Vitamin B2 (Riboflavin)"
+      ]
+    }
+  },
+  "vitamin-b6-plasma": {
+    "title": "Vitamin B6, Plasma - $32 | Goodlabs",
+    "price": "33",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Micronutrient, Vitamin B6, Plasma": [
+        "Vitamin B6 (PLP), Plasma"
+      ]
+    }
+  },
+  "vitamin-e": {
+    "title": "Micronutrient, Vitamin E - $27 | Goodlabs",
+    "price": "27",
+    "total_biomarkers": 2,
+    "subtests": {
+      "Micronutrient, Vitamin E": [
+        "Vitamin E (Alpha-Tocopherol)",
+        "Vitamin E, Beta-Gamma Tocopherol"
+      ]
+    }
+  },
+  "vitamin-c": {
+    "title": "Vitamin C - $32 | Goodlabs",
+    "price": "32",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Vitamin C": [
+        "Vitamin C"
+      ]
+    }
+  },
+  "vitamin-k": {
+    "title": "Vitamin K - $18 | Goodlabs",
+    "price": "18",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Vitamin K": [
+        "Vitamin K1"
+      ]
+    }
+  },
+  "womens-hormone": {
+    "title": "Women&#x27;s Hormone - $45 | Goodlabs",
+    "price": "45",
+    "total_biomarkers": 10,
+    "subtests": {
+      "DHEA Sulfate, Immunoassay": [
+        "DHEA-S"
+      ],
+      "FSH (Follicle Stimulating Hormone)": [
+        "FSH"
+      ],
+      "LH": [
+        "LH"
+      ],
+      "Testosterone, Free, Bioavailable and Total, MS": [
+        "Albumin",
+        "SHBG",
+        "Testosterone (Total)",
+        "Free Testosterone (Calculated)",
+        "Testosterone (Bioavailable)"
+      ],
+      "Estradiol": [
+        "Estradiol (E2)"
+      ],
+      "TSH": [
+        "TSH"
+      ]
+    }
+  },
+  "zinc-serum-or-plasma": {
+    "title": "Zinc, Serum or Plasma - $11 | Goodlabs",
+    "price": "11",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Zinc": [
+        "Zinc (Serum)"
+      ]
+    }
+  },
+  "vitamin-d-25-hydroxy": {
+    "title": "Vitamin D, 25-Hydroxy - $14 | Goodlabs",
+    "price": "14",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Vitamin D, 25-Hydroxy, Total, Immunoassay": [
+        "Vitamin D (25-OH)"
+      ]
+    }
+  },
+  "zinc-rbc": {
+    "title": "Zinc, RBC - $13 | Goodlabs",
+    "price": "43",
+    "total_biomarkers": 1,
+    "subtests": {
+      "Zinc, RBC": [
+        "Zinc (RBC)"
+      ]
+    }
+  }
+}

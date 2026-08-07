@@ -1,0 +1,39 @@
+{
+  "vendor_slug": "rythm-health",
+  "source_notes": "Extracted from rythmhealth.com/biomarkers, 2026-07-14. Rythm has only ONE real purchasable product (Core Monthly Subscription, $79/mo) -- the DB's second pre-migration vendor_tiers row ('Men's/Women's Plus Panel') was not actually Rythm's own product at all, it's a third-party Ulta Lab Tests panel Rythm merely references (no price, no direct purchase path through Rythm), so it's excluded. Migrating a single-product vendor to this model is still worthwhile: the Cart Builder shows exactly which of a user's target markers this one panel covers and which it doesn't, which is a more useful display than the flat included/unavailable table for a marketing site that doesn't itemize per-marker status well. Excluded 'Rythm Score', 'Personalized Biomarker Insights', and 'Biomarker Trends' from the markers list as computed dashboard features, not lab-drawn markers. Kept 'Biological Age' as a raw marker (matches our tracked 'Biological Age Score'), consistent with how Jinfiniti's computed Biological Age metric was handled.",
+  "products": [
+    {
+      "title": "Core Monthly Subscription",
+      "slug": "core-monthly-subscription",
+      "product_type": "panel",
+      "price_cents": 7900,
+      "markers": [
+        "Total Testosterone",
+        "Free Testosterone",
+        "Estrogen (Estradiol E2)",
+        "Progesterone (Female only)",
+        "SHBG (Hormone Availability)",
+        "TSH (Thyroid Signal)",
+        "Free T3 (Energy & Metabolism)",
+        "ApoB (Advanced Cholesterol)",
+        "LDL Cholesterol",
+        "HDL Cholesterol",
+        "LDL-C / ApoB Ratio (Cholesterol Particle Size)",
+        "hsCRP (Inflammation)",
+        "Vitamin D",
+        "Ferritin (Iron Storage)",
+        "Fructosamine (Average Blood Sugar)",
+        "Albumin (Protein Status)",
+        "Triglycerides (Fat Metabolism)",
+        "Triglycerides / HDL Ratio (Insulin Sensitivity)",
+        "Uric Acid (Cellular Health)",
+        "Hematocrit (Red Blood Cell Volume) (Male only)",
+        "Hemoglobin (Oxygen Carrying Capacity) (Male only)",
+        "Creatinine (Kidney Function)",
+        "ALP (Liver & Bone Health)",
+        "GGT (Liver Health)",
+        "Biological Age"
+      ]
+    }
+  ]
+}

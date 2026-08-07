@@ -1,0 +1,27 @@
+{
+  "vendor_slug": "hundred-health",
+  "source_notes": "Extracted from hundred.com homepage + /what-we-test page, 2026-07-14. Single-tier vendor (Hundred Core, $199/yr, matches pre-migration DB exactly) migrated as a single-product vendor, same pattern as Rythm Health -- no bundle choice needed, the Cart Builder still shows per-marker coverage/gaps which beats the flat table. ~106 raw markers itemized across 13 categories (Heart, Liver, Kidney, Cancer Detection, Female Health, Male Health, Thyroid, Metabolism, Blood, Nutrient, Urine, Electrolytes, Inflammation), close to the vendor's own '100+' marketing claim.",
+  "products": [
+    {
+      "title": "Hundred Core",
+      "slug": "hundred-core",
+      "product_type": "panel",
+      "price_cents": 19900,
+      "markers": [
+        "Apolipoprotein B (ApoB)", "Cholesterol/HDL-C", "HDL Cholesterol", "LDL Cholesterol", "Non-HDL Cholesterol", "Total Cholesterol", "Triglycerides",
+        "Alanine Transaminase (ALT)", "Albumin", "Alkaline Phosphatase (ALP)", "Aspartate Transaminase (AST)", "AST/ALT Ratio (De Ritis)", "FIB-4 Index", "GGT", "GGT/Platelet Ratio", "Globulin", "Total Bilirubin", "Total Protein",
+        "Albumin (Microalbumin) - Urine", "Albumin/Creatinine Ratio - Urine", "Blood Urea Nitrogen (BUN)", "BUN / Creatinine Ratio", "Creatinine", "Creatinine - Urine", "Estimated Glomerular Filtration Rate (eGFR)",
+        "PSA Total",
+        "Estradiol", "Follicle Stimulating Hormone (FSH)", "Luteinizing Hormone (LH)", "Progesterone",
+        "Free Androgen Index", "Sex Hormone Binding Globulin (SHBG)", "Testosterone, Bioavailable", "Testosterone, Free", "Testosterone, Total",
+        "Thyroid-Stimulating Hormone (TSH)", "Thyroxine (T4) Free",
+        "Glucose", "Hemoglobin A1c (HbA1c)", "HOMA-IR", "Insulin", "TG/HDL Ratio", "TyG Index",
+        "Absolute Eosinophils", "Absolute Neutrophils", "Basophils", "Eosinophils", "Hematocrit", "Hemoglobin", "Lymphocytes", "Lymphocytes Percentage", "Mean Corpuscular Hemoglobin (MCH)", "Mean Corpuscular Hemoglobin Concentration (MCHC)", "Mean Corpuscular Volume (MCV)", "Mean Platelet Volume (MPV)", "Monocytes", "Neutrophils", "Platelet Count", "Red Blood Cell (RBC) Count", "Red Cell Distribution Width (RDW)", "White Blood Cell Count",
+        "Ferritin", "Iron", "Iron % Saturation", "Iron Binding Capacity (TIBC)", "Vitamin D",
+        "Amorphous Sediment - Urine", "Appearance - Urine", "Bacteria - Urine", "Bilirubin - Urine", "Calcium Oxalate Crystals - Urine", "Casts - Urine", "Color - Urine", "Crystals - Urine", "Glucose - Urine", "Granular Cast - Urine", "Hyaline Cast - Urine", "Ketones - Urine", "Leukocyte Esterase - Urine", "Nitrite - Urine", "Occult Blood - Urine", "Ph - Urine", "Protein - Urine", "Red Blood Cell - Urine", "Renal Epithelial Cells - Urine", "Specific Gravity - Urine", "Squamous Epithelial Cells - Urine", "Transitional Epithelial Cells - Urine", "Triple Phosphate Crystals - Urine", "Uric Acid Crystals - Urine", "White Blood Cell Count (WBC) - Urine", "Yeast - Urine",
+        "Calcium", "Carbon Dioxide", "Chloride", "Potassium", "Sodium",
+        "High-Sensitivity C-Reactive Protein (hs-CRP)", "Monocyte-to-Lymphocyte Ratio", "Neutrophil-Lymphocyte-Platelet Ratio", "Neutrophil-to-Lymphocyte Ratio", "Platelet-to-Lymphocyte Ratio", "RDW/Platelet Ratio", "Systemic Immune-Inflammation Index", "Systemic Inflammation Response Index"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "vendor_slug": "onetwenty",
+  "source_notes": "Extracted from onetwenty.com/biometrics via Playwright (client-rendered category tabs, similar to SiPhox this session) plus the homepage's fuller Immune & Inflammation summary, 2026-07-14. Corrected an earlier call: OneTwenty was initially written off as a non-candidate because its two DB tiers ('Annual Membership Standard' $499 and 'Annual Membership NY/NJ' $749) are explicitly the SAME panel -- but that's exactly the Rythm Health situation (one real product, no second bundle to combine with), not a reason to skip it. Migrated as a single-product vendor at the $499 standard price; the $749 NY/NJ price is a state-compliance surcharge on the identical panel, not a separate product (same treatment as other vendors' NY/NJ surcharge metadata, e.g. Marek). Excluded non-lab 'Smart Metric' wearable/device markers visible on the site (Resting Heart Rate, Daily Step Count, Blood Pressure, BMI, Sleep, Body Fat Percentage, CGM) -- those aren't blood draws. Got a complete, count-verified (32/32) Immune & Inflammation list from the homepage; the /biometrics page's own tab for that category only rendered 10 of 32 items with no working 'Load More' expansion for it specifically (worked fine for the other 4 tabs). Total 70 raw markers captured vs. the vendor's own '85 lab biomarkers to start' claim -- likely a few more exist behind further pagination not reached; treat as a solid floor, not a fully exhaustive catalog (same caveat as Superpower's partial 218/359 extraction this session).",
+  "products": [
+    {
+      "title": "OneTwenty Annual Membership",
+      "slug": "annual-membership",
+      "product_type": "panel",
+      "price_cents": 49900,
+      "markers": [
+        "Uric Acid", "Total Cholesterol", "Calcium", "Lipoprotein (a)", "TC/HDL Ratio", "Non-HDL Cholesterol", "Fasting Glucose", "LDL Small Particles", "Homocysteine", "Apolipoprotein B (ApoB)",
+        "IG (female-only)", "Plasma Cells", "Basophils", "Red Blood Cell Count", "Hematocrit", "Hemoglobin", "Eosinophils", "Reactive Lymphocytes", "Serum Iron", "Metamyelocytes", "Neutrophils", "Ferritin", "Red Cell Distribution Width", "Prolymphocytes", "Lymphocytes", "Myelocytes", "MCV", "Promyelocytes", "Blasts", "MCH", "MCHC", "MPV", "Band Neutrophils", "Platelet Count", "Complete Blood Count", "hs-CRP", "Nucleated Red Blood Cells", "Iron Binding Capacity", "Iron Saturation", "White Blood Cell Count", "Monocytes", "Platelet Estimation",
+        "Aspartate Aminotransferase (AST)", "Alkaline Phosphatase", "Globulin", "A/G Ratio", "Liver Enzyme ALT", "Total Protein", "Albumin", "Total Bilirubin",
+        "Urea Nitrogen (BUN)", "Chloride", "Potassium", "Estimated Glomerular Filtration Rate (eGFR)", "Sodium", "Bicarbonate / Carbon Dioxide (CO2)", "BUN/Cr Ratio", "Creatinine",
+        "T3 Uptake", "Total T4 (Thyroxine)", "Thyroid-Stimulating Hormone (TSH)", "SHBG (male-only)", "TT (male-only)", "Follicle-Stimulating Hormone (FSH)", "Free T4 Index (T7)", "Luteinizing Hormone (LH)", "FT (male-only)", "BioT (male-only)", "Prostate-Specific Antigen (PSA)", "E2 (female-only)"
+      ]
+    }
+  ]
+}
