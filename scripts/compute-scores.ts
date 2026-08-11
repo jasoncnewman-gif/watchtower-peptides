@@ -34,6 +34,8 @@ type VendorRow = {
   name: string;
   has_coa: boolean;
   finnrick_tests_count: number | null;
+  finnrick_pass_count: number | null;
+  finnrick_fail_count: number | null;
   status: string;
   shipping_free_threshold: number | null;
   shipping_flat_fee: number | null;
@@ -92,11 +94,23 @@ function labVerificationScore(vendor: VendorRow, trans: TransparencyRow | undefi
 
   if (tier < 4) return TIER_BASE[tier];
 
-  // Tier 4: apply sampling confidence modifier
+  // Tier 4: sampling confidence modifier (test count) …
   const n = vendor.finnrick_tests_count ?? 0;
-  if (n >= 10) return 40;
-  if (n >= 4)  return 30 + Math.round((n - 4) * 1.5); // 4→30 … 9→37
-  return 25 + Math.round((n - 1) * 2);                  // 1→25 … 3→29
+  let base: number;
+  if (n >= 10) base = 40;
+  else if (n >= 4) base = 30 + Math.round((n - 4) * 1.5); // 4→30 … 9→37
+  else base = 25 + Math.round((n - 1) * 2);                // 1→25 … 3→29
+
+  // … then weighted by Finnrick's own pass rate (added 2026-08-10). Without
+  // this, a vendor with many tests but a low pass rate maxes the score just
+  // like a vendor that passes every test — found via a portfolio-wide review,
+  // see CLAUDE.md "Known Constraints". Falls back to the count-only base when
+  // pass/fail totals aren't available yet (e.g. before a vendor's first
+  // Finnrick scrape under the rewritten scraper).
+  const total = (vendor.finnrick_pass_count ?? 0) + (vendor.finnrick_fail_count ?? 0);
+  if (total === 0) return base;
+  const passRate = (vendor.finnrick_pass_count ?? 0) / total;
+  return Math.round(base * passRate);
 }
 
 // ── 2. Product Quality (max 25) ────────────────────────────────────────────
@@ -272,7 +286,7 @@ async function main() {
     { data: marketPrices,   error: e5 },
   ] = await Promise.all([
     db.from("vendors")
-      .select("id, slug, name, has_coa, finnrick_tests_count, status, shipping_free_threshold, shipping_flat_fee")
+      .select("id, slug, name, has_coa, finnrick_tests_count, finnrick_pass_count, finnrick_fail_count, status, shipping_free_threshold, shipping_flat_fee")
       .in("status", ["active", "flagged"]),
 
     db.from("lab_tests")
