@@ -366,6 +366,14 @@ async function main() {
     /\bin conclusion\b/i,
     /\bfurthermore\b/i,
     /\bmoreover\b/i,
+    /\bit is important to note\b/i,
+    /\badditionally\b/i,
+    /\bresearchers suggest\b/i,
+    /\bstudies indicate\b/i,
+    /\blet'?s explore\b/i,
+    /\btake a closer look\b/i,
+    /\bnavigat(?:e|ing|ion)\b/i,   // "navigating uncharted territory" reads as AI-generated hedge language
+    /\bpromis(?:e|ing)\b/i,       // "shows promise" / "promising" — matches the prompt's VOICE & STYLE ban, missing from this checker until 2026-08-22
   ];
   const found = BANNED.filter((re) => re.test(article)).map((re) => re.source);
   if (found.length > 0) {
