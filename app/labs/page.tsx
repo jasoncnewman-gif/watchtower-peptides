@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/labs" },
-  openGraph: { title, description },
-  twitter: { card: "summary_large_image", title, description },
+  openGraph: { title, description, images: [{ url: "/images/labs-hero.png" }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/images/labs-hero.png"] },
 };
 
 export const revalidate = 0;
@@ -51,19 +52,29 @@ export default async function LabsPage() {
       <Nav />
 
       <div className="pt-20">
-        <section className="px-6 py-20 text-center" style={{ backgroundColor: "#1D1D1F" }}>
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#5BA4C4" }}>
-              Lab Verification
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: "#FFFFFF" }}>
-              Is the lab on your COA legit?
-            </h1>
-            <p className="text-lg" style={{ color: "rgba(255,255,255,0.75)" }}>
-              A COA is only as trustworthy as the lab behind it. We independently check accreditation
-              registries, corporate filings, and public verification portals — not the lab&apos;s own
-              marketing copy.
-            </p>
+        <section className="relative" style={{ minHeight: "320px" }}>
+          <Image
+            src="/images/labs-hero.png"
+            alt="Lab Verification"
+            fill
+            priority
+            style={{ objectFit: "cover", objectPosition: "center 40%" }}
+          />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.65) 100%)" }} />
+          <div className="relative z-10 px-6 py-24 text-center">
+            <div className="max-w-3xl mx-auto">
+              <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#5BA4C4" }}>
+                Lab Verification
+              </p>
+              <h1 className="text-5xl font-bold mb-4" style={{ color: "#FFFFFF" }}>
+                Is the lab on your COA legit?
+              </h1>
+              <p className="text-xl" style={{ color: "rgba(255,255,255,0.75)" }}>
+                A COA is only as trustworthy as the lab behind it. We independently check accreditation
+                registries, corporate filings, and public verification portals — not the lab&apos;s own
+                marketing copy.
+              </p>
+            </div>
           </div>
         </section>
 
