@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { supabase } from '@/lib/supabase'
@@ -58,6 +59,25 @@ export default async function ResearchPage() {
         {/* Articles */}
         <section className="px-6 py-16" style={{ backgroundColor: '#F5F5F7' }}>
           <div className="max-w-5xl mx-auto">
+            <Link
+              href="/research/peptide-stacks-by-goal"
+              className="flex items-center justify-between gap-4 rounded-2xl px-6 py-5 mb-10 transition-shadow hover:shadow-md"
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E5E7' }}
+            >
+              <div>
+                <p className="text-xs font-semibold tracking-widest uppercase mb-1" style={{ color: '#5BA4C4' }}>
+                  Quick Reference
+                </p>
+                <p className="font-semibold text-lg" style={{ color: '#1D1D1F' }}>
+                  Peptide Stacks by Goal
+                </p>
+                <p className="text-sm mt-1" style={{ color: '#6E6E73' }}>
+                  Muscle, longevity, recovery, sleep, and more — what our data actually points to for each.
+                </p>
+              </div>
+              <span className="text-2xl shrink-0" style={{ color: '#5BA4C4' }} aria-hidden="true">→</span>
+            </Link>
+
             <ResearchLibraryClient articles={articles ?? []} />
           </div>
         </section>
