@@ -42,3 +42,22 @@ a {
 .article-body blockquote { border-left: 3px solid #186784; padding: 0.5rem 0 0.5rem 1rem; margin: 1.5rem 0; color: #6E6E73; font-style: italic; }
 .article-body code { background: #F5F5F7; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
 .article-body hr { border: none; border-top: 1px solid #E5E5E7; margin: 2rem 0; }
+
+/* Dense/detailed images (infographics) break out of the narrow prose column
+   toward viewport width, capped at 1100px, instead of shrinking to 768px —
+   small on-image text becomes illegible at the prose-column width. */
+.article-image-breakout {
+  display: block;
+  width: 100vw;
+  max-width: 1100px;
+  position: relative;
+  left: 50%;
+  margin: 1.75rem 0 1.75rem -50vw;
+}
+.article-image-breakout img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+}
