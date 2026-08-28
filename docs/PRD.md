@@ -85,11 +85,12 @@ Buyers have no reliable way to evaluate vendor quality, purity claims, or legiti
 - IU-first reconstitution output for insulin syringe users
 
 ### 5.6 Research Articles (`/research`)
-- 14 articles published (backdated to ~1–2/week cadence)
+- 18 articles published (backdated to ~1–2/week cadence for genuine batches; a single one-off doesn't need backdating)
 - KB pipeline: YouTube transcripts → vector embeddings → claim extraction → GPT-4o drafts → human review → publish
 - Direct publish path for topic-driven articles (written from primary sources, no KB pipeline required)
-- SEO-driven topic selection: articles target high-impression/low-rank queries identified via Google Search Console
-- Banned phrase checker prevents AI-sounding vocabulary
+- Topic selection: SEO-driven (high-impression/low-rank GSC queries) **and**, since 2026-08-22, `kb_claims`-driven — grouping the 1,375 extracted claims by peptide (consolidating real transcription-noise name variants) surfaces topics with substantive multi-source material and zero published coverage, independent of GSC's cold-start blind spot for un-ranked topics. Found Thymosin Alpha-1, Epitalon, and Pinealon this way.
+- Banned phrase checker prevents AI-sounding vocabulary — covers a subset of the words the generation prompt itself bans; cross-check drafts against the full instructed list too (see `CLAUDE.md`)
+- **Infographic format (added 2026-08-24):** one designed image (built HTML/CSS, screenshotted, embedded via a breakout-width markdown image) inside a normal article row, not a bespoke page route — see "Peptide Stacks by Goal" and `CLAUDE.md`'s Knowledge Base Pipeline section for the embedding mechanism
 - Client-side search on article index
 
 ### 5.7 Admin Audit Queue (`/admin/audits`)
@@ -147,7 +148,7 @@ Tiered by COA verification depth:
 - T1: COA exists, no named lab → 5 pts
 - T2: Named lab, no batch IDs → 15 pts
 - T3: Named lab + batch IDs (HPLC-verifiable) → 25 pts
-- T4: Finnrick aggregate data → 25–40 pts (scales with test count, confidence curve)
+- T4: Finnrick aggregate data → sampling-confidence base (25–40 pts, scales with test count) **× Finnrick pass rate** (added 2026-08-22 — a vendor with many tests but a low pass rate no longer maxes this out the same as a vendor that passes consistently; see `CLAUDE.md`'s Known Constraints for the before/after tier-distribution shift this caused)
 
 **Product Quality (PQ) — max 25**  
 Recency-weighted average purity from `lab_tests`. Weight = `e^(-0.04 × months_since_test)`. Capped by LV tier: T1 max 10, T2 max 15, T3 max 20, T4 max 25. No lab data → 0.
@@ -189,7 +190,9 @@ Two jobs, separate cadence:
 - All proposals written as `pending` to `vendor_audit_log` / `vendor_sentiment_log`
 - Human reviews at `/admin/audits` — approve applies changes, deny discards
 
-Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
+Full vendor pool needs ~10-11 runs to cycle through — **not fully automated back-to-back**: the candidate window is a fixed ~20-row slice by `last_reviewed`, and it stops advancing once every vendor in that slice has a pending proposal, regardless of how many more runs happen. A human has to clear pending records at `/admin/audits` (approve or deny) between batches to let the window move; see `CLAUDE.md`'s "candidate-window limit" entry. A full 53-vendor sweep done this way in one sitting (2026-08-10) took 11 batches with review between each, not 10 unattended days.
+
+**Finnrick data (rewritten 2026-08-22):** Finnrick now gates per-test purity/dosage/lab-name behind a paid membership site-wide. `scrape-finnrick.ts` was rewritten to capture what's still free — per-test pass/fail, and a vendor-level summary (overall rating %, rank of ~301 tracked vendors, reported location, an "Ownership/control" status, pass/fail counts) that was never captured before migration_025. The reported location and ownership fields are a real, free, independent verification signal — they caught a vendor's USA claim contradicting Finnrick's own Singapore listing (see Section 6 formula note and `CLAUDE.md`).
 
 **`audit:sentiment <slug>` (on-demand)**
 - Re-runs Reddit sentiment for a single vendor
@@ -247,6 +250,8 @@ Full vendor pool cycles through in ~10 runs (~10 days at 5/day).
 ## 10. Deferred / Roadmap
 
 ### Near-term
+- **Finnrick "Ownership/control" signal captured but unused (found 2026-08-22)** — `vendors.finnrick_ownership_status` is populated for every re-scraped vendor (16 of the current top-29 show "Not established"), but nothing in `transparencyScore()` or the transparency checklist reads it yet. Open decision: fold it into `has_ownership_disclosure` automatically, surface it as its own field on vendor pages, or leave it internal-only for now.
+- **Finnrick per-test history is paginated, only the first page is scraped** — `scrape-finnrick.ts` captures up to 10 most-recent individual test rows per vendor; a vendor with more history (e.g. 75 tests) has the rest reflected only in the vendor-level summary counts (pass/fail/rating), not as individual `lab_tests` rows. Acceptable for scoring (which uses the summary counts) but incomplete if per-test detail is ever needed beyond the 10 most recent.
 - **Kovera Labs research** — the single highest search-demand COA testing lab found during the `/labs` GSC investigation (2026-08-02), with zero research done. Should be the next lab profile, not a lower priority just because it's unstarted — see `CLAUDE.md`'s "Lab Verification" section.
 - **3 more lab profiles need finishing research before publish** — Colmaric Analyticals, ACS Lab, MZ Biolabs each have an accreditation claim in `docs/lab_registry.md` explicitly marked "to be confirmed on next encounter," never followed up.
 - **Vendor page crawl-budget problem (found 2026-08-02)** — most `/vendors/[slug]` pages have never been crawled by Google at all, confirmed via GSC URL Inspection API, despite full sitemap + internal-link coverage. Not fixable with more on-page work; needs real backlinks and internal-link diversity to earn crawl priority. `/labs`' cross-links are a first, small step in that direction, not a full fix.
