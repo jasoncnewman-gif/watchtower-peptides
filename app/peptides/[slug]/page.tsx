@@ -141,6 +141,7 @@ export default async function PeptideDetailPage({
     ? await supabase
         .from('vendors')
         .select('id, name, slug, website, overall_score, status')
+        .eq('status', 'active')
         .in('id', vendorIds)
     : { data: [] }
 

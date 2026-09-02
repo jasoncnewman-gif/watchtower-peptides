@@ -47,6 +47,7 @@
     "kb:generate": "tsx --tsconfig scripts/tsconfig.json scripts/generate-content.ts",
     "kb:publish": "tsx --tsconfig scripts/tsconfig.json scripts/publish-article.ts",
     "add:vendor": "tsx --tsconfig scripts/tsconfig.json scripts/add-vendor.ts",
+  "vendor:status": "tsx --tsconfig scripts/tsconfig.json scripts/set-vendor-status.ts",
     "audit:pricing": "tsx --tsconfig scripts/tsconfig.json scripts/audit-pricing.ts",
     "audit:vendors": "tsx --tsconfig scripts/tsconfig.json scripts/audit-vendors.ts",
     "audit:sentiment": "tsx --tsconfig scripts/tsconfig.json scripts/audit-sentiment.ts"

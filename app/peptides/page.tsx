@@ -27,7 +27,8 @@ export default async function PeptidesPage() {
       .order('name'),
     supabase
       .from('vendor_peptides')
-      .select('peptide_name, vendor_id'),
+      .select('peptide_name, vendor_id, vendors!inner(status)')
+      .eq('vendors.status', 'active'),
   ])
 
   // Build vendor count map: normalise size suffixes so "ipamorelin-10mg" → "ipamorelin"
