@@ -66,15 +66,26 @@ export default async function PeptideDetailPage({
   const { slug } = await params
 
   // Fetch peptide profile + vendor pricing data in parallel
-  const [{ data: peptideRow }, { data: vpAll }] = await Promise.all([
+  const [{ data: peptideRow }, { data: vpAll }, { data: articleRows }] = await Promise.all([
     supabase.from('peptides').select('*').eq('slug', slug).maybeSingle(),
     supabase
       .from('vendor_peptides')
       .select('vendor_id, peptide_name, size_mg, list_price, sale_price, in_stock')
       .not('list_price', 'is', null),
+    supabase
+      .from('research_articles')
+      .select('slug, title, peptide')
+      .eq('status', 'published')
+      .not('peptide', 'is', null),
   ])
 
   if (!peptideRow) notFound()
+
+  // Related research articles: mirror the /research/[slug] cross-link match
+  // (article.peptide is a substring of the peptide's name, case-insensitive)
+  const relatedArticles = (articleRows ?? []).filter(a =>
+    a.peptide && peptideRow.name.toLowerCase().includes(String(a.peptide).toLowerCase())
+  )
 
   // Bloodwork tab: what to monitor for this peptide + who covers it best.
   // Reuses the same RPCs the /blood-tests Protocol Builder calls, scoped to this one peptide.
@@ -255,6 +266,31 @@ export default async function PeptideDetailPage({
 
           {/* Tabs */}
           <PeptideDetailTabs peptide={peptide} vendorData={vendorData} bloodworkData={bloodwork} />
+
+          {/* Cross-link to related research articles */}
+          {relatedArticles.length > 0 && (
+            <div
+              className="mt-12 p-6 rounded-xl"
+              style={{ backgroundColor: '#F5F5F7', border: '1px solid #E5E5E7' }}
+            >
+              <p className="text-sm font-semibold mb-3" style={{ color: '#1D1D1F' }}>
+                Related research
+              </p>
+              <ul className="flex flex-col gap-2">
+                {relatedArticles.map(a => (
+                  <li key={a.slug}>
+                    <Link
+                      href={`/research/${a.slug}`}
+                      className="text-sm font-medium transition-opacity hover:opacity-70"
+                      style={{ color: '#186784' }}
+                    >
+                      {a.title} →
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <Link
             href="/peptides"
