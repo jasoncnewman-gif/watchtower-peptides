@@ -21,6 +21,7 @@ const UA     = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.
 type VendorRow = {
   id: string;
   name: string;
+  slug: string;
   website: string | null;
   login_email: string | null;
   login_password: string | null;
@@ -74,21 +75,34 @@ async function tryShopifyApiPlain(website: string): Promise<ProductData[] | null
   } catch { return null; }
 }
 
+function mapWooProducts(json: any[]): ProductData[] {
+  return json.filter((p: any) => isPeptide(p.name)).map((p: any) => {
+    const rp = p.prices?.regular_price ? parseInt(p.prices.regular_price) / 100 : null;
+    const sp = p.prices?.sale_price    ? parseInt(p.prices.sale_price)    / 100 : null;
+    const pr = p.prices?.price         ? parseInt(p.prices.price)         / 100 : null;
+    const sale = sp !== null && rp !== null && sp < rp;
+    return { peptide_name: p.name, size_mg: parseMg(p.name), list_price: sale ? rp : pr, sale_price: sale ? sp : null, in_stock: p.is_in_stock ?? true };
+  });
+}
+
+// Store API namespace is un-versioned on older WooCommerce Blocks, /v1/ on newer;
+// some installs also 401 the /v1/ route while leaving the legacy one public. Try both.
+const WOO_STORE_PATHS = ["/wp-json/wc/store/products", "/wp-json/wc/store/v1/products"];
+
 async function tryWooApiPlain(website: string): Promise<ProductData[] | null> {
-  try {
-    const { origin } = new URL(website);
-    const res = await fetch(`${origin}/wp-json/wc/store/v1/products?per_page=100`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(10000) });
-    if (!res.ok) return null;
-    const json = await res.json() as any[];
-    if (!Array.isArray(json) || !json.length) return null;
-    return json.filter((p: any) => isPeptide(p.name)).map((p: any) => {
-      const rp = p.prices?.regular_price ? parseInt(p.prices.regular_price) / 100 : null;
-      const sp = p.prices?.sale_price    ? parseInt(p.prices.sale_price)    / 100 : null;
-      const pr = p.prices?.price         ? parseInt(p.prices.price)         / 100 : null;
-      const sale = sp !== null && rp !== null && sp < rp;
-      return { peptide_name: p.name, size_mg: parseMg(p.name), list_price: sale ? rp : pr, sale_price: sale ? sp : null, in_stock: p.is_in_stock ?? true };
-    });
-  } catch { return null; }
+  const { origin } = new URL(website);
+  for (const path of WOO_STORE_PATHS) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const res = await fetch(`${origin}${path}?per_page=100`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(12000) });
+        if (!res.ok) break;                          // 401/404 — try the other path, don't retry
+        const json = await res.json();
+        if (Array.isArray(json) && json.length) return mapWooProducts(json);
+        break;
+      } catch { await sleep(800); }                  // transient (abort / network) — retry once
+    }
+  }
+  return null;
 }
 
 // ── Browser ────────────────────────────────────────────────────────────────────
@@ -183,19 +197,15 @@ async function tryShopifyApiBrowser(page: Page, origin: string): Promise<Product
 }
 
 async function tryWooApiBrowser(page: Page, origin: string): Promise<ProductData[] | null> {
-  try {
-    await page.goto(`${origin}/wp-json/wc/store/v1/products?per_page=100`, { waitUntil: "domcontentloaded", timeout: 12000 });
-    const body = await page.evaluate(() => document.body?.innerText ?? "");
-    const json = JSON.parse(body) as any[];
-    if (!Array.isArray(json) || !json.length) return null;
-    return json.filter((p: any) => isPeptide(p.name)).map((p: any) => {
-      const rp = p.prices?.regular_price ? parseInt(p.prices.regular_price) / 100 : null;
-      const sp = p.prices?.sale_price    ? parseInt(p.prices.sale_price)    / 100 : null;
-      const pr = p.prices?.price         ? parseInt(p.prices.price)         / 100 : null;
-      const sale = sp !== null && rp !== null && sp < rp;
-      return { peptide_name: p.name, size_mg: parseMg(p.name), list_price: sale ? rp : pr, sale_price: sale ? sp : null, in_stock: p.is_in_stock ?? true };
-    });
-  } catch { return null; }
+  for (const path of WOO_STORE_PATHS) {
+    try {
+      await page.goto(`${origin}${path}?per_page=100`, { waitUntil: "domcontentloaded", timeout: 12000 });
+      const body = await page.evaluate(() => document.body?.innerText ?? "");
+      const json = JSON.parse(body) as any[];
+      if (Array.isArray(json) && json.length) return mapWooProducts(json);
+    } catch { /* try next path */ }
+  }
+  return null;
 }
 
 async function scrapeProductsHtml(page: Page, url: string): Promise<ProductData[]> {
@@ -226,21 +236,25 @@ async function scrapeProductsHtml(page: Page, url: string): Promise<ProductData[
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const { data: vendors, error } = await db
+  // Optional: `npm run audit:pricing -- <slug> [<slug> ...]` to sweep just those.
+  const slugFilter = process.argv.slice(2).filter((a) => !a.startsWith("-"));
+
+  let query = db
     .from("vendors")
-    .select("id, name, website, login_email, login_password, login_username, login_path, catalog_paths, login_platform")
+    .select("id, name, slug, website, login_email, login_password, login_username, login_path, catalog_paths, login_platform")
     .in("status", ["active", "flagged"])
     .order("name", { ascending: true });
+  if (slugFilter.length) query = query.in("slug", slugFilter);
+
+  const { data: vendors, error } = await query;
 
   if (error || !vendors?.length) { log(SCRIPT, `No vendors: ${error?.message ?? "empty"}`); process.exit(1); }
-  log(SCRIPT, `${vendors.length} vendors to process\n`);
+  log(SCRIPT, `${vendors.length} vendors to process${slugFilter.length ? ` (filtered: ${slugFilter.join(", ")})` : ""}\n`);
 
-  const needsBrowser = (vendors as VendorRow[]).some((v) => v.login_email && v.login_password);
-  let browser: Browser | null = null;
-  if (needsBrowser) {
-    log(SCRIPT, "Launching browser for gated vendor access…");
-    browser = await launchBrowser();
-  }
+  // Always launch — the browser is the fallback for bot-blocked / JS-rendered
+  // storefronts too, not just credentialed logins.
+  log(SCRIPT, "Launching browser…");
+  const browser: Browser = await launchBrowser();
 
   let updated = 0;
   let skipped = 0;
@@ -276,12 +290,26 @@ async function main() {
       try {
         let products: ProductData[] | null = await tryShopifyApiPlain(vendor.website) ?? await tryWooApiPlain(vendor.website);
 
-        if (!products && hasCreds) {
-          const page = await ensureLogin();
+        // Plain fetch failed (bot-block / WAF 403, disabled REST API, members-only
+        // catalog, or JS-rendered store). Retry through the stealth browser — logging
+        // in first when we have creds — for every vendor, not just gated ones.
+        if ((!products || products.length === 0) && browser) {
+          let page: Page | null = null;
+          if (hasCreds) {
+            page = await ensureLogin();
+          } else {
+            if (!browserPage) {
+              browserPage = await browser.newPage();
+              await browserPage.setUserAgent(UA);
+              await browserPage.setViewport({ width: 1280, height: 900 });
+              browserPage.setDefaultNavigationTimeout(20000);
+            }
+            page = browserPage;
+          }
           if (page) {
             products = await tryShopifyApiBrowser(page, origin) ?? await tryWooApiBrowser(page, origin);
-            if (!products) {
-              const paths = vendor.catalog_paths ?? ["/shop/", "/products/", "/peptides/", "/collections/all"];
+            if (!products || products.length === 0) {
+              const paths = vendor.catalog_paths ?? ["/shop/", "/product-category/peptides/", "/products/", "/peptides/", "/collections/all", "/shop"];
               for (const path of paths) {
                 const scraped = await scrapeProductsHtml(page, `${origin}${path}`);
                 if (scraped.length > 0) { products = scraped; break; }
@@ -294,6 +322,19 @@ async function main() {
         if (products && products.length > 0) {
           const now = new Date().toISOString();
           const { data: oldRows } = await db.from("vendor_peptides").select("peptide_name, size_mg, list_price, sale_price, in_stock, last_checked").eq("vendor_id", vendor.id);
+
+          // Don't wipe existing priced rows for a scrape that got names but no prices
+          // (theme-specific price selector missed) — keep what we have.
+          const newPriced = products.filter((p) => p.list_price != null).length;
+          const oldPriced = (oldRows ?? []).filter((r) => r.list_price != null).length;
+          if (newPriced === 0 && oldPriced > 0) {
+            log(SCRIPT, `  ⚠ ${products.length} names, no prices — keeping ${oldPriced} existing priced rows`);
+            skipped++;
+            if (browserPage) await browserPage.close().catch(() => {});
+            await sleep(1000);
+            continue;
+          }
+
           await db.from("vendor_peptides").delete().eq("vendor_id", vendor.id);
           const { error: pe } = await db.from("vendor_peptides").insert(
             products.map((p) => ({ ...p, vendor_id: vendor.id, last_checked: now }))
