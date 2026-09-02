@@ -17,7 +17,7 @@ async function main() {
     { slug: "southern-peptides", patch: { website: "https://southern-peptides-llc.myshopify.com" } },
     { slug: "nextechlabs",     patch: { website: "https://nextechlaboratories.com" } },
     { slug: "healthgevity",    patch: { website: "https://healthgev.com" } },
-    { slug: "aavant-research", patch: { website: "https://aavantacr.com" } },
+    { slug: "aavant-research", patch: { website: "https://aavantpeptides.com" } },
     { slug: "peptidology",           patch: { website: "https://peptidology.co" } },
     { slug: "prime-peptides",        patch: { website: "https://primepeptides.co" } },
     { slug: "felix-chemical-supply", patch: { website: "https://felixchemical.com" } },
