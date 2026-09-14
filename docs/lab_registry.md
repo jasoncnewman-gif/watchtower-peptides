@@ -183,6 +183,19 @@
 
 ---
 
+## BioChex
+**Added:** 2026-09-14  
+**Status:** VERIFIED (report-level — no independent community track record, no accreditation claimed)  
+**Physical address:** 8275 S Eastern Ave #200, Las Vegas, NV 89123 (from their own site, not just the COA)  
+**Website:** biochex.org  
+**Accreditation:** None claimed — site makes no ISO/A2LA/registry claims at all, which is itself a point in their favor (no overclaiming to check).  
+**Batch lookup:** YES — biochex.org/verify, requires both the COA ID and a 16-char validation key printed on the report (CSRF-protected form, not a static/fakeable page). Directly tested: submitted BCX-260807-001 / ZVQ4QLVDGAPDRN9L (from Chameleon Peptides' published KPV COA) and got back a matching authenticated record (compound, batch, client, CONFORMS) — a real chain-of-custody verification system, not window dressing.  
+**Vendor appearances:** chameleon-peptides (first encounter)  
+**Fraud incidents:** None known. Not findable via general web search as an established peptide-testing lab — no forum/community discussion found — but the working portal + real address + honest no-accreditation-claim pattern reads as a new, small, real lab rather than a fabricated one. Same category as Chromate at its first encounter (new lab, portal-verified, T3, no ISO).  
+**Notes:** Instrumentation specified on the sample COA (Thermo Vanquish UHPLC + Q-Exactive Orbitrap MS, full column/gradient/method detail) is specific enough to be costly to fabricate convincingly. Treat as T3 (portal-verified third-party, batch-specific) per the Chromate precedent — re-assess if a second, larger vendor sample surfaces problems.
+
+---
+
 ## [NEW LABS — TO BE ADDED ON ENCOUNTER]
 When a new lab appears on any vendor COA, add it here before scoring the COA.
 Template:
