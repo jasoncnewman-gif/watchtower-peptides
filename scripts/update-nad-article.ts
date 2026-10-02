@@ -12,7 +12,7 @@ import { readFileSync } from "fs";
 import { db } from "./lib/client.js";
 
 const SLUG = "nad-for-aging-and-energy";
-const FILE = "/private/tmp/claude-501/-Users-jcnmacbook/739b5db9-40a6-4ace-9177-c7c5bb8759cd/scratchpad/nad-current.md";
+const FILE = "/private/tmp/claude-501/-Users-jcnmacbook/739b5db9-40a6-4ace-9177-c7c5bb8759cd/scratchpad/nad-v3.md";
 
 function extractTitle(md: string): string {
   return md.match(/^#\s+(.+)$/m)?.[1]?.trim() ?? "NAD+";
