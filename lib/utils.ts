@@ -39,4 +39,6 @@ export function stripSizeSuffix(slug: string): string {
     .replace(/-mod-grf-1-29$/, '')        // "CJC-1295 No DAC (Mod GRF 1-29)" → cjc-1295-no-dac
     .replace(/-peptide$/, '')                                        // -peptide suffix
     .replace(/^receptor-grade-/, '')                                 // quality grade prefix
+    .replace(/-(un)?buffered$/, '')                                  // "NAD+ Buffered" / "NAD+ Unbuffered" suffix
+    .replace(/^(un)?buffered-/, '')                                  // "Buffered NAD+" prefix
 }
