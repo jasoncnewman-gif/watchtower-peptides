@@ -41,4 +41,13 @@ export function stripSizeSuffix(slug: string): string {
     .replace(/^receptor-grade-/, '')                                 // quality grade prefix
     .replace(/-(un)?buffered$/, '')                                  // "NAD+ Buffered" / "NAD+ Unbuffered" suffix
     .replace(/^(un)?buffered-/, '')                                  // "Buffered NAD+" prefix
+    .replace(/-amidate$/, '')                                        // "N-Acetyl Semax Amidate" → n-acetyl-semax
+    // Known vendor naming variants that don't share a slug with the canonical DB slug
+    .replace(/^melanotan-ii$/, 'melanotan-2')                        // "Melanotan II" → melanotan-2
+    .replace(/^melanotan-i$/, 'melanotan-1')                         // "Melanotan I" → melanotan-1
+    .replace(/^cjc-1295-with-dac$/, 'cjc-1295-dac')                  // "CJC-1295 With DAC" → cjc-1295-dac
+    .replace(/^igf-lr3$/, 'igf-1-lr3')                               // "IGF-LR3" → igf-1-lr3
+    .replace(/^igf-1lr3$/, 'igf-1-lr3')                              // "IGF-1LR3" (no hyphen) → igf-1-lr3
+    .replace(/^ghk-basic$/, 'ghk-cu')                                // "GHK Basic" → ghk-cu
+    .replace(/^bpc-157-\d+(\.\d+)?mg-tb-500-\d+(\.\d+)?mg-blend$/, 'bpc-157-tb-500-blend') // "BPC-157 5MG, TB-500 5MG (Blend)"
 }
