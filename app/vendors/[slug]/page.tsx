@@ -63,7 +63,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const { data } = await supabase
     .from("vendors")
-    .select("name, verdict, overall_score")
+    .select("name, verdict, overall_score, status")
     .eq("slug", slug)
     .in("status", ["active", "closed"])
     .maybeSingle();
@@ -71,7 +71,9 @@ export async function generateMetadata({
   if (!data) return { title: "Vendor Not Found" };
 
   const score = data.overall_score;
-  const tier = score != null ? ratingLabel(score) : null;
+  // A closed vendor's score is a historical figure, not a current rating --
+  // don't present it with a live tier label like "Trusted".
+  const tier = score != null ? (data.status === "closed" ? "Closed" : ratingLabel(score)) : null;
   const title = score != null ? `${data.name} Review: ${score}/100 (${tier})` : `${data.name} Review`;
   const desc = data.verdict
     ? truncateDescription(score != null ? `${tier} tier, ${score}/100. ${data.verdict}` : data.verdict)
@@ -300,6 +302,11 @@ export default async function VendorDetailPage({
                   {status.label}
                 </div>
                 <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.50)" }}>out of 100</div>
+                {vendor.status === "closed" && (
+                  <div className="text-xs mt-1 text-center" style={{ color: "rgba(255,255,255,0.40)", maxWidth: "110px" }}>
+                    Score at last review, before closing
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -324,7 +331,7 @@ export default async function VendorDetailPage({
                   <tr style={{ borderBottom: "1px solid #E5E5E7" }}>
                     <td className="py-3 font-medium" style={{ color: "#6E6E73" }}>Vendor Score</td>
                     <td className="py-3 text-right font-semibold" style={{ color }}>
-                      {vendor.overall_score}/100 ({ratingLabel(vendor.overall_score)})
+                      {vendor.overall_score}/100 ({vendor.status === "closed" ? "Closed" : ratingLabel(vendor.overall_score)})
                     </td>
                   </tr>
                   <tr style={{ borderBottom: "1px solid #E5E5E7" }}>

@@ -124,15 +124,18 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
 
                 {/* Badges */}
                 <div className="flex flex-wrap gap-2">
-                  <span
-                    className="text-xs font-medium px-2.5 py-1 rounded-full"
-                    style={{ backgroundColor: rating.bg, color: rating.text }}
-                  >
-                    {rating.label}
-                  </span>
-                  {vendor.status === 'closed' && (
+                  {vendor.status === 'closed' ? (
+                    // A closed vendor's score tier ("Trusted", etc.) isn't a live
+                    // recommendation anymore -- show only the Closed badge, not the tier.
                     <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>
                       Closed
+                    </span>
+                  ) : (
+                    <span
+                      className="text-xs font-medium px-2.5 py-1 rounded-full"
+                      style={{ backgroundColor: rating.bg, color: rating.text }}
+                    >
+                      {rating.label}
                     </span>
                   )}
                   {vendor.has_coa && (
