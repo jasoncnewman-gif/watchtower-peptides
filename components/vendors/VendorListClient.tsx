@@ -130,6 +130,11 @@ export default function VendorListClient({ vendors }: { vendors: Vendor[] }) {
                   >
                     {rating.label}
                   </span>
+                  {vendor.status === 'closed' && (
+                    <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>
+                      Closed
+                    </span>
+                  )}
                   {vendor.has_coa && (
                     <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: '#DCFCE7', color: '#16A34A' }}>
                       ✓ COA Verified

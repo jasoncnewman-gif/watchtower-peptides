@@ -7,7 +7,7 @@ const BASE = 'https://www.watchtowerpeptides.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [{ data: vendors }, { data: peptides }, { data: articles }, { data: labVendors }, { data: labs }] = await Promise.all([
-    supabase.from('vendors').select('slug, updated_at').in('status', ['active', 'flagged']),
+    supabase.from('vendors').select('slug, updated_at').in('status', ['active', 'flagged', 'closed']),
     supabase.from('peptides').select('slug, updated_at'),
     supabase.from('research_articles').select('slug, updated_at').eq('status', 'published'),
     supabase.from('lab_vendors').select('slug, updated_at').neq('eligibility', 'EXCLUDE'),

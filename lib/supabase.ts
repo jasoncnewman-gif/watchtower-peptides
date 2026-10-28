@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 
 // ── Display types ────────────────────────────────────────────────────────────
 
-export type VendorStatus = "recommended" | "caution" | "not-recommended" | "under-review";
+export type VendorStatus = "recommended" | "caution" | "not-recommended" | "under-review" | "closed";
 
 export type Vendor = {
   id: string;
@@ -338,8 +338,12 @@ export function dbLabVendorToLabVendor(db: DbLabVendor): LabVendor {
 
 // DB status values ('active','inactive','closed','flagged') don't map 1:1 to
 // the display VendorStatus type. Active vendors are scored; others are flagged.
+// 'closed' is a neutral, no-fault status (vendor voluntarily shut down) and
+// gets its own display bucket -- it is NOT a quality judgment, so it must not
+// collapse into 'not-recommended' alongside 'flagged'/'inactive'.
 function dbStatusToDisplayStatus(dbStatus: DbVendor['status'], score: number | null): VendorStatus {
-  if (dbStatus === 'flagged' || dbStatus === 'closed' || dbStatus === 'inactive') return 'not-recommended'
+  if (dbStatus === 'closed') return 'closed'
+  if (dbStatus === 'flagged' || dbStatus === 'inactive') return 'not-recommended'
   if (score === null) return 'under-review'
   if (score >= 80) return 'recommended'
   if (score >= 55) return 'caution'

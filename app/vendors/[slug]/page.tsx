@@ -65,7 +65,7 @@ export async function generateMetadata({
     .from("vendors")
     .select("name, verdict, overall_score")
     .eq("slug", slug)
-    .eq("status", "active")
+    .in("status", ["active", "closed"])
     .maybeSingle();
 
   if (!data) return { title: "Vendor Not Found" };
@@ -92,6 +92,7 @@ const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: str
   caution:           { label: "Use With Caution", bg: "#FEF3C7", text: "#D97706" },
   "not-recommended": { label: "Not Recommended", bg: "#FEE2E2", text: "#DC2626" },
   "under-review":    { label: "Under Review",    bg: "#EDE9FE", text: "#7C3AED" },
+  closed:            { label: "Closed",          bg: "#F3F4F6", text: "#6B7280" },
 };
 
 const SCORE_LABELS: Record<string, { label: string; max: number }> = {
@@ -128,7 +129,7 @@ export async function generateStaticParams() {
   const { data } = await supabase
     .from("vendors")
     .select("slug")
-    .eq("status", "active")
+    .in("status", ["active", "closed"])
     .not("slug", "is", null);
   return (data ?? []).map((v) => ({ slug: v.slug as string }));
 }
@@ -144,7 +145,7 @@ export default async function VendorDetailPage({
     .from("vendors")
     .select("*")
     .eq("slug", slug)
-    .eq("status", "active")
+    .in("status", ["active", "closed"])
     .single();
 
   if (!vendorRow) notFound();

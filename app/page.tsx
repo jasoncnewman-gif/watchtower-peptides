@@ -15,6 +15,7 @@ const STATUS_CONFIG: Record<VendorStatus, { label: string; bg: string; text: str
   caution:           { label: "Use With Caution", bg: "#FEF3C7", text: "#D97706" },
   "not-recommended": { label: "Not Recommended", bg: "#FEE2E2", text: "#DC2626" },
   "under-review":    { label: "Under Review",    bg: "#EDE9FE", text: "#7C3AED" },
+  closed:            { label: "Closed",          bg: "#F3F4F6", text: "#6B7280" },
 };
 
 const FDA_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
