@@ -45,6 +45,9 @@ next-env.d.ts
 node_modules.nosync/
 Wordmark & Logos/
 docs/peptide_drafts/
+
+# saved login sessions (cookies) for gated vendors
+scripts/.sessions/
 *.docx
 humanin-draft.md
 mk677-draft.md

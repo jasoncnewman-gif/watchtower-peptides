@@ -45,28 +45,40 @@ async function main() {
   // joined with the vendor's active status
   log(SCRIPT, "Loading vendor_peptides…");
 
-  const { data: rows, error } = await db
-    .from("vendor_peptides")
-    .select(`
-      id,
-      vendor_id,
-      peptide_name,
-      size_mg,
-      list_price,
-      sale_price,
-      vendors!inner(status)
-    `)
-    .eq("vendors.status", "active")
-    .not("size_mg", "is", null)
-    .neq("size_mg", 0)
-    .or("list_price.not.is.null,sale_price.not.is.null");
+  // PostgREST caps a single response at 1000 rows — with the vendor_peptides
+  // table now past that (found 2026-11-03: 1878 total rows, only 1000 loaded
+  // and the rest silently skipped, including 29 of NextGen Peps' own rows),
+  // this must page through with .range() rather than a single select.
+  const PAGE_SIZE = 1000;
+  const rows: any[] = [];
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data: page, error } = await db
+      .from("vendor_peptides")
+      .select(`
+        id,
+        vendor_id,
+        peptide_name,
+        size_mg,
+        list_price,
+        sale_price,
+        vendors!inner(status)
+      `)
+      .eq("vendors.status", "active")
+      .not("size_mg", "is", null)
+      .neq("size_mg", 0)
+      .or("list_price.not.is.null,sale_price.not.is.null")
+      .range(from, from + PAGE_SIZE - 1);
 
-  if (error) {
-    log(SCRIPT, `DB error: ${error.message}`);
-    process.exit(1);
+    if (error) {
+      log(SCRIPT, `DB error: ${error.message}`);
+      process.exit(1);
+    }
+    if (!page || page.length === 0) break;
+    rows.push(...page);
+    if (page.length < PAGE_SIZE) break;
   }
 
-  log(SCRIPT, `Loaded ${rows?.length ?? 0} rows.`);
+  log(SCRIPT, `Loaded ${rows.length} rows.`);
 
   if (!rows || rows.length === 0) {
     log(SCRIPT, "Nothing to process.");

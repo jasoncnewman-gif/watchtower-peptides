@@ -42,6 +42,7 @@
     "seed:transparency": "tsx --tsconfig scripts/tsconfig.json scripts/seed-transparency.ts",
     "scrape:transparency": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-transparency.ts",
     "scrape:gated": "tsx --tsconfig scripts/tsconfig.json scripts/scrape-gated-vendors.ts",
+    "login:nextgenpeps": "tsx --tsconfig scripts/tsconfig.json scripts/login-nextgenpeps.ts",
     "kb:import": "tsx --tsconfig scripts/tsconfig.json scripts/import-transcript.ts",
     "kb:extract": "tsx --tsconfig scripts/tsconfig.json scripts/extract-claims.ts",
     "kb:generate": "tsx --tsconfig scripts/tsconfig.json scripts/generate-content.ts",
