@@ -381,7 +381,7 @@ async function recomputeScore(v: VendorRow): Promise<{ score: number; lv: number
 type RedditPost = { title: string; selftext: string; permalink: string };
 type SentimentResult = { sentiment: "positive" | "neutral" | "mixed" | "negative" | "insufficient_data"; summary: string };
 
-async function fetchRedditPosts(vendorName: string): Promise<RedditPost[]> {
+export async function fetchRedditPosts(vendorName: string): Promise<RedditPost[]> {
   const apiKey = process.env.SERPER_API_KEY;
   if (!apiKey) { log(SCRIPT, "WARN: SERPER_API_KEY not set"); return []; }
   const posts: RedditPost[] = [];
@@ -401,24 +401,64 @@ async function fetchRedditPosts(vendorName: string): Promise<RedditPost[]> {
   return posts;
 }
 
-async function summarizeSentiment(vendorName: string, posts: RedditPost[]): Promise<SentimentResult> {
-  if (posts.length < 3) return { sentiment: "insufficient_data", summary: `Fewer than 3 Reddit posts found for ${vendorName}. Insufficient data to assess community sentiment.` };
-  const postsText = posts.slice(0, 20).map((p) => `TITLE: ${p.title}\nBODY: ${p.selftext}`).join("\n\n---\n\n");
+// Generic filler that made every vendor's summary read identically regardless
+// of what the posts actually said (found 2026-11-03 — 39/46 vendors had
+// stacked near-duplicate entries using this exact phrasing pattern release
+// over release). The model defaults to this template unless explicitly
+// blocked and forced toward concrete specifics instead.
+const BANNED_SENTIMENT_PHRASES = [
+  "frequently mentioned", "actively recommended", "favorable light", "positive light",
+  "various reddit posts", "various sources", "strong reputation", "within the community",
+  "indicating a", "receiving praise", "express satisfaction", "worth noting",
+];
+
+async function callSentimentModel(vendorName: string, postsText: string, retryNote: string): Promise<SentimentResult | null> {
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
-      { role: "system", content: "You analyze Reddit posts about peptide vendors. Be concise and factual." },
-      { role: "user", content: `Analyze these Reddit posts about "${vendorName}" and respond with JSON:\n{"sentiment":"positive"|"neutral"|"mixed"|"negative"|"insufficient_data","summary":"2-3 sentence summary."}\n\nSentiment: positive=actively recommended, neutral=mentioned without strong opinion, mixed=praise+complaints, negative=criticized/warned against, insufficient_data=too few posts.\n\nPosts:\n${postsText}` },
+      {
+        role: "system",
+        content:
+          "You analyze Reddit posts about peptide vendors for a vendor-review site. Write like a human analyst " +
+          "skimming the actual threads, not a generic report template. Cite at least one concrete, specific detail " +
+          "from the posts — a product name, a specific complaint, a specific thing someone praised, a number — " +
+          "rather than describing the posts in the abstract. Never use these generic phrases, which read as " +
+          "templated filler regardless of what the posts actually said: " + BANNED_SENTIMENT_PHRASES.join(", ") + ". " +
+          "If you can't find a concrete detail to cite, say that plainly instead of papering over it with vague " +
+          "praise language." + retryNote,
+      },
+      { role: "user", content: `Analyze these Reddit posts about "${vendorName}" and respond with JSON:\n{"sentiment":"positive"|"neutral"|"mixed"|"negative"|"insufficient_data","summary":"2-3 sentence summary citing specifics."}\n\nSentiment: positive=actively recommended, neutral=mentioned without strong opinion, mixed=praise+complaints, negative=criticized/warned against, insufficient_data=too few posts.\n\nPosts:\n${postsText}` },
     ],
     response_format: { type: "json_object" },
-    temperature: 0.2,
+    temperature: 0.5,
   });
   const VALID = ["positive", "neutral", "mixed", "negative", "insufficient_data"];
   const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as Partial<SentimentResult>;
-  if (!parsed.sentiment || !VALID.includes(parsed.sentiment)) {
-    return { sentiment: "insufficient_data", summary: `Unable to parse sentiment response for ${vendorName}.` };
-  }
+  if (!parsed.sentiment || !VALID.includes(parsed.sentiment)) return null;
   return parsed as SentimentResult;
+}
+
+export async function summarizeSentiment(vendorName: string, posts: RedditPost[]): Promise<SentimentResult> {
+  if (posts.length < 3) return { sentiment: "insufficient_data", summary: `Fewer than 3 Reddit posts found for ${vendorName}. Insufficient data to assess community sentiment.` };
+  const postsText = posts.slice(0, 20).map((p) => `TITLE: ${p.title}\nBODY: ${p.selftext}`).join("\n\n---\n\n");
+
+  let result = await callSentimentModel(vendorName, postsText, "");
+  if (!result) return { sentiment: "insufficient_data", summary: `Unable to parse sentiment response for ${vendorName}.` };
+
+  // Backstop for the model reverting to banned filler despite the instruction
+  // — same pattern as generate-content.ts's banned-phrase checker. Retry once
+  // with an explicit callout before accepting filler into a live summary.
+  const usedBanned = (s: string) => BANNED_SENTIMENT_PHRASES.find((p) => s.toLowerCase().includes(p));
+  const firstHit = usedBanned(result.summary);
+  if (firstHit) {
+    const retry = await callSentimentModel(
+      vendorName, postsText,
+      ` Your previous attempt used the banned phrase "${firstHit}" — rewrite with a genuinely specific detail instead.`
+    );
+    if (retry && !usedBanned(retry.summary)) result = retry;
+  }
+
+  return result;
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -587,4 +627,9 @@ async function main() {
   log(SCRIPT, `Done. ${toAudit.length} vendors audited. Review at /admin/audits`);
 }
 
-main();
+// Guard so other scripts can import fetchRedditPosts/summarizeSentiment
+// (e.g. a targeted sentiment-only regeneration) without triggering a full
+// 5-vendor audit batch as a side effect of the import.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}

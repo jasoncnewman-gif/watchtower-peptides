@@ -173,6 +173,10 @@ export default async function VendorDetailPage({
     ? await supabase.from("labs").select("slug").eq("name", latestTestRow.lab_name).maybeSingle()
     : { data: null };
 
+  // Only the latest entry — older ones were re-generated every audit cycle on
+  // similar Reddit results and read as redundant, near-identical boilerplate
+  // stacked on the page (found 2026-11-03). History stays in the DB, just not
+  // rendered multiple times.
   const { data: sentimentLogs } = await supabase
     .from("vendor_sentiment_log")
     .select("sentiment, summary, scraped_at")
@@ -180,7 +184,7 @@ export default async function VendorDetailPage({
     .eq("status", "approved")
     .neq("sentiment", "insufficient_data")
     .order("scraped_at", { ascending: false })
-    .limit(5);
+    .limit(1);
 
   const vendor = dbVendorToVendor(vendorRow as DbVendor, (peptideRows ?? []) as DbVendorPeptide[]);
   const status = STATUS_CONFIG[vendor.status];
